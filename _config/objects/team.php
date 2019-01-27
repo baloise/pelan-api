@@ -2,52 +2,41 @@
 
 //error_reporting(0);
 
-class User {
+class Team {
 
     private $conn;
-    private $db_table = "users";
+    private $db_table = "teams";
 
     public $id;
-    public $firstname;
-    public $lastname;
-    public $language;
-    public $identifier;
-    public $nickname;
-    public $email;
-    public $team;
-    public $role;
+    public $name;
+    public $abbreviation;
 
     public function __construct($db){
         $this->conn = $db;
     }
 
-    function userExists(){
+    function read(){
 
         $query = "
-        SELECT ID, Firstname, Lastname, Language, Identifier, Nickname, Email, Roles_ID, Teams_ID
+        SELECT ID, Name, Abbreviation
         FROM " . $this->db_table . "
-        WHERE Identifier = ?
+        WHERE ID = ?
         LIMIT 0,1
         ";
 
-        $this->identifier=htmlspecialchars(strip_tags($this->identifier));
+        $this->id=htmlspecialchars(strip_tags($this->id));
 
         $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(1, $this->identifier);
+        $stmt->bindParam(1, $this->id);
         $stmt->execute();
+
         if($stmt->rowCount()>0){
 
             $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
             $this->id = $row['ID'];
-            $this->firstname = $row['Firstname'];
-            $this->lastname = $row['Lastname'];
-            $this->language = $row['Language'];
-            $this->identifier = $row['Identifier'];
-            $this->nickname = $row['Nickname'];
-            $this->email = $row['Email'];
-            $this->role = $row['Roles_ID'];
-            $this->team = $row['Teams_ID'];
+            $this->name = $row['Name'];
+            $this->abbreviation = $row['Abbreviation'];
 
             return true;
 

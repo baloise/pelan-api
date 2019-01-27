@@ -11,7 +11,7 @@
         "issuer" => 'Pelan Application',
         "issuedAt" => time(),
         "notBefore" => time(),
-        "expireAt" => time() + (60*60),
+        "expireAt" => time() + (15*60),
     );
 
     function returnSuccess($data = false){

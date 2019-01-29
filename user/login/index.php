@@ -54,9 +54,9 @@ if($user_exists){
                         "admin" => $role->admin,
                     ),
                     "team" => array(
-                        "id" => $role->id,
-                        "name" => $role->name,
-                        "abbreviation" => $role->abbreviation
+                        "id" => $team->id,
+                        "name" => $team->name,
+                        "abbreviation" => $team->abbreviation
                     ),
                 )
             );

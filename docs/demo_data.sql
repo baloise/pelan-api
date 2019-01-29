@@ -16,3 +16,7 @@ INSERT INTO `users` (`ID`, `InsertDate`, `UpdateDate`, `Firstname`, `Lastname`, 
 (NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'Johannes', 'Kraut', 'de', 'xx008', 'Jok', 'johannes.kraut@demo.com', '1', '1'),
 (NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'Klaus', 'thaler', 'de', 'xx009', 'Klaus', 'klaus.thaler@demo.com', '1', '1'),
 (NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'Peter', 'Silie', 'de', 'xx010', 'Peter', 'peter.silie@demo.com', '1', '1');
+
+INSERT INTO `shifts` (`ID`, `InsertDate`, `UpdateDate`, `Title`, `Abbreviation`, `Color`, `Description`, `Teams_ID`) VALUES 
+(NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'Telefon', 'Tele', '#42f465', 'Anrufe entgegennehmen', '1'),
+(NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'Vor-Ort', 'IBS', '#4150f4', 'Vor-Ort Tickets bearbeiten', '1');

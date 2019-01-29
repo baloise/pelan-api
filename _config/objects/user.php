@@ -53,6 +53,8 @@ class User {
 
         }
 
+        return false;
+
     }
 
     /*

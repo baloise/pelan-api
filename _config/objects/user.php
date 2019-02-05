@@ -26,19 +26,24 @@ class User {
         $query = "
         SELECT ID, Firstname, Lastname, Language, Identifier, Nickname, Email, Roles_ID, Teams_ID
         FROM " . $this->db_table . "
-        WHERE Identifier = ?
+        WHERE Email = ?
         LIMIT 0,1
         ";
 
-        $this->identifier=htmlspecialchars(strip_tags($this->identifier));
+
+        if(filter_var($this->email, FILTER_VALIDATE_EMAIL)){
+            $this->email=htmlspecialchars(strip_tags($this->email));
+        } else {
+            throw new InvalidArgumentException('Invalid E-Mail Adress');
+        }
 
         $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(1, $this->identifier);
+        $stmt->bindParam(1, $this->email);
         $stmt->execute();
+
         if($stmt->rowCount()>0){
 
             $row = $stmt->fetch(PDO::FETCH_ASSOC);
-
             $this->id = $row['ID'];
             $this->firstname = $row['Firstname'];
             $this->lastname = $row['Lastname'];
@@ -57,27 +62,38 @@ class User {
 
     }
 
-    /*
     function create(){
 
-        $query = "
-        INSERT INTO " . $this->db_table . " SET
-        Firstname = :firstname,
-        Lastname = :lastname,
-        Email = :email,
-        Password = :password";
+        $query =  "
+        INSERT INTO " . $this->db_table . "
+        (`Firstname`, `Lastname`, `Language`, `Identifier`, `Nickname`, `Email`) VALUES
+        (:firstname, :lastname, :language, :identifier, :nickname, :email);
+        ";
 
         $stmt = $this->conn->prepare($query);
 
-        if(strlen($this->firstname) > 0 && strlen($this->lastname) > 0){
+        if(
+            mb_strlen($this->firstname) > 0 &&
+            mb_strlen($this->lastname) > 0 &&
+            mb_strlen($this->language) > 0 &&
+            mb_strlen($this->language) <= 2 &&
+            mb_strlen($this->identifier) > 0 &&
+            mb_strlen($this->nickname) > 0 &&
+            mb_strlen($this->nickname) <= 6
+        ){
+
             $this->firstname=htmlspecialchars(strip_tags($this->firstname));
             $this->lastname=htmlspecialchars(strip_tags($this->lastname));
+            $this->language=htmlspecialchars(strip_tags($this->language));
+            $this->identifier=htmlspecialchars(strip_tags($this->identifier));
+            $this->nickname=htmlspecialchars(strip_tags($this->nickname));
+
         } else {
-            throw new InvalidArgumentException('Invalid Firstname or Lastname');
+            throw new InvalidArgumentException('Missing Values');
         }
 
-        if($this->emailExists()){
-            throw new InvalidArgumentException('E-Mail already in use');
+        if($this->userExists()){
+            throw new InvalidArgumentException('User already exists');
         }
 
         if(filter_var($this->email, FILTER_VALIDATE_EMAIL)){
@@ -86,18 +102,15 @@ class User {
             throw new InvalidArgumentException('Invalid E-Mail Adress');
         }
 
-        if (strlen($this->password) < 8 && !preg_match("#[0-9]+#", $this->password) && !preg_match("#[a-zA-Z]+#", $this->password)) {
-            throw new InvalidArgumentException('Invalid Password');
-        } else {
-            $this->password=htmlspecialchars(strip_tags($this->password));
-        }
-
         $stmt->bindParam(':firstname', $this->firstname);
         $stmt->bindParam(':lastname', $this->lastname);
+        $stmt->bindParam(':language', $this->language);
+        $stmt->bindParam(':identifier', $this->identifier);
+        $stmt->bindParam(':nickname', $this->nickname);
         $stmt->bindParam(':email', $this->email);
 
-        $password_hash = password_hash($this->password, PASSWORD_BCRYPT);
-        $stmt->bindParam(':password', $password_hash);
+        $identifier_hash = password_hash($this->identifier, PASSWORD_BCRYPT);
+        $stmt->bindParam(':identifier', $identifier_hash);
 
         if($stmt->execute()){
             return true;
@@ -107,6 +120,7 @@ class User {
 
     }
 
+    /*
     public function update(){
 
         $query = "

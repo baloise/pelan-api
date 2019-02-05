@@ -22,10 +22,10 @@ include_once '../../_config/objects/role.php';
 $user = new User($db);
 // ---- End of default Configuration
 
-$user->identifier = $data->identifier;
+$user->email = $data->email;
 $user_exists = $user->userExists();
 
-if($user_exists){
+if($user_exists && password_verify($data->identifier, $user->identifier)){
 
     $team = new Team($db);
     $team->id = $user->team;
@@ -69,7 +69,7 @@ if($user_exists){
 
 } else {
 
-    returnNoData();
+    returnNoData('User not existing');
 
 }
 ?>

@@ -8,10 +8,10 @@ class Role {
     private $db_table = "roles";
 
     public $id;
-    public $name;
+    public $title;
     public $abbreviation;
     public $admin;
-    public $team;
+    public $teamid;
 
     public function __construct($db){
         $this->conn = $db;
@@ -20,35 +20,16 @@ class Role {
     function read(){
 
         $query = "
-        SELECT ID, Name, Abbreviation, Admin, Teams_ID
-        FROM " . $this->db_table . "
-        WHERE ID = ?
-        LIMIT 0,1
+        SELECT ID as id, Title as title, Abbreviation as abbreviation, Admin as admin, Teams_ID as team
+        FROM ". $this->db_table . "
+        WHERE Teams_ID = :teamid
         ";
 
-        $this->id=htmlspecialchars(strip_tags($this->id));
-
         $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(1, $this->id);
+        $stmt->bindParam(':teamid', $this->teamid);
         $stmt->execute();
 
-        if($stmt->rowCount()>0){
-
-            $row = $stmt->fetch(PDO::FETCH_ASSOC);
-
-            $this->id = $row['ID'];
-            $this->name = $row['Name'];
-            $this->abbreviation = $row['Abbreviation'];
-            if($row['Admin'] == 1){
-                $this->admin = true;
-            } else {
-                $this->admin = false;
-            }
-            $this->team = $row['Teams_ID'];
-
-            return true;
-
-        }
+        return $stmt;
 
     }
 

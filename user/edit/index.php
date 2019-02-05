@@ -19,38 +19,32 @@ $token = authenticate();
 // ---- End of Authenticate Request
 
 // ---- Get needed Objects
-include_once '../../_config/objects/role.php';
-$role = new Role($db);
+include_once '../../_config/objects/user.php';
+$user = new User($db);
 // ---- End of Get needed Objects
 
 try {
 
     $decoded = JWT::decode($token, $token_conf['secret'], $token_conf['algorithm']);
 
-    $role->team = $decoded->data->team->id;
-    $stmt = $role->readAll();
-    $num = $stmt->rowCount();
-
-    if($num>0){
-
-        $roles_arr=array();
-
-        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
-            extract($row);
-            $role_item = array(
-                "id" => $id,
-                "title" => $title,
-                "abbreviation" => $abbreviation,
-                "admin" => $admin,
-                "team" => $team
-            );
-            array_push($roles_arr, $role_item);
-        }
-
-        returnSuccess($roles_arr);
-
+    if(!$decoded->data->role->admin){
+        $user->id = $decoded->data->id;
+        $user->role = $decoded->data->role->id;
     } else {
-        returnNoData();
+        $user->id = $data->id;
+        $user->role = $data->role;
+    }
+
+    $user->firstname = $data->firstname;
+    $user->lastname = $data->lastname;
+    $user->language = $data->language;
+    $user->nickname = $data->nickname;
+    $user->team = $decoded->data->team->id;
+
+    if($user->edit()){
+        returnSuccess();
+    } else {
+        returnError("Update failed.");
     }
 
 } catch(Exception $e){

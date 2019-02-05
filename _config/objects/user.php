@@ -120,41 +120,34 @@ class User {
 
     }
 
-    /*
-    public function update(){
+    function edit(){
 
         $query = "
         UPDATE " . $this->db_table . " SET
         Firstname = :firstname,
         Lastname = :lastname,
         Language = :language,
-        IsFemale = :isFemale,
-        Birthdate = :birthdate,
-        Height = :height,
-        Aim_Weight = :aim_weight,
-        Aim_Date = :aim_date
-        WHERE ID = :id
+        Nickname = :nickname,
+        Roles_ID = :role
+        WHERE ID = :id AND Teams_ID = :team
         ";
 
         $stmt = $this->conn->prepare($query);
         $this->firstname=htmlspecialchars(strip_tags($this->firstname));
         $this->lastname=htmlspecialchars(strip_tags($this->lastname));
         $this->language=htmlspecialchars(strip_tags($this->language));
-        $this->isFemale=htmlspecialchars(strip_tags($this->isFemale));
-        $this->birthdate=htmlspecialchars(strip_tags($this->birthdate));
-        $this->height=htmlspecialchars(strip_tags($this->height));
-        $this->aims->weight=htmlspecialchars(strip_tags($this->aims->weight));
-        $this->aims->date=htmlspecialchars(strip_tags($this->aims->date));
+        $this->nickname=htmlspecialchars(strip_tags($this->nickname));
+        $this->role=htmlspecialchars(strip_tags($this->role));
+        $this->id=htmlspecialchars(strip_tags($this->id));
+        $this->team=htmlspecialchars(strip_tags($this->team));
 
         $stmt->bindParam(':firstname', $this->firstname);
         $stmt->bindParam(':lastname', $this->lastname);
         $stmt->bindParam(':language', $this->language);
-        $stmt->bindParam(':isFemale', $this->isFemale);
-        $stmt->bindParam(':height', $this->height);
-        $stmt->bindParam(':birthdate', $this->birthdate);
-        $stmt->bindParam(':aim_weight', $this->aims->weight);
-        $stmt->bindParam(':aim_date', $this->aims->date);
+        $stmt->bindParam(':nickname', $this->nickname);
+        $stmt->bindParam(':role', $this->role);
         $stmt->bindParam(':id', $this->id);
+        $stmt->bindParam(':team', $this->team);
 
         if($stmt->execute()){
             return true;
@@ -163,7 +156,7 @@ class User {
         return false;
 
     }
-    */
+
 
 }
 ?>

@@ -29,8 +29,10 @@ if($user_exists && password_verify($data->identifier, $user->identifier)){
 
     $team = new Team($db);
     $team->id = $user->team;
+
     if($team->read()){
 
+        
         $role = new Role($db);
         $role->id = $user->role;
         if($role->read()){
@@ -49,13 +51,13 @@ if($user_exists && password_verify($data->identifier, $user->identifier)){
                     "email" => $user->email,
                     "role" => array(
                         "id" => $role->id,
-                        "name" => $role->name,
+                        "title" => $role->title,
                         "abbreviation" => $role->abbreviation,
                         "admin" => $role->admin,
                     ),
                     "team" => array(
                         "id" => $team->id,
-                        "name" => $team->name,
+                        "title" => $team->title,
                         "abbreviation" => $team->abbreviation
                     ),
                 )

@@ -8,7 +8,7 @@ class Team {
     private $db_table = "teams";
 
     public $id;
-    public $name;
+    public $title;
     public $abbreviation;
 
     public function __construct($db){
@@ -18,7 +18,7 @@ class Team {
     function read(){
 
         $query = "
-        SELECT ID, Name, Abbreviation
+        SELECT ID, Title, Abbreviation
         FROM " . $this->db_table . "
         WHERE ID = ?
         LIMIT 0,1
@@ -35,7 +35,7 @@ class Team {
             $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
             $this->id = $row['ID'];
-            $this->name = $row['Name'];
+            $this->title = $row['Title'];
             $this->abbreviation = $row['Abbreviation'];
 
             return true;

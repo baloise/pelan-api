@@ -31,21 +31,17 @@ try {
         returnForbidden('Not Admin');
     }
 
-    $shift->title = $data->title;
-    $shift->abbreviation = $data->abbreviation;
-    $shift->color = $data->color;
-    $shift->description = $data->description;
+    $shift->id = $data->id;
     $shift->team = $decoded->data->team->id;
 
-    if($shift->create()){
-        returnSuccess($shift->id);
+    if($shift->delete()){
+        returnSuccess();
     } else {
-        returnError("Could not create entry");
+        returnError("Update failed. Title or Abbreviation may already exist");
     }
 
 } catch(Exception $e){
     returnForbidden();
 }
-
 
 ?>

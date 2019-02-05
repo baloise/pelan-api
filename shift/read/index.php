@@ -27,11 +27,7 @@ try {
 
     $decoded = JWT::decode($token, $token_conf['secret'], $token_conf['algorithm']);
 
-    if(!$decoded->data->role->admin){
-        returnForbidden('Not Admin');
-    }
-
-    $shift->teamid = $decoded->data->team->id;
+    $shift->team = $decoded->data->team->id;
     $stmt = $shift->read();
     $num = $stmt->rowCount();
 

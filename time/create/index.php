@@ -19,8 +19,8 @@ $token = authenticate();
 // ---- End of Authenticate Request
 
 // ---- Get needed Objects
-include_once '../../_config/objects/shift.php';
-$shift = new Shift($db);
+include_once '../../_config/objects/time.php';
+$time = new Time($db);
 // ---- End of Get needed Objects
 
 try {
@@ -31,14 +31,14 @@ try {
         returnForbidden('Not Admin');
     }
 
-    $shift->title = $data->title;
-    $shift->abbreviation = $data->abbreviation;
-    $shift->color = $data->color;
-    $shift->description = $data->description;
-    $shift->team = $decoded->data->team->id;
+    $time->title = $data->title;
+    $time->abbreviation = $data->abbreviation;
+    $time->position = $data->position;
+    $time->description = $data->description;
+    $time->team = $decoded->data->team->id;
 
-    if($shift->create()){
-        returnSuccess($shift->id);
+    if($time->create()){
+        returnSuccess($time->id);
     } else {
         returnError("Could not create entry");
     }

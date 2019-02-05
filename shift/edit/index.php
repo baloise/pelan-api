@@ -36,7 +36,7 @@ try {
     $shift->color = $data->color;
     $shift->description = $data->description;
     $shift->id = $data->id;
-    $shift->teamid = $decoded->data->team->id;
+    $shift->team = $decoded->data->team->id;
 
     if($shift->edit()){
         returnSuccess();

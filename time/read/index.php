@@ -19,33 +19,42 @@ $token = authenticate();
 // ---- End of Authenticate Request
 
 // ---- Get needed Objects
-include_once '../../_config/objects/shift.php';
-$shift = new Shift($db);
+include_once '../../_config/objects/time.php';
+$time = new Time($db);
 // ---- End of Get needed Objects
 
 try {
 
     $decoded = JWT::decode($token, $token_conf['secret'], $token_conf['algorithm']);
 
-    if(!$decoded->data->role->admin){
-        returnForbidden('Not Admin');
-    }
+    $time->team = $decoded->data->team->id;
+    $stmt = $time->read();
+    $num = $stmt->rowCount();
 
-    $shift->title = $data->title;
-    $shift->abbreviation = $data->abbreviation;
-    $shift->color = $data->color;
-    $shift->description = $data->description;
-    $shift->team = $decoded->data->team->id;
+    if($num>0){
 
-    if($shift->create()){
-        returnSuccess($shift->id);
+        $times_arr=array();
+
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
+            extract($row);
+            $time_item = array(
+                "id" => $id,
+                "title" => $title,
+                "abbreviation" => $abbreviation,
+                "position" => $position,
+                "description" => $description
+            );
+            array_push($times_arr, $time_item);
+        }
+
+        returnSuccess($times_arr);
+
     } else {
-        returnError("Could not create entry");
+        returnNoData();
     }
 
 } catch(Exception $e){
     returnForbidden();
 }
-
 
 ?>

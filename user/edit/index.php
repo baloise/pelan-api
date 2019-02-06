@@ -27,7 +27,7 @@ try {
 
     $decoded = JWT::decode($token, $token_conf['secret'], $token_conf['algorithm']);
 
-    if(!$decoded->data->role->admin){
+    if (!$decoded->data->role->admin) {
         $user->id = $decoded->data->id;
         $user->role = $decoded->data->role->id;
     } else {
@@ -41,13 +41,13 @@ try {
     $user->nickname = $data->nickname;
     $user->team = $decoded->data->team->id;
 
-    if($user->edit()){
+    if ($user->edit()) {
         returnSuccess();
     } else {
         returnError("Update failed.");
     }
 
-} catch(Exception $e){
+} catch (Exception $e) {
     returnForbidden();
 }
 

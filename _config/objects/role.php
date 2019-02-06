@@ -13,11 +13,11 @@ class Role {
     public $admin;
     public $team;
 
-    public function __construct($db){
+    public function __construct($db) {
         $this->conn = $db;
     }
 
-    public function read(){
+    public function read() {
 
         $query = "
         SELECT ID, Title, Abbreviation, Admin, Teams_ID
@@ -26,20 +26,20 @@ class Role {
         LIMIT 0,1
         ";
 
-        $this->id=htmlspecialchars(strip_tags($this->id));
+        $this->id = htmlspecialchars(strip_tags($this->id));
 
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(1, $this->id);
         $stmt->execute();
 
-        if($stmt->rowCount()>0){
+        if ($stmt->rowCount() > 0) {
 
             $row = $stmt->fetch(PDO::FETCH_ASSOC);
             $this->id = $row['ID'];
             $this->title = $row['Title'];
             $this->abbreviation = $row['Abbreviation'];
 
-            if($row['Admin'] == 1){
+            if ($row['Admin'] == 1) {
                 $this->admin = true;
             } else {
                 $this->admin = false;
@@ -52,7 +52,7 @@ class Role {
 
     }
 
-    public function readAll(){
+    public function readAll() {
 
         $query = "
         SELECT ID as id, Title as title, Abbreviation as abbreviation, Admin as admin, Teams_ID as team

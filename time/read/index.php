@@ -31,11 +31,11 @@ try {
     $stmt = $time->read();
     $num = $stmt->rowCount();
 
-    if($num>0){
+    if ($num > 0) {
 
-        $times_arr=array();
+        $times_arr = array();
 
-        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             extract($row);
             $time_item = array(
                 "id" => $id,
@@ -53,7 +53,7 @@ try {
         returnNoData();
     }
 
-} catch(Exception $e){
+} catch (Exception $e) {
     returnForbidden();
 }
 

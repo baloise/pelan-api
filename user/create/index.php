@@ -21,7 +21,7 @@ if (
     $data->identifier &&
     $data->nickname &&
     $data->email
-){
+) {
 
     $user->firstname = $data->firstname;
     $user->lastname = $data->lastname;

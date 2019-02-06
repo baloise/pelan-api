@@ -27,20 +27,20 @@ try {
 
     $decoded = JWT::decode($token, $token_conf['secret'], $token_conf['algorithm']);
 
-    if(!$decoded->data->role->admin){
+    if (!$decoded->data->role->admin) {
         returnForbidden('Not Admin');
     }
 
     $shift->id = $data->id;
     $shift->team = $decoded->data->team->id;
 
-    if($shift->delete()){
+    if ($shift->delete()) {
         returnSuccess();
     } else {
         returnError("Update failed. Title or Abbreviation may already exist");
     }
 
-} catch(Exception $e){
+} catch (Exception $e) {
     returnForbidden();
 }
 

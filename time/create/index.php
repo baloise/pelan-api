@@ -27,7 +27,7 @@ try {
 
     $decoded = JWT::decode($token, $token_conf['secret'], $token_conf['algorithm']);
 
-    if(!$decoded->data->role->admin){
+    if (!$decoded->data->role->admin) {
         returnForbidden('Not Admin');
     }
 
@@ -37,13 +37,13 @@ try {
     $time->description = $data->description;
     $time->team = $decoded->data->team->id;
 
-    if($time->create()){
+    if ($time->create()) {
         returnSuccess($time->id);
     } else {
         returnError("Could not create entry");
     }
 
-} catch(Exception $e){
+} catch (Exception $e) {
     returnForbidden();
 }
 

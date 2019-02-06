@@ -11,11 +11,11 @@ class Team {
     public $title;
     public $abbreviation;
 
-    public function __construct($db){
+    public function __construct($db) {
         $this->conn = $db;
     }
 
-    public function read(){
+    public function read() {
 
         $query = "
         SELECT ID, Title, Abbreviation
@@ -24,13 +24,13 @@ class Team {
         LIMIT 0,1
         ";
 
-        $this->id=htmlspecialchars(strip_tags($this->id));
+        $this->id = htmlspecialchars(strip_tags($this->id));
 
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(1, $this->id);
         $stmt->execute();
 
-        if($stmt->rowCount()>0){
+        if ($stmt->rowCount() > 0) {
 
             $row = $stmt->fetch(PDO::FETCH_ASSOC);
 

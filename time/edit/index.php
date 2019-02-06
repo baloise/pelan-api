@@ -27,7 +27,7 @@ try {
 
     $decoded = JWT::decode($token, $token_conf['secret'], $token_conf['algorithm']);
 
-    if(!$decoded->data->role->admin){
+    if (!$decoded->data->role->admin) {
         returnForbidden('Not Admin');
     }
 
@@ -38,13 +38,13 @@ try {
     $time->description = $data->description;
     $time->team = $decoded->data->team->id;
 
-    if($time->edit()){
+    if ($time->edit()) {
         returnSuccess();
     } else {
         returnError("Update failed.");
     }
 
-} catch(Exception $e){
+} catch (Exception $e) {
     returnForbidden();
 }
 

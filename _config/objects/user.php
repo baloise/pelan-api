@@ -17,11 +17,11 @@ class User {
     public $team;
     public $role;
 
-    public function __construct($db){
+    public function __construct($db) {
         $this->conn = $db;
     }
 
-    public function userExists(){
+    public function userExists() {
 
         $query = "
         SELECT ID, Firstname, Lastname, Language, Identifier, Nickname, Email, Roles_ID, Teams_ID
@@ -31,8 +31,8 @@ class User {
         ";
 
 
-        if(filter_var($this->email, FILTER_VALIDATE_EMAIL)){
-            $this->email=htmlspecialchars(strip_tags($this->email));
+        if (filter_var($this->email, FILTER_VALIDATE_EMAIL)) {
+            $this->email = htmlspecialchars(strip_tags($this->email));
         } else {
             throw new InvalidArgumentException('Invalid E-Mail Adress');
         }
@@ -41,7 +41,7 @@ class User {
         $stmt->bindParam(1, $this->email);
         $stmt->execute();
 
-        if($stmt->rowCount()>0){
+        if ($stmt->rowCount() > 0) {
 
             $row = $stmt->fetch(PDO::FETCH_ASSOC);
             $this->id = $row['ID'];
@@ -62,9 +62,9 @@ class User {
 
     }
 
-    public function create(){
+    public function create() {
 
-        $query =  "
+        $query = "
         INSERT INTO " . $this->db_table . "
         (`Firstname`, `Lastname`, `Language`, `Identifier`, `Nickname`, `Email`) VALUES
         (:firstname, :lastname, :language, :identifier, :nickname, :email);
@@ -72,7 +72,7 @@ class User {
 
         $stmt = $this->conn->prepare($query);
 
-        if(
+        if (
             mb_strlen($this->firstname) > 0 &&
             mb_strlen($this->lastname) > 0 &&
             mb_strlen($this->language) > 0 &&
@@ -80,24 +80,24 @@ class User {
             mb_strlen($this->identifier) > 0 &&
             mb_strlen($this->nickname) > 0 &&
             mb_strlen($this->nickname) <= 6
-        ){
+        ) {
 
-            $this->firstname=htmlspecialchars(strip_tags($this->firstname));
-            $this->lastname=htmlspecialchars(strip_tags($this->lastname));
-            $this->language=htmlspecialchars(strip_tags($this->language));
-            $this->identifier=htmlspecialchars(strip_tags($this->identifier));
-            $this->nickname=htmlspecialchars(strip_tags($this->nickname));
+            $this->firstname = htmlspecialchars(strip_tags($this->firstname));
+            $this->lastname = htmlspecialchars(strip_tags($this->lastname));
+            $this->language = htmlspecialchars(strip_tags($this->language));
+            $this->identifier = htmlspecialchars(strip_tags($this->identifier));
+            $this->nickname = htmlspecialchars(strip_tags($this->nickname));
 
         } else {
             throw new InvalidArgumentException('Missing Values');
         }
 
-        if($this->userExists()){
+        if ($this->userExists()) {
             throw new InvalidArgumentException('User already exists');
         }
 
-        if(filter_var($this->email, FILTER_VALIDATE_EMAIL)){
-            $this->email=htmlspecialchars(strip_tags($this->email));
+        if (filter_var($this->email, FILTER_VALIDATE_EMAIL)) {
+            $this->email = htmlspecialchars(strip_tags($this->email));
         } else {
             throw new InvalidArgumentException('Invalid E-Mail Adress');
         }
@@ -112,7 +112,7 @@ class User {
         $identifier_hash = password_hash($this->identifier, PASSWORD_BCRYPT);
         $stmt->bindParam(':identifier', $identifier_hash);
 
-        if($stmt->execute()){
+        if ($stmt->execute()) {
             return true;
         }
 
@@ -120,7 +120,7 @@ class User {
 
     }
 
-    public function edit(){
+    public function edit() {
 
         $query = "
         UPDATE " . $this->db_table . " SET
@@ -133,13 +133,13 @@ class User {
         ";
 
         $stmt = $this->conn->prepare($query);
-        $this->firstname=htmlspecialchars(strip_tags($this->firstname));
-        $this->lastname=htmlspecialchars(strip_tags($this->lastname));
-        $this->language=htmlspecialchars(strip_tags($this->language));
-        $this->nickname=htmlspecialchars(strip_tags($this->nickname));
-        $this->role=htmlspecialchars(strip_tags($this->role));
-        $this->id=htmlspecialchars(strip_tags($this->id));
-        $this->team=htmlspecialchars(strip_tags($this->team));
+        $this->firstname = htmlspecialchars(strip_tags($this->firstname));
+        $this->lastname = htmlspecialchars(strip_tags($this->lastname));
+        $this->language = htmlspecialchars(strip_tags($this->language));
+        $this->nickname = htmlspecialchars(strip_tags($this->nickname));
+        $this->role = htmlspecialchars(strip_tags($this->role));
+        $this->id = htmlspecialchars(strip_tags($this->id));
+        $this->team = htmlspecialchars(strip_tags($this->team));
 
         $stmt->bindParam(':firstname', $this->firstname);
         $stmt->bindParam(':lastname', $this->lastname);
@@ -149,7 +149,7 @@ class User {
         $stmt->bindParam(':id', $this->id);
         $stmt->bindParam(':team', $this->team);
 
-        if($stmt->execute()){
+        if ($stmt->execute()) {
             return true;
         }
 

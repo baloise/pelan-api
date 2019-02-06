@@ -71,6 +71,6 @@ if($user_exists && password_verify($data->identifier, $user->identifier)){
 
 } else {
 
-    returnNoData('Not found');
+    returnNoData();
 
 }

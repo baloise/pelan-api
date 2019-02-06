@@ -15,7 +15,7 @@ class Team {
         $this->conn = $db;
     }
 
-    function read(){
+    public function read(){
 
         $query = "
         SELECT ID, Title, Abbreviation
@@ -45,7 +45,7 @@ class Team {
     }
 
     /*
-    function create(){
+    public function create(){
 
         $query = "
         INSERT INTO " . $this->db_table . " SET
@@ -139,4 +139,3 @@ class Team {
     */
 
 }
-

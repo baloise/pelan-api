@@ -16,7 +16,7 @@ class Time {
         $this->conn = $db;
     }
 
-    function read(){
+    public function read(){
 
         $query = "
         SELECT ID as id, Title as title, Abbreviation as abbreviation, Description as description, Position as position
@@ -32,7 +32,7 @@ class Time {
 
     }
 
-    function edit(){
+    public function edit(){
 
         $query = "
         UPDATE ".$this->db_table." SET
@@ -64,7 +64,7 @@ class Time {
 
     }
 
-    function create(){
+    public function create(){
 
         $query = "
             INSERT INTO ".$this->db_table."
@@ -96,7 +96,7 @@ class Time {
     }
 
 
-    function delete(){
+    public function delete(){
 
         $query = "
         DELETE FROM " . $this->db_table . "

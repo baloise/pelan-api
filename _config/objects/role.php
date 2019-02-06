@@ -17,7 +17,7 @@ class Role {
         $this->conn = $db;
     }
 
-    function read(){
+    public function read(){
 
         $query = "
         SELECT ID, Title, Abbreviation, Admin, Teams_ID
@@ -52,14 +52,14 @@ class Role {
 
     }
 
-    function readAll(){
+    public function readAll(){
 
         $query = "
         SELECT ID as id, Title as title, Abbreviation as abbreviation, Admin as admin, Teams_ID as team
         FROM ". $this->db_table . "
         WHERE Teams_ID = :team
         ";
-        
+
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':team', $this->team);
         $stmt->execute();
@@ -69,7 +69,7 @@ class Role {
     }
 
     /*
-    function create(){
+    public function create(){
 
     $query = "
     INSERT INTO " . $this->db_table . " SET
@@ -163,4 +163,3 @@ public function update(){
 */
 
 }
-

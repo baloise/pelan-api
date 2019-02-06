@@ -1,4 +1,6 @@
 # pelan-api
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/baloise/pelan-api/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/baloise/pelan-api/?branch=master)
+
 API for the coming staff-planning tool by Baloise.
 
 

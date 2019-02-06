@@ -60,9 +60,6 @@ class Time {
             return true;
         }
 
-        print_r($stmt);
-        die();
-
         return false;
 
     }
@@ -125,4 +122,3 @@ class Time {
 
 
 }
-?>

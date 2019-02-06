@@ -32,7 +32,7 @@ if($user_exists && password_verify($data->identifier, $user->identifier)){
 
     if($team->read()){
 
-        
+
         $role = new Role($db);
         $role->id = $user->role;
         if($role->read()){
@@ -71,7 +71,6 @@ if($user_exists && password_verify($data->identifier, $user->identifier)){
 
 } else {
 
-    returnNoData('User not existing');
+    returnNoData('Not found');
 
 }
-?>

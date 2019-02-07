@@ -21,13 +21,11 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://localhost/pelan-api/shift/read/",
-							"protocol": "http",
+							"raw": "{{host}}/shift/read/",
 							"host": [
-								"localhost"
+								"{{host}}"
 							],
 							"path": [
-								"pelan-api",
 								"shift",
 								"read",
 								""
@@ -56,13 +54,11 @@
 							"raw": "{\r\n\t\"id\":\"1\",\r\n    \"title\": \"Edited\",\r\n    \"abbreviation\": \"Edit\",\r\n    \"color\": \"#ffffff\",\r\n    \"description\": \"Dies wurde bearbeitet yayayayay\"\r\n}"
 						},
 						"url": {
-							"raw": "http://localhost/pelan-api/shift/edit/",
-							"protocol": "http",
+							"raw": "{{host}}/shift/edit/",
 							"host": [
-								"localhost"
+								"{{host}}"
 							],
 							"path": [
-								"pelan-api",
 								"shift",
 								"edit",
 								""
@@ -99,13 +95,11 @@
 							"raw": "{\r\n    \"title\": \"Insertet\",\r\n    \"abbreviation\": \"Inse\",\r\n    \"color\": \"#asdasd\"\r\n}"
 						},
 						"url": {
-							"raw": "http://localhost/pelan-api/shift/create/",
-							"protocol": "http",
+							"raw": "{{host}}/shift/create/",
 							"host": [
-								"localhost"
+								"{{host}}"
 							],
 							"path": [
-								"pelan-api",
 								"shift",
 								"create",
 								""
@@ -134,13 +128,11 @@
 							"raw": "{\r\n\t\"id\":\"3\"\r\n}"
 						},
 						"url": {
-							"raw": "http://localhost/pelan-api/shift/delete/",
-							"protocol": "http",
+							"raw": "{{host}}/shift/delete/",
 							"host": [
-								"localhost"
+								"{{host}}"
 							],
 							"path": [
-								"pelan-api",
 								"shift",
 								"delete",
 								""
@@ -219,13 +211,11 @@
 							"raw": "{\r\n   \"identifier\":\"xx002\",\r\n   \"email\":\"filet.minyon@demo.com\"\r\n}"
 						},
 						"url": {
-							"raw": "http://localhost/pelan-api/user/login/",
-							"protocol": "http",
+							"raw": "{{host}}/user/login/",
 							"host": [
-								"localhost"
+								"{{host}}"
 							],
 							"path": [
-								"pelan-api",
 								"user",
 								"login",
 								""
@@ -267,13 +257,11 @@
 							"raw": "{\r\n   \"identifier\":\"xx005\",\r\n   \"email\": \"ernst.fall@demo.com\"\r\n}"
 						},
 						"url": {
-							"raw": "http://localhost/pelan-api/user/login/",
-							"protocol": "http",
+							"raw": "{{host}}/user/login/",
 							"host": [
-								"localhost"
+								"{{host}}"
 							],
 							"path": [
-								"pelan-api",
 								"user",
 								"login",
 								""
@@ -307,13 +295,11 @@
 							"raw": "{\r\n    \"firstname\": \"Test\",\r\n    \"lastname\": \"Test\",\r\n    \"language\": \"de\",\r\n    \"identifier\": \"123123123\",\r\n    \"nickname\": \"test\",\r\n    \"email\": \"test.test@gmail.com\"\r\n}"
 						},
 						"url": {
-							"raw": "http://localhost/pelan-api/user/create/",
-							"protocol": "http",
+							"raw": "{{host}}/user/create/",
 							"host": [
-								"localhost"
+								"{{host}}"
 							],
 							"path": [
-								"pelan-api",
 								"user",
 								"create",
 								""
@@ -342,13 +328,11 @@
 							"raw": "{\r\n\t\"id\":\"10\",\r\n    \"firstname\": \"Tessst\",\r\n    \"lastname\": \"Edit\",\r\n    \"language\": \"de\",\r\n    \"nickname\": \"baba\",\r\n    \"role\": \"1\"\r\n}"
 						},
 						"url": {
-							"raw": "http://localhost/pelan-api/user/edit/",
-							"protocol": "http",
+							"raw": "{{host}}/user/edit/",
 							"host": [
-								"localhost"
+								"{{host}}"
 							],
 							"path": [
-								"pelan-api",
 								"user",
 								"edit",
 								""
@@ -385,13 +369,11 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://localhost/pelan-api/role/read/",
-							"protocol": "http",
+							"raw": "{{host}}/role/read/",
 							"host": [
-								"localhost"
+								"{{host}}"
 							],
 							"path": [
-								"pelan-api",
 								"role",
 								"read",
 								""
@@ -457,13 +439,11 @@
 							"raw": "{\n\t\"title\": \"Abends\",\n\t\"abbreviation\": \"Ab\",\n\t\"position\": 3,\n\t\"description\" : \"abends arbeiten\"\n}"
 						},
 						"url": {
-							"raw": "http://localhost/pelan-api/time/create/",
-							"protocol": "http",
+							"raw": "{{host}}/time/create/",
 							"host": [
-								"localhost"
+								"{{host}}"
 							],
 							"path": [
-								"pelan-api",
 								"time",
 								"create",
 								""
@@ -568,6 +548,36 @@
 					}
 				]
 			}
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "8fd5af39-1bee-4e34-bc85-47c537737863",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "dd7d10ab-251d-46f7-8958-23b3c6a011ae",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "0d3e2e36-ddd2-4055-a19d-37a38bdb4a50",
+			"key": "host",
+			"value": "http://localhost/pelan-api/",
+			"type": "string"
 		}
 	]
 }

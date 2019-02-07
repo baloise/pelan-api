@@ -1,0 +1,573 @@
+{
+	"info": {
+		"_postman_id": "f65926fe-3e2f-4e5a-8f58-a84ff9c85eb7",
+		"name": "Pelan",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Shifts",
+			"item": [
+				{
+					"name": "Read",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost/pelan-api/shift/read/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"pelan-api",
+								"shift",
+								"read",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"id\":\"1\",\r\n    \"title\": \"Edited\",\r\n    \"abbreviation\": \"Edit\",\r\n    \"color\": \"#ffffff\",\r\n    \"description\": \"Dies wurde bearbeitet yayayayay\"\r\n}"
+						},
+						"url": {
+							"raw": "http://localhost/pelan-api/shift/edit/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"pelan-api",
+								"shift",
+								"edit",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "asdfasdfasdf",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"Insertet\",\r\n    \"abbreviation\": \"Inse\",\r\n    \"color\": \"#asdasd\"\r\n}"
+						},
+						"url": {
+							"raw": "http://localhost/pelan-api/shift/create/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"pelan-api",
+								"shift",
+								"create",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"id\":\"3\"\r\n}"
+						},
+						"url": {
+							"raw": "http://localhost/pelan-api/shift/delete/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"pelan-api",
+								"shift",
+								"delete",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "{{token}}",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "6349e4bd-d61c-4054-9779-c5e7dfd9c5cc",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "6ae131de-2e0d-4b94-a562-847a72168cf2",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Login",
+			"item": [
+				{
+					"name": "Login Default (Filet Minyon, en)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "3117e8a6-3601-40e8-b4f8-c74adf80ee07",
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);\r",
+									"postman.setEnvironmentVariable(\"token\", jsonData.content);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n   \"identifier\":\"xx002\",\r\n   \"email\":\"filet.minyon@demo.com\"\r\n}"
+						},
+						"url": {
+							"raw": "http://localhost/pelan-api/user/login/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"pelan-api",
+								"user",
+								"login",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login Admin (Ernst Fall, de)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "bbffc9cb-9394-499f-8e2e-a72ae4cd62db",
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);\r",
+									"postman.setEnvironmentVariable(\"token\", jsonData.content);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n   \"identifier\":\"xx005\",\r\n   \"email\": \"ernst.fall@demo.com\"\r\n}"
+						},
+						"url": {
+							"raw": "http://localhost/pelan-api/user/login/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"pelan-api",
+								"user",
+								"login",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "Create",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstname\": \"Test\",\r\n    \"lastname\": \"Test\",\r\n    \"language\": \"de\",\r\n    \"identifier\": \"123123123\",\r\n    \"nickname\": \"test\",\r\n    \"email\": \"test.test@gmail.com\"\r\n}"
+						},
+						"url": {
+							"raw": "http://localhost/pelan-api/user/create/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"pelan-api",
+								"user",
+								"create",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"id\":\"10\",\r\n    \"firstname\": \"Tessst\",\r\n    \"lastname\": \"Edit\",\r\n    \"language\": \"de\",\r\n    \"nickname\": \"baba\",\r\n    \"role\": \"1\"\r\n}"
+						},
+						"url": {
+							"raw": "http://localhost/pelan-api/user/edit/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"pelan-api",
+								"user",
+								"edit",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "{{token}}",
+						"type": "string"
+					}
+				]
+			}
+		},
+		{
+			"name": "Roles",
+			"item": [
+				{
+					"name": "Read",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost/pelan-api/role/read/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"pelan-api",
+								"role",
+								"read",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "{{token}}",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "7c0e9ae1-0d42-454f-9796-229f65cb7888",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "c2fcb28d-f26c-4441-8a49-b212c98c768b",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Times",
+			"item": [
+				{
+					"name": "Create",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"title\": \"Abends\",\n\t\"abbreviation\": \"Ab\",\n\t\"position\": 3,\n\t\"description\" : \"abends arbeiten\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost/pelan-api/time/create/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"pelan-api",
+								"time",
+								"create",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"id\": \"1\",\n\t\"title\" : \"terr\",\n\t\"abbreviation\" : \"tet\",\n\t\"description\" : \"bearbeitete time\",\n\t\"position\" : \"4\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost/pelan-api/time/edit/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"pelan-api",
+								"time",
+								"edit",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Read",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": ""
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"id\":\"6\"\r\n}"
+						},
+						"url": {
+							"raw": "http://localhost/pelan-api/time/delete/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"pelan-api",
+								"time",
+								"delete",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "{{token}}",
+						"type": "string"
+					}
+				]
+			}
+		}
+	]
+}

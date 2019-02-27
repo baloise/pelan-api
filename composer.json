@@ -1,0 +1,21 @@
+{
+    "name": "baloise/pelan-api",
+    "description": "API for the coming Pelan-UI",
+    "type": "project",
+    "require": {
+        "php": "^7.2",
+        "ext-bcmath": "^7.2",
+        "mrclay/minify": "^3.0"
+    },
+    "require-dev": {
+        "php": "^7.2",
+        "ext-bcmath": "^7.2",
+        "mrclay/minify": "^3.0"
+    },
+    "authors": [
+        {
+            "name": "Elia Reutlinger",
+            "email": "mail@eliareutlinger.ch"
+        }
+    ]
+}

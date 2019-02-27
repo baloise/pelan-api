@@ -64,7 +64,9 @@ if($user_exists && password_verify($data->identifier, $user->identifier)){
             );
 
             $jwt = JWT::encode($token, $token_conf['secret']);
-            returnSuccess($jwt);
+            if(setAuth($jwt, $token_conf['expireDefault'])){
+                returnSuccess();
+            }
 
         }
     }

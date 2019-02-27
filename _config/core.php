@@ -14,16 +14,39 @@ $token_conf = array(
     "expireAt" => time() + (15*60),
 );
 
+function setAuth($token, $expire){
+
+    $domain = "localhost";
+    //$domain = ".eliareutlinger.ch";
+    $secure = false;
+    if(isset($_SERVER['HTTPS'])){
+        $secure = true;
+    }
+
+    $appCookie = setcookie ("appToken", $token, $expire, "/", $domain, $secure, false);
+    $secureCookie = setcookie ("secureToken", $token, $expire, "/", $domain, $secure, true);
+    if($appCookie && $secureCookie){
+        return true;
+    }
+
+    return false;
+
+}
+
 function authenticate() {
-    if (isset(getallheaders()['Authorization'])) {
+    if (isset($_COOKIE["appToken"]) && isset(getallheaders()['Authorization'])) {
         list($type, $data) = explode(" ", getallheaders()['Authorization'], 2);
         if (strcasecmp($type, "Bearer") == 0) {
-            return $data;
+            if($_COOKIE["appToken"] === $data){
+                return $_COOKIE["appToken"];
+            } else {
+                returnForbidden("Tokens not correct");
+            }
         } else {
-            returnBadRequest("Token incorrectly formed");
+            returnForbidden("Auth-Token invalid.");
         }
     } else {
-        returnBadRequest("No token");
+        returnForbidden("Required Tokens not found.");
     }
 }
 
@@ -103,7 +126,3 @@ function returnError($reason = false) {
     }
     die();
 }
-
-
-
-

@@ -58,9 +58,9 @@ class Time {
 
         if ($stmt->execute()) {
             return true;
+        } else {
+            throw new InvalidArgumentException($stmt->errorInfo()[1]);
         }
-
-        return false;
 
     }
 
@@ -72,14 +72,13 @@ class Time {
             (:title, :abbreviation, :position, :description, :team);
         ";
 
-        $stmt = $this->conn->prepare($query);
-
         $this->title = htmlspecialchars(strip_tags($this->title));
         $this->abbreviation = htmlspecialchars(strip_tags($this->abbreviation));
         $this->position = htmlspecialchars(strip_tags($this->position));
         $this->description = htmlspecialchars(strip_tags($this->description));
         $this->team = htmlspecialchars(strip_tags($this->team));
 
+        $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':title', $this->title);
         $stmt->bindParam(':abbreviation', $this->abbreviation);
         $stmt->bindParam(':position', $this->position);
@@ -89,9 +88,9 @@ class Time {
         if ($stmt->execute()) {
             $this->id = $this->conn->lastInsertId();
             return true;
+        } else {
+            throw new InvalidArgumentException($stmt->errorInfo()[1]);
         }
-
-        return false;
 
     }
 
@@ -111,12 +110,10 @@ class Time {
         $stmt->bindParam(":team", $this->team);
 
         if ($stmt->execute()) {
-
             return true;
-
+        } else {
+            throw new InvalidArgumentException($stmt->errorInfo()[1]);
         }
-
-        return false;
 
     }
 

@@ -15,7 +15,12 @@ $data = json_decode(file_get_contents("php://input"));
 // ---- End of Initialize Default
 
 // ---- Authenticate Request
-$token = authenticate();
+try {
+    $token = authenticate();
+    $decoded = JWT::decode($token, $token_conf['secret'], $token_conf['algorithm']);
+} catch (Exception $e) {
+    returnForbidden();
+}
 // ---- End of Authenticate Request
 
 // ---- Get needed Objects
@@ -23,25 +28,18 @@ include_once '../../_config/objects/time.php';
 $time = new Time($db);
 // ---- End of Get needed Objects
 
+if (!$decoded->data->role->admin) {
+    returnForbidden('Not Admin');
+}
+
 try {
-
-    $decoded = JWT::decode($token, $token_conf['secret'], $token_conf['algorithm']);
-
-    if (!$decoded->data->role->admin) {
-        returnForbidden('Not Admin');
-    }
 
     $time->id = $data->id;
     $time->team = $decoded->data->team->id;
 
-    if ($time->delete()) {
-        returnSuccess();
-    } else {
-        returnError("Update failed. Title or Abbreviation may already exist");
-    }
+    $time->delete();
+    returnSuccess();
 
 } catch (Exception $e) {
-    returnForbidden();
+    returnBadRequest($e->getMessage());
 }
-
-

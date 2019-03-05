@@ -15,7 +15,12 @@ $data = json_decode(file_get_contents("php://input"));
 // ---- End of Initialize Default
 
 // ---- Authenticate Request
-$token = authenticate();
+try {
+    $token = authenticate();
+    $decoded = JWT::decode($token, $token_conf['secret'], $token_conf['algorithm']);
+} catch (Exception $e) {
+    returnForbidden();
+}
 // ---- End of Authenticate Request
 
 // ---- Get needed Objects
@@ -23,9 +28,8 @@ include_once '../../_config/objects/user.php';
 $user = new User($db);
 // ---- End of Get needed Objects
 
-try {
 
-    $decoded = JWT::decode($token, $token_conf['secret'], $token_conf['algorithm']);
+try {
 
     if (!$decoded->data->role->admin) {
         $user->id = $decoded->data->id;
@@ -41,14 +45,10 @@ try {
     $user->nickname = $data->nickname;
     $user->team = $decoded->data->team->id;
 
-    if ($user->edit()) {
-        returnSuccess();
-    } else {
-        returnError("Update failed.");
-    }
+    $user->edit();
 
 } catch (Exception $e) {
-    returnForbidden();
+
+    returnBadRequest($e->getMessage());
+
 }
-
-

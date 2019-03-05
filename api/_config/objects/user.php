@@ -62,8 +62,48 @@ class User {
 
     }
 
+    public function edit() {
+
+        $query = "
+        UPDATE " . $this->db_table . " SET
+        Firstname = :firstname,
+        Lastname = :lastname,
+        Language = :language,
+        Nickname = :nickname,
+        Roles_ID = :role
+        WHERE ID = :id AND Teams_ID = :team
+        ";
+
+        $this->firstname = htmlspecialchars(strip_tags($this->firstname));
+        $this->lastname = htmlspecialchars(strip_tags($this->lastname));
+        $this->language = htmlspecialchars(strip_tags($this->language));
+        $this->nickname = htmlspecialchars(strip_tags($this->nickname));
+        $this->role = htmlspecialchars(strip_tags($this->role));
+        $this->id = htmlspecialchars(strip_tags($this->id));
+        $this->team = htmlspecialchars(strip_tags($this->team));
+
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':firstname', $this->firstname);
+        $stmt->bindParam(':lastname', $this->lastname);
+        $stmt->bindParam(':language', $this->language);
+        $stmt->bindParam(':nickname', $this->nickname);
+        $stmt->bindParam(':role', $this->role);
+        $stmt->bindParam(':id', $this->id);
+        $stmt->bindParam(':team', $this->team);
+
+        if ($stmt->execute()) {
+            return true;
+        } else {
+            throw new InvalidArgumentException($stmt->errorInfo()[1]);
+        }
+
+    }
+
+    /*
     public function create() {
 
+
+        //NOT UP TO BEST PRACTISE
         $query = "
         INSERT INTO " . $this->db_table . "
         (`Firstname`, `Lastname`, `Language`, `Identifier`, `Nickname`, `Email`) VALUES
@@ -71,7 +111,7 @@ class User {
         ";
 
         $stmt = $this->conn->prepare($query);
-
+        //NOT UP TO BEST PRACTISE
         if (
             mb_strlen($this->firstname) > 0 &&
             mb_strlen($this->lastname) > 0 &&
@@ -81,7 +121,7 @@ class User {
             mb_strlen($this->nickname) > 0 &&
             mb_strlen($this->nickname) <= 6
         ) {
-
+            //NOT UP TO BEST PRACTISE
             $this->firstname = htmlspecialchars(strip_tags($this->firstname));
             $this->lastname = htmlspecialchars(strip_tags($this->lastname));
             $this->language = htmlspecialchars(strip_tags($this->language));
@@ -101,7 +141,7 @@ class User {
         } else {
             throw new InvalidArgumentException('Invalid E-Mail Adress');
         }
-
+        //NOT UP TO BEST PRACTISE
         $stmt->bindParam(':firstname', $this->firstname);
         $stmt->bindParam(':lastname', $this->lastname);
         $stmt->bindParam(':language', $this->language);
@@ -111,7 +151,7 @@ class User {
 
         $identifier_hash = password_hash($this->identifier, PASSWORD_BCRYPT);
         $stmt->bindParam(':identifier', $identifier_hash);
-
+        //NOT UP TO BEST PRACTISE
         if ($stmt->execute()) {
             return true;
         }
@@ -119,43 +159,6 @@ class User {
         return false;
 
     }
-
-    public function edit() {
-
-        $query = "
-        UPDATE " . $this->db_table . " SET
-        Firstname = :firstname,
-        Lastname = :lastname,
-        Language = :language,
-        Nickname = :nickname,
-        Roles_ID = :role
-        WHERE ID = :id AND Teams_ID = :team
-        ";
-
-        $stmt = $this->conn->prepare($query);
-        $this->firstname = htmlspecialchars(strip_tags($this->firstname));
-        $this->lastname = htmlspecialchars(strip_tags($this->lastname));
-        $this->language = htmlspecialchars(strip_tags($this->language));
-        $this->nickname = htmlspecialchars(strip_tags($this->nickname));
-        $this->role = htmlspecialchars(strip_tags($this->role));
-        $this->id = htmlspecialchars(strip_tags($this->id));
-        $this->team = htmlspecialchars(strip_tags($this->team));
-
-        $stmt->bindParam(':firstname', $this->firstname);
-        $stmt->bindParam(':lastname', $this->lastname);
-        $stmt->bindParam(':language', $this->language);
-        $stmt->bindParam(':nickname', $this->nickname);
-        $stmt->bindParam(':role', $this->role);
-        $stmt->bindParam(':id', $this->id);
-        $stmt->bindParam(':team', $this->team);
-
-        if ($stmt->execute()) {
-            return true;
-        }
-
-        return false;
-
-    }
-
+    */
 
 }

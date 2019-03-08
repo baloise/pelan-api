@@ -45,6 +45,7 @@ try {
                 "user" => $user,
                 "time" => $time,
                 "date" => (new DateTime($date))->format('Y/m/d'),
+                "note" => $note,
                 "shift" => $id
             );
             array_push($assignments_arr, $assignment_item);

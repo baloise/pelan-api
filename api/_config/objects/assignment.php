@@ -21,6 +21,7 @@ class Assignment {
         $query = "
         SELECT ID as id,
         Date as date,
+        Note as note,
         Times_ID as time,
         Shifts_ID as shift,
         Users_ID as user

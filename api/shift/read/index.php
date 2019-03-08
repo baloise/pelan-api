@@ -58,5 +58,5 @@ try {
     }
 
 } catch (Exception $e) {
-    returnForbidden();
+    returnBadRequest();
 }

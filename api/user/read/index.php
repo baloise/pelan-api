@@ -24,39 +24,38 @@ try {
 // ---- End of Authenticate Request
 
 // ---- Get needed Objects
-include_once '../../_config/objects/time.php';
+include_once '../../_config/objects/user.php';
 $user = new User($db);
 // ---- End of Get needed Objects
 
 
 try {
 
-    $time->team = $decoded->data->team->id;
-    $stmt = $time->read();
+    $user->team = $decoded->data->team->id;
+    $stmt = $user->read();
     $num = $stmt->rowCount();
 
     if ($num > 0) {
 
-        $times_arr = array();
+        $users_arr = array();
 
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             extract($row);
-            $time_item = array(
+            $user_item = array(
                 "id" => $id,
-                "title" => $title,
-                "abbreviation" => $abbreviation,
-                "position" => $position,
-                "description" => $description
+                "firstname" => $firstname,
+                "lastname" => $lastname,
+                "nickname" => $nickname
             );
-            array_push($times_arr, $time_item);
+            array_push($users_arr, $user_item);
         }
 
-        returnSuccess($times_arr);
+        returnSuccess($users_arr);
 
     } else {
         returnNoData();
     }
 
 } catch (Exception $e) {
-    returnForbidden();
+    returnBadRequest();
 }

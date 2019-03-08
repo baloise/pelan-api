@@ -102,7 +102,7 @@ class User {
     public function read() {
 
         $query = "
-        SELECT ID as id, Firstname as firstname, Lastname as lastname, Color as color, Nickname as nickname
+        SELECT ID as id, Firstname as firstname, Lastname as lastname, Nickname as nickname
         FROM ". $this->db_table . "
         WHERE Teams_ID = :team
         ";

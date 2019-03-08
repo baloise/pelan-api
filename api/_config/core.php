@@ -5,13 +5,18 @@ error_reporting(E_ALL);
 //error_reporting(0); <-- to deactivate
 date_default_timezone_set('Europe/Zurich');
 
+$api_conf = array(
+    "environment" => "test", // 'test', 'prod'
+    "corsOrigin" => "http://localhost:8080"
+);
+
 $token_conf = array(
     "secret" => 'asdffae@hjk4352[bnbnmv]lkjhgfr:334',
     "algorithm" => array('HS256'),
     "issuer" => 'Pelan Application',
     "issuedAt" => time(),
     "notBefore" => time(),
-    "expireAt" => time() + (15*60),
+    "expireAt" => time() + (15*60)
 );
 
 function setAuth($token, $expire){

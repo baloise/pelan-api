@@ -1,9 +1,9 @@
 <?php
 
 // ---- Include Defaults
+include_once '../../_config/core.php';
 include_once '../../_config/headers.php';
 include_once '../../_config/database.php';
-include_once '../../_config/core.php';
 include_once '../../_config/libraries/php-jwt-master/src/BeforeValidException.php';
 include_once '../../_config/libraries/php-jwt-master/src/ExpiredException.php';
 include_once '../../_config/libraries/php-jwt-master/src/SignatureInvalidException.php';
@@ -13,7 +13,6 @@ use \Firebase\JWT\JWT;
 // ---- Initialize Default
 $database = new Database();
 $db = $database->connect();
-$data = json_decode(file_get_contents("php://input"));
 
 // ---- Include Object
 include_once '../../_config/objects/user.php';
@@ -22,16 +21,33 @@ include_once '../../_config/objects/role.php';
 $user = new User($db);
 // ---- End of default Configuration
 
-$user->email = $data->email;
-$user_exists = $user->userExists();
 
-if($user_exists && password_verify($data->identifier, $user->identifier)){
+if ($api_conf['environment'] === 'test' && !isset($_SERVER['PHP_AUTH_USER'])) {
+
+    header('WWW-Authenticate: Basic realm="My Realm"');
+    header('HTTP/1.0 401 Unauthorized');
+    die('Auth unsuccessful');
+
+} else if($api_conf['environment'] === 'test'){
+
+    //Basic Auth if Test
+    $user->email = $_SERVER['PHP_AUTH_USER'];
+    $submitKey = $_SERVER['PHP_AUTH_PW'];
+
+} else if($api_conf['environment'] === 'prod'){
+
+    //Medusa Login if Prod
+    $user->email = 'mailByMedusa';
+    $submitKey = 'keyByMedusa';
+
+}
+
+if($user->userExists() && password_verify($submitKey, $user->identifier)){
 
     $team = new Team($db);
     $team->id = $user->team;
 
     if($team->read()){
-
 
         $role = new Role($db);
         $role->id = $user->role;
@@ -64,7 +80,7 @@ if($user_exists && password_verify($data->identifier, $user->identifier)){
             );
 
             $jwt = JWT::encode($token, $token_conf['secret']);
-            if(setAuth($jwt, $token_conf['expireDefault'])){
+            if(setAuth($jwt, $token_conf['expireAt'])){
                 returnSuccess();
             }
 
@@ -72,7 +88,5 @@ if($user_exists && password_verify($data->identifier, $user->identifier)){
     }
 
 } else {
-
     returnNoData();
-
 }

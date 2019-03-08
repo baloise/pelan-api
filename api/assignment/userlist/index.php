@@ -1,9 +1,9 @@
 <?php
 
 // ---- Initialize Default
+include_once '../../_config/core.php';
 include_once '../../_config/headers.php';
 include_once '../../_config/database.php';
-include_once '../../_config/core.php';
 include_once '../../_config/libraries/php-jwt-master/src/BeforeValidException.php';
 include_once '../../_config/libraries/php-jwt-master/src/ExpiredException.php';
 include_once '../../_config/libraries/php-jwt-master/src/SignatureInvalidException.php';
@@ -24,29 +24,39 @@ try {
 // ---- End of Authenticate Request
 
 // ---- Get needed Objects
-include_once '../../_config/objects/user.php';
+include_once '../../_config/objects/time.php';
 $user = new User($db);
 // ---- End of Get needed Objects
 
 
 try {
 
-    if (!$decoded->data->role->admin) {
-        $user->id = $decoded->data->id;
-        $user->role = $decoded->data->role->id;
+    $time->team = $decoded->data->team->id;
+    $stmt = $time->read();
+    $num = $stmt->rowCount();
+
+    if ($num > 0) {
+
+        $times_arr = array();
+
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            extract($row);
+            $time_item = array(
+                "id" => $id,
+                "title" => $title,
+                "abbreviation" => $abbreviation,
+                "position" => $position,
+                "description" => $description
+            );
+            array_push($times_arr, $time_item);
+        }
+
+        returnSuccess($times_arr);
+
     } else {
-        $user->id = $data->id;
-        $user->role = $data->role;
+        returnNoData();
     }
 
-    $user->firstname = $data->firstname;
-    $user->lastname = $data->lastname;
-    $user->language = $data->language;
-    $user->nickname = $data->nickname;
-    $user->team = $decoded->data->team->id;
-
-    $user->edit();
-
 } catch (Exception $e) {
-    returnBadRequest($e->getMessage());
+    returnForbidden();
 }

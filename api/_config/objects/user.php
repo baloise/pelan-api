@@ -99,6 +99,22 @@ class User {
 
     }
 
+    public function read() {
+
+        $query = "
+        SELECT ID as id, Firstname as firstname, Lastname as lastname, Color as color, Nickname as nickname
+        FROM ". $this->db_table . "
+        WHERE Teams_ID = :team
+        ";
+
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':team', $this->team);
+        $stmt->execute();
+
+        return $stmt;
+
+    }
+
     /*
     public function create() {
 

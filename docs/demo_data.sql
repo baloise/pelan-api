@@ -19,4 +19,10 @@ INSERT INTO `users` (`ID`, `InsertDate`, `UpdateDate`, `Firstname`, `Lastname`, 
 
 INSERT INTO `shifts` (`ID`, `InsertDate`, `UpdateDate`, `Title`, `Abbreviation`, `Color`, `Description`, `Teams_ID`) VALUES
 (NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'Telefon', 'Tele', '#42f465', 'Anrufe entgegennehmen', '1'),
+(NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'Telefon Früh', 'TeFu', '#01b023', 'Anrufe früh entgegennehmen', '1'),
+(NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'Vor-Ort Früh', 'IBFu', '#4150f4', 'Vor-Ort Tickets früh bearbeiten', '1'),
 (NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'Vor-Ort', 'IBS', '#4150f4', 'Vor-Ort Tickets bearbeiten', '1');
+
+INSERT INTO `times` (`Description`, `Title`, `Abbreviation`, `Position`, `Teams_ID`) VALUES
+('Vormittags', 'Morgen', 'Mo', 1, '1'),
+('Nachmittags', 'Abend', 'Ab', 2, '1');

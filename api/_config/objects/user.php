@@ -99,7 +99,7 @@ class User {
 
     }
 
-    public function read() {
+    public function read($userid = false) {
 
         $query = "
         SELECT ID as id, Firstname as firstname, Lastname as lastname, Nickname as nickname
@@ -107,8 +107,15 @@ class User {
         WHERE Teams_ID = :team
         ";
 
+        if($userid){
+            $query.= " AND ID = :userid";
+        }
+
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':team', $this->team);
+        if($userid){
+            $stmt->bindParam(':userid', $userid);
+        }
         $stmt->execute();
 
         return $stmt;

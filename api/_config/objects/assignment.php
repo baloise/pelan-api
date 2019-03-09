@@ -6,11 +6,11 @@ class Assignment {
     private $db_table = "assignments";
 
     public $id;
-    public $date;
-    public $note;
+    public $user;
     public $time;
     public $shift;
-    public $user;
+    public $date;
+    public $note;
 
     public function __construct($db) {
         $this->conn = $db;
@@ -37,30 +37,27 @@ class Assignment {
 
     }
 
-    /*
-    public function edit() {
+    public function set() {
 
         $query = "
-        UPDATE ".$this->db_table . " SET
-        `Title` = :title, `Abbreviation` = :abbreviation, `Color` = :color, `Description` = :description
-        WHERE `shifts`.`ID` = :id AND `shifts`.`Teams_ID` = :team;
+        REPLACE INTO ". $this->db_table . "
+        (`Note`, `Date`, `Times_ID`, `Shifts_ID`, `Users_ID`) VALUES
+        (:note, :date, :time, :shift, :user);
         ";
 
         $stmt = $this->conn->prepare($query);
 
-        $this->title = htmlspecialchars(strip_tags($this->title));
-        $this->abbreviation = htmlspecialchars(strip_tags($this->abbreviation));
-        $this->color = htmlspecialchars(strip_tags($this->color));
-        $this->description = htmlspecialchars(strip_tags($this->description));
-        $this->id = htmlspecialchars(strip_tags($this->id));
-        $this->team = htmlspecialchars(strip_tags($this->team));
+        $this->note = htmlspecialchars(strip_tags($this->note));
+        $this->date = htmlspecialchars(strip_tags($this->date));
+        $this->time = htmlspecialchars(strip_tags($this->time));
+        $this->shift = htmlspecialchars(strip_tags($this->shift));
+        $this->user = htmlspecialchars(strip_tags($this->user));
 
-        $stmt->bindParam(':title', $this->title);
-        $stmt->bindParam(':abbreviation', $this->abbreviation);
-        $stmt->bindParam(':color', $this->color);
-        $stmt->bindParam(':description', $this->description);
-        $stmt->bindParam(':id', $this->id);
-        $stmt->bindParam(':team', $this->team);
+        $stmt->bindParam(':note', $this->note);
+        $stmt->bindParam(':date', $this->date);
+        $stmt->bindParam(':time', $this->time);
+        $stmt->bindParam(':shift', $this->shift);
+        $stmt->bindParam(':user', $this->user);
 
         if ($stmt->execute()) {
             return true;
@@ -70,6 +67,7 @@ class Assignment {
 
     }
 
+    /*
     public function create() {
 
         $query = "

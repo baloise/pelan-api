@@ -24,42 +24,36 @@ try {
 // ---- End of Authenticate Request
 
 // ---- Get needed Objects
-include_once '../../_config/objects/user.php';
-$user = new User($db);
+include_once '../../_config/objects/assignment.php';
+$assignment = new Assignment($db);
 // ---- End of Get needed Objects
 
 
+if (!$decoded->data->role->admin) {
+    returnForbidden('Not Admin');
+}
+
 try {
 
+    include_once '../../_config/objects/user.php';
+    $user = new User($db);
     $user->team = $decoded->data->team->id;
+    $exist = ($user->read($data->user))->rowCount();
 
-    if($data && $data->user){
-        $stmt = $user->read($data->user);
-    } else {
-        $stmt = $user->read();
-    }
+    if($exist){
+        $assignment->user = $data->user;
+        $assignment->time = $data->time;
+        $assignment->shift = $data->shift;
+        $assignment->date = $data->date;
+        $assignment->note = $data->note;
 
-    $num = $stmt->rowCount();
-
-    if ($num > 0) {
-
-        $users_arr = array();
-
-        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            extract($row);
-            $user_item = array(
-                "id" => $id,
-                "firstname" => $firstname,
-                "lastname" => $lastname,
-                "nickname" => $nickname
-            );
-            array_push($users_arr, $user_item);
+        if ($assignment->set()) {
+            returnSuccess();
+        } else {
+            returnError("Could not set Entry");
         }
-
-        returnSuccess($users_arr);
-
     } else {
-        returnNoData();
+        returnForbidden('User not available');
     }
 
 } catch (Exception $e) {

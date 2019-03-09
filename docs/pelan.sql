@@ -86,7 +86,7 @@ CREATE TABLE IF NOT EXISTS assignments (
 	Times_ID INT NOT NULL,
 	Shifts_ID INT NOT NULL,
 	Users_ID INT NOT NULL,
-    UNIQUE INDEX `UNIQUE_Time_per_User_and_Shift_per_Date` (`Times_ID`, `Users_ID`, `Shifts_ID`, `Date`),
+    UNIQUE INDEX `UNIQUE_Time_per_User_per_Date` (`Times_ID`, `Users_ID`, `Date`),
     PRIMARY KEY (ID),
 	FOREIGN KEY (Times_ID) REFERENCES times(ID),
 	FOREIGN KEY (Shifts_ID) REFERENCES shifts(ID),

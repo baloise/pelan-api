@@ -31,7 +31,7 @@ $assignment = new Assignment($db);
 
 try {
 
-    $assignment->user = $data;
+    $assignment->user = $data->user;
     $stmt = $assignment->read();
     $num = $stmt->rowCount();
 
@@ -46,7 +46,7 @@ try {
                 "time" => $time,
                 "date" => (new DateTime($date))->format('Y/m/d'),
                 "note" => $note,
-                "shift" => $id
+                "shift" => $shift
             );
             array_push($assignments_arr, $assignment_item);
         }

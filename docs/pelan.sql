@@ -66,13 +66,12 @@ CREATE TABLE IF NOT EXISTS times (
     UpdateDate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     Description VARCHAR(45),
     Title VARCHAR(45) NOT NULL,
-    Abbreviation VARCHAR(4) NOT NULL,
-    Position INT NOT NULL,
+    Abbreviation VARCHAR(4),
+    Position INT,
     Deleted BOOLEAN NOT NULL DEFAULT false,
 	Teams_ID INT NOT NULL,
     UNIQUE INDEX `UNIQUE_Title_per_Team` (`Title`, `Teams_ID`),
     UNIQUE INDEX `UNIQUE_Abbreviation_per_Team` (`Abbreviation`, `Teams_ID`),
-    UNIQUE INDEX `UNIQUE_Position_per_Team` (`Position`, `Teams_ID`),
     PRIMARY KEY (ID),
 	FOREIGN KEY (Teams_ID) REFERENCES teams(ID)
 );

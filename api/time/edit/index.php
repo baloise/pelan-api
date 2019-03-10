@@ -36,10 +36,10 @@ try {
 
     $time->id = $data->id;
     $time->title = $data->title;
-    $time->abbreviation = $data->abbreviation;
     $time->position = $data->position;
-    $time->description = $data->description;
     $time->team = $decoded->data->team->id;
+    //$time->abbreviation = $data->abbreviation;
+    //$time->description = $data->description;
 
     $time->edit();
     returnSuccess();

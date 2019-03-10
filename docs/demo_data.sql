@@ -18,11 +18,11 @@ INSERT INTO `users` (`ID`, `InsertDate`, `UpdateDate`, `Firstname`, `Lastname`, 
 (NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'Peter', 'Silie', 'de', '$2y$10$UlBo14YZ4tt1adLdVE0EcuIxZAm.selNEmxektR/YRMyGqSS2Pd1.', 'Peter', 'peter.silie@demo.com', '1', '1'); -- xx010
 
 INSERT INTO `shifts` (`ID`, `InsertDate`, `UpdateDate`, `Title`, `Abbreviation`, `Color`, `Description`, `Teams_ID`) VALUES
-(NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'Telefon', 'Tele', '#42f465', 'Anrufe entgegennehmen', '1'),
-(NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'Telefon FrÃ¼h', 'TeFu', '#01b023', 'Anrufe frÃ¼h entgegennehmen', '1'),
-(NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'Vor-Ort FrÃ¼h', 'IBFu', '#4150f4', 'Vor-Ort Tickets frÃ¼h bearbeiten', '1'),
-(NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'Vor-Ort', 'IBS', '#a8b0ff', 'Vor-Ort Tickets bearbeiten', '1');
+(NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'Telefon', 'Tele', '#00ff00', 'Anrufe entgegennehmen', '1'),
+(NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'Telefon FrÃ¼h', 'TeFu', '#ff0000', 'Anrufe frÃ¼h entgegennehmen', '1'),
+(NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'Vor-Ort FrÃ¼h', 'IBFu', '#0000ff', 'Vor-Ort Tickets frÃ¼h bearbeiten', '1'),
+(NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'Vor-Ort', 'IBS', '#ffff00', 'Vor-Ort Tickets bearbeiten', '1');
 
 INSERT INTO `times` (`ID`, `InsertDate`, `UpdateDate`, `Description`, `Title`, `Abbreviation`, `Position`, `Teams_ID`) VALUES
-(NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'Vormittags', 'Morgen', 'Mo', 1, '1'),
-(NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'Nachmittags', 'Abend', 'Ab', 2, '1');
+(NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, '', 'Morgen', NULL, 1, '1'),
+(NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, '', 'Abend', NULL, 2, '1');

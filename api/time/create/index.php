@@ -36,9 +36,9 @@ if (!$decoded->data->role->admin) {
 try {
 
     $time->title = $data->title;
-    $time->abbreviation = $data->abbreviation;
+    //$time->abbreviation = $data->abbreviation;
     $time->position = $data->position;
-    $time->description = $data->description;
+    //$time->description = $data->description;
     $time->team = $decoded->data->team->id;
 
     $time->create();

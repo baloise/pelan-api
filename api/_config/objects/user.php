@@ -30,7 +30,6 @@ class User {
         LIMIT 0,1
         ";
 
-
         if (filter_var($this->email, FILTER_VALIDATE_EMAIL)) {
             $this->email = htmlspecialchars(strip_tags($this->email));
         } else {
@@ -82,6 +81,12 @@ class User {
         $this->id = htmlspecialchars(strip_tags($this->id));
         $this->team = htmlspecialchars(strip_tags($this->team));
 
+        if (
+            strlen($this->firstname) < 1 ||
+            strlen($this->lastname) < 1 ||
+            strlen($this->nickname) < 1
+        ){ throw new InvalidArgumentException('Min. 1 Value missing'); }
+
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':firstname', $this->firstname);
         $stmt->bindParam(':lastname', $this->lastname);
@@ -102,7 +107,7 @@ class User {
     public function read($userid = false) {
 
         $query = "
-        SELECT ID as id, Firstname as firstname, Lastname as lastname, Nickname as nickname
+        SELECT ID as id, Firstname as firstname, Lastname as lastname, Nickname as nickname, Roles_ID as role
         FROM ". $this->db_table . "
         WHERE Teams_ID = :team
         ";

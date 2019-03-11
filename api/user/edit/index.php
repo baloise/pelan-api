@@ -34,17 +34,28 @@ try {
     if (!$decoded->data->role->admin) {
         $user->id = $decoded->data->id;
         $user->role = $decoded->data->role->id;
+        if(isset($data->language)){
+            $user->language = $data->language;
+        } else {
+            returnBadRequest('What are you trying to do???');
+        }
     } else {
         $user->id = $data->id;
         $user->role = $data->role;
+        $user->firstname = $data->firstname;
+        $user->lastname = $data->lastname;
+        $user->nickname = $data->nickname;
+        if(isset($data->language)){
+            $user->language = $data->language;
+        }
     }
 
-    $user->firstname = $data->firstname;
-    $user->lastname = $data->lastname;
-    $user->language = $data->language;
-    $user->nickname = $data->nickname;
     $user->team = $decoded->data->team->id;
     $user->email = $decoded->data->email;
+
+    if($user->edit() && $user->id !== $decoded->data->id){
+        returnSuccess();
+    }
 
     if($user->edit() && $user->userExists()){
 

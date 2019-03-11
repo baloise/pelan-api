@@ -51,7 +51,8 @@ try {
                 "id" => $id,
                 "firstname" => $firstname,
                 "lastname" => $lastname,
-                "nickname" => $nickname
+                "nickname" => $nickname,
+                "role" => $role
             );
             array_push($users_arr, $user_item);
         }

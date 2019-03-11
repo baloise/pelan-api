@@ -1,9 +1,9 @@
 <?php
 
 // ---- Initialize Default
+include_once '../../_config/core.php';
 include_once '../../_config/headers.php';
 include_once '../../_config/database.php';
-include_once '../../_config/core.php';
 include_once '../../_config/libraries/php-jwt-master/src/BeforeValidException.php';
 include_once '../../_config/libraries/php-jwt-master/src/ExpiredException.php';
 include_once '../../_config/libraries/php-jwt-master/src/SignatureInvalidException.php';
@@ -44,8 +44,56 @@ try {
     $user->language = $data->language;
     $user->nickname = $data->nickname;
     $user->team = $decoded->data->team->id;
+    $user->email = $decoded->data->email;
 
-    $user->edit();
+    if($user->edit() && $user->userExists()){
+
+        include_once '../../_config/objects/team.php';
+        include_once '../../_config/objects/role.php';
+
+        $team = new Team($db);
+        $team->id = $decoded->data->team->id;
+
+        if($team->read()){
+
+            $role = new Role($db);
+            $role->id = $user->role;
+            if($role->read()){
+
+                $token = array(
+                "iss" => $token_conf['issuer'],
+                "iat" => $token_conf['issuedAt'],
+                "exp" => $token_conf['expireAt'],
+                "nbf" => $token_conf['notBefore'],
+                "data" => array(
+                "id" => $user->id,
+                "firstname" => $user->firstname,
+                "lastname" => $user->lastname,
+                "language" => $user->language,
+                "nickname" => $user->nickname,
+                "email" => $user->email,
+                "role" => array(
+                "id" => $role->id,
+                "title" => $role->title,
+                "abbreviation" => $role->abbreviation,
+                "admin" => $role->admin,
+                ),
+                "team" => array(
+                "id" => $team->id,
+                "title" => $team->title,
+                "abbreviation" => $team->abbreviation
+                ),
+                )
+                );
+
+                $jwt = JWT::encode($token, $token_conf['secret']);
+                if(setAuth($jwt, $token_conf['expireAt'])){
+                    returnSuccess();
+                }
+
+            }
+        }
+    }
 
 } catch (Exception $e) {
     returnBadRequest($e->getMessage());

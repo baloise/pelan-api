@@ -35,11 +35,11 @@ if (!$decoded->data->role->admin) {
 
 try {
 
-    $shift->title = $data->title;
-    $shift->abbreviation = $data->abbreviation;
-    $shift->color = $data->color;
-    $shift->description = $data->description;
     $shift->id = $data->id;
+    $shift->title = $data->title;
+    $shift->color = $data->color;
+    $shift->abbreviation = $data->abbreviation;
+    $shift->description = $data->description;
     $shift->team = $decoded->data->team->id;
 
     if ($shift->edit()) {
@@ -49,5 +49,5 @@ try {
     }
 
 } catch (Exception $e) {
-    returnForbidden();
+    returnBadRequest($e);
 }

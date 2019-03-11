@@ -131,11 +131,11 @@ class User {
 
     }
 
-    /*
+
     public function create() {
 
 
-        //NOT UP TO BEST PRACTISE
+
         $query = "
         INSERT INTO " . $this->db_table . "
         (`Firstname`, `Lastname`, `Language`, `Identifier`, `Nickname`, `Email`) VALUES
@@ -143,26 +143,22 @@ class User {
         ";
 
         $stmt = $this->conn->prepare($query);
-        //NOT UP TO BEST PRACTISE
-        if (
-            mb_strlen($this->firstname) > 0 &&
-            mb_strlen($this->lastname) > 0 &&
-            mb_strlen($this->language) > 0 &&
-            mb_strlen($this->language) <= 2 &&
-            mb_strlen($this->identifier) > 0 &&
-            mb_strlen($this->nickname) > 0 &&
-            mb_strlen($this->nickname) <= 6
-        ) {
-            //NOT UP TO BEST PRACTISE
-            $this->firstname = htmlspecialchars(strip_tags($this->firstname));
-            $this->lastname = htmlspecialchars(strip_tags($this->lastname));
-            $this->language = htmlspecialchars(strip_tags($this->language));
-            $this->identifier = htmlspecialchars(strip_tags($this->identifier));
-            $this->nickname = htmlspecialchars(strip_tags($this->nickname));
 
-        } else {
-            throw new InvalidArgumentException('Missing Values');
-        }
+        if (
+            mb_strlen($this->firstname) < 1 ||
+            mb_strlen($this->lastname) < 1 ||
+            mb_strlen($this->language) < 1 ||
+            mb_strlen($this->language) < 2 ||
+            mb_strlen($this->identifier) < 1 ||
+            mb_strlen($this->nickname) < 1 ||
+            mb_strlen($this->nickname) > 6
+        ) { throw new InvalidArgumentException('Missing Values'); }
+
+        $this->firstname = htmlspecialchars(strip_tags($this->firstname));
+        $this->lastname = htmlspecialchars(strip_tags($this->lastname));
+        $this->language = htmlspecialchars(strip_tags($this->language));
+        $this->identifier = htmlspecialchars(strip_tags($this->identifier));
+        $this->nickname = htmlspecialchars(strip_tags($this->nickname));
 
         if ($this->userExists()) {
             throw new InvalidArgumentException('User already exists');
@@ -173,7 +169,7 @@ class User {
         } else {
             throw new InvalidArgumentException('Invalid E-Mail Adress');
         }
-        //NOT UP TO BEST PRACTISE
+
         $stmt->bindParam(':firstname', $this->firstname);
         $stmt->bindParam(':lastname', $this->lastname);
         $stmt->bindParam(':language', $this->language);
@@ -183,14 +179,17 @@ class User {
 
         $identifier_hash = password_hash($this->identifier, PASSWORD_BCRYPT);
         $stmt->bindParam(':identifier', $identifier_hash);
-        //NOT UP TO BEST PRACTISE
+
         if ($stmt->execute()) {
+            $this->id = $this->conn->lastInsertId();
             return true;
+        } else {
+            throw new InvalidArgumentException($stmt->errorInfo()[1]);
         }
 
         return false;
 
     }
-    */
+
 
 }

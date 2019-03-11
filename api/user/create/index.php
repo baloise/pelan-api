@@ -1,9 +1,9 @@
 <?php
 
 // ---- Initialize Default
+include_once '../../_config/core.php';
 include_once '../../_config/headers.php';
 include_once '../../_config/database.php';
-include_once '../../_config/core.php';
 $database = new Database();
 $db = $database->connect();
 $data = json_decode(file_get_contents("php://input"));
@@ -14,14 +14,10 @@ include_once '../../_config/objects/user.php';
 $user = new User($db);
 // ---- End of Get needed Objects
 
-if (
-    $data->firstname &&
-    $data->lastname &&
-    $data->language &&
-    $data->identifier &&
-    $data->nickname &&
-    $data->email
-) {
+returnBadRequest('This function has not been implemented yet')
+
+/*
+try {
 
     $user->firstname = $data->firstname;
     $user->lastname = $data->lastname;
@@ -30,15 +26,10 @@ if (
     $user->nickname = $data->nickname;
     $user->email = $data->email;
 
-    try {
-        $user->create();
-        returnSuccess();
-    } catch (Exception $e) {
-        returnError($e);
-    }
+    $user->create();
+    returnSuccess($shift->id);
 
-} else {
-    returnBadRequest();
+} catch (Exception $e) {
+    returnBadRequest($e->getMessage());
 }
-
-
+*/

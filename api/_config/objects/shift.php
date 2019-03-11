@@ -42,18 +42,18 @@ class Shift {
 
         $stmt = $this->conn->prepare($query);
 
-        $this->title = htmlspecialchars(strip_tags($this->title));
-        $this->abbreviation = htmlspecialchars(strip_tags($this->abbreviation));
-        $this->color = htmlspecialchars(strip_tags($this->color));
-        $this->description = htmlspecialchars(strip_tags($this->description));
         $this->id = htmlspecialchars(strip_tags($this->id));
+        $this->title = htmlspecialchars(strip_tags($this->title));
+        $this->color = htmlspecialchars(strip_tags($this->color));
+        $this->abbreviation = htmlspecialchars(strip_tags($this->abbreviation));
+        $this->description = htmlspecialchars(strip_tags($this->description));
         $this->team = htmlspecialchars(strip_tags($this->team));
 
-        $stmt->bindParam(':title', $this->title);
-        $stmt->bindParam(':abbreviation', $this->abbreviation);
-        $stmt->bindParam(':color', $this->color);
-        $stmt->bindParam(':description', $this->description);
         $stmt->bindParam(':id', $this->id);
+        $stmt->bindParam(':title', $this->title);
+        $stmt->bindParam(':color', $this->color);
+        $stmt->bindParam(':abbreviation', $this->abbreviation);
+        $stmt->bindParam(':description', $this->description);
         $stmt->bindParam(':team', $this->team);
 
         if ($stmt->execute()) {

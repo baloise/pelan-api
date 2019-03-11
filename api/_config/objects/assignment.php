@@ -61,68 +61,38 @@ class Assignment {
 
         if ($stmt->execute()) {
             return true;
+        } else {
+            throw new InvalidArgumentException($stmt->errorInfo()[1]);
         }
 
         return false;
 
     }
-
-    /*
-    public function create() {
-
-        $query = "
-            INSERT INTO ".$this->db_table . "
-            (`Title`, `Abbreviation`, `Color`, `Description`, `Teams_ID`) VALUES
-            (:title, :abbreviation, :color, :description, :team);
-        ";
-
-        $stmt = $this->conn->prepare($query);
-
-        $this->title = htmlspecialchars(strip_tags($this->title));
-        $this->abbreviation = htmlspecialchars(strip_tags($this->abbreviation));
-        $this->color = htmlspecialchars(strip_tags($this->color));
-        $this->description = htmlspecialchars(strip_tags($this->description));
-        $this->team = htmlspecialchars(strip_tags($this->team));
-
-        $stmt->bindParam(':title', $this->title);
-        $stmt->bindParam(':abbreviation', $this->abbreviation);
-        $stmt->bindParam(':color', $this->color);
-        $stmt->bindParam(':description', $this->description);
-        $stmt->bindParam(':team', $this->team);
-
-        if ($stmt->execute()) {
-            $this->id = $this->conn->lastInsertId();
-            return true;
-        }
-
-        return false;
-
-    }
-
 
     public function delete() {
 
         $query = "
-        DELETE FROM " . $this->db_table . "
-        WHERE ID = :id AND Teams_ID = :team
+        DELETE FROM " . $this->db_table . " WHERE
+        Date = :date AND Times_ID = :time AND Users_ID = :user
         ";
 
-        $this->id = htmlspecialchars(strip_tags($this->id));
-        $this->team = htmlspecialchars(strip_tags($this->team));
+        $this->date = htmlspecialchars(strip_tags($this->date));
+        $this->time = htmlspecialchars(strip_tags($this->time));
+        $this->user = htmlspecialchars(strip_tags($this->user));
 
         $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(":id", $this->id);
-        $stmt->bindParam(":team", $this->team);
+        $stmt->bindParam(":date", $this->date);
+        $stmt->bindParam(":time", $this->time);
+        $stmt->bindParam(":user", $this->user);
 
         if ($stmt->execute()) {
-
             return true;
-
+        } else {
+            throw new InvalidArgumentException($stmt->errorInfo()[1]);
         }
 
         return false;
 
     }
-    */
 
 }

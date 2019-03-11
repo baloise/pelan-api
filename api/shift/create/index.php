@@ -38,15 +38,14 @@ try {
     $shift->title = $data->title;
     $shift->abbreviation = $data->abbreviation;
     $shift->color = $data->color;
-    $shift->description = $data->description;
     $shift->team = $decoded->data->team->id;
-
-    if ($shift->create()) {
-        returnSuccess($shift->id);
-    } else {
-        returnError("Could not create entry");
+    if(isset($data->description)){
+        $shift->description = $data->description;
     }
 
+    $shift->create();
+    returnSuccess($shift->id);
+
 } catch (Exception $e) {
-    returnBadRequest();
+    returnBadRequest($e->getMessage());
 }

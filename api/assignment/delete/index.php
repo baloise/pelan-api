@@ -24,8 +24,8 @@ try {
 // ---- End of Authenticate Request
 
 // ---- Get needed Objects
-include_once '../../_config/objects/shift.php';
-$shift = new Shift($db);
+include_once '../../_config/objects/assignment.php';
+$assignment = new Assignment($db);
 // ---- End of Get needed Objects
 
 
@@ -35,10 +35,12 @@ if (!$decoded->data->role->admin) {
 
 try {
 
-    $shift->id = $data->id;
-    $shift->team = $decoded->data->team->id;
+    $assignment->user = $data->user;
+    $assignment->time = $data->time;
+    $assignment->date = $data->date;
+    $assignment->team = $decoded->data->team->id;
 
-    $shift->delete();
+    $assignment->delete();
     returnSuccess();
 
 } catch (Exception $e) {

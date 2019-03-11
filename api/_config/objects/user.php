@@ -81,18 +81,22 @@ class User {
         $this->id = htmlspecialchars(strip_tags($this->id));
         $this->team = htmlspecialchars(strip_tags($this->team));
 
-        if (
-            strlen($this->firstname) < 1 ||
-            strlen($this->lastname) < 1 ||
-            strlen($this->nickname) < 1
-        ){ throw new InvalidArgumentException('Min. 1 Value missing'); }
+        if (strlen($this->firstname) < 1 || strlen($this->lastname) < 1 || strlen($this->nickname) < 1){
+            if(strlen($this->language) < 1){
+                throw new InvalidArgumentException('Min. 1 Value missing');
+            } else {
+                $query = "UPDATE " . $this->db_table . " SET Language = :language WHERE ID = :id AND Teams_ID = :team";
+                $stmt = $this->conn->prepare($query);
+            }
+        } else {
+            $stmt = $this->conn->prepare($query);
+            $stmt->bindParam(':firstname', $this->firstname);
+            $stmt->bindParam(':lastname', $this->lastname);
+            $stmt->bindParam(':nickname', $this->nickname);
+            $stmt->bindParam(':role', $this->role);
+        }
 
-        $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(':firstname', $this->firstname);
-        $stmt->bindParam(':lastname', $this->lastname);
         $stmt->bindParam(':language', $this->language);
-        $stmt->bindParam(':nickname', $this->nickname);
-        $stmt->bindParam(':role', $this->role);
         $stmt->bindParam(':id', $this->id);
         $stmt->bindParam(':team', $this->team);
 

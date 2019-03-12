@@ -16,24 +16,50 @@ class Assignment {
         $this->conn = $db;
     }
 
-    public function read() {
+    public function read($from = false, $to = false) {
 
         $query = "
-        SELECT ID as id,
-        Date as date,
-        Note as note,
-        Times_ID as time,
-        Shifts_ID as shift,
-        Users_ID as user
+        SELECT ID as id, Date as date, Note as note, Times_ID as time, Shifts_ID as shift, Users_ID as user
         FROM ". $this->db_table . "
         WHERE Users_ID = :user
         ";
 
+        if($from && $to){
+            $query .= "AND Date BETWEEN :from AND :to";
+        }
+
+
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':user', $this->user);
-        $stmt->execute();
+        if($from && $to){
+            $stmt->bindParam(':from', $from);
+            $stmt->bindParam(':to', $to);
+        }
 
+        $stmt->execute();
         return $stmt;
+
+    }
+
+    public function readNotes($from = false, $to = false) {
+
+        if($from && $to){
+            
+            $query = "
+            SELECT ID as id, Date as date, Note as note, Users_ID as user
+            FROM ". $this->db_table . "
+            WHERE Date BETWEEN :from AND :to
+            ";
+
+            $stmt = $this->conn->prepare($query);
+            $stmt->bindParam(':from', $from);
+            $stmt->bindParam(':to', $to);
+
+
+            $stmt->execute();
+            return $stmt;
+
+        }
 
     }
 

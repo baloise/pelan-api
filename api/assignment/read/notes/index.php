@@ -1,13 +1,13 @@
 <?php
 
 // ---- Initialize Default
-include_once '../../_config/core.php';
-include_once '../../_config/headers.php';
-include_once '../../_config/database.php';
-include_once '../../_config/libraries/php-jwt-master/src/BeforeValidException.php';
-include_once '../../_config/libraries/php-jwt-master/src/ExpiredException.php';
-include_once '../../_config/libraries/php-jwt-master/src/SignatureInvalidException.php';
-include_once '../../_config/libraries/php-jwt-master/src/JWT.php';
+include_once '../../../_config/core.php';
+include_once '../../../_config/headers.php';
+include_once '../../../_config/database.php';
+include_once '../../../_config/libraries/php-jwt-master/src/BeforeValidException.php';
+include_once '../../../_config/libraries/php-jwt-master/src/ExpiredException.php';
+include_once '../../../_config/libraries/php-jwt-master/src/SignatureInvalidException.php';
+include_once '../../../_config/libraries/php-jwt-master/src/JWT.php';
 use \Firebase\JWT\JWT;
 $database = new Database();
 $db = $database->connect();
@@ -24,33 +24,25 @@ try {
 // ---- End of Authenticate Request
 
 // ---- Get needed Objects
-include_once '../../_config/objects/assignment.php';
+include_once '../../../_config/objects/assignment.php';
 $assignment = new Assignment($db);
 // ---- End of Get needed Objects
 
 
 try {
 
-    $assignment->user = $data->user;
-    if($data->from && $data->to){
-        $stmt = $assignment->read($data->from, $data->to);
-    } else {
-        $stmt = $assignment->read();
-    }
+    $stmt = $assignment->readNotes($data->from, $data->to);
     $num = $stmt->rowCount();
 
     if ($num > 0) {
 
         $assignments_arr = array();
-
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             extract($row);
             $assignment_item = array(
-                "user" => $user,
-                "time" => $time,
                 "date" => (new DateTime($date))->format('Y/m/d'),
-                "note" => $note,
-                "shift" => $shift
+                "user" => $user,
+                "note" => $note
             );
             array_push($assignments_arr, $assignment_item);
         }

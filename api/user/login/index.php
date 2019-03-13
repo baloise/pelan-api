@@ -80,7 +80,7 @@ if($user->userExists() && password_verify($submitKey, $user->identifier)){
             );
 
             $jwt = JWT::encode($token, $token_conf['secret']);
-            if(setAuth($jwt, $token_conf['expireAt'])){
+            if(setAuth($jwt, $token_conf['expireAt'], $api_conf['cookieDomain'])){
                 returnSuccess();
             }
 

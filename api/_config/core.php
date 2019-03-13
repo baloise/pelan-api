@@ -7,7 +7,8 @@ date_default_timezone_set('Europe/Zurich');
 
 $api_conf = array(
     "environment" => "test", // 'test', 'prod'
-    "corsOrigin" => "http://localhost:8080"
+    "corsOrigin" => "http://localhost:8080",
+    "cookieDomain" => "" //IE11 doesn't like this
 );
 
 $token_conf = array(
@@ -19,17 +20,15 @@ $token_conf = array(
     "expireAt" => time() + (15*60)
 );
 
-function setAuth($token, $expire){
+function setAuth($token, $expire, $confDomain){
 
-    $domain = "localhost";
-    //$domain = ".eliareutlinger.ch";
     $secure = false;
     if(isset($_SERVER['HTTPS'])){
         $secure = true;
     }
 
-    $appCookie = setcookie ("appToken", $token, $expire, "/", $domain, $secure, false);
-    $secureCookie = setcookie ("secureToken", $token, $expire, "/", $domain, $secure, true);
+    $appCookie = setcookie ("appToken", $token, $expire, "/", $confDomain, $secure, false);
+    $secureCookie = setcookie ("secureToken", $token, $expire, "/", $confDomain, $secure, true);
     if($appCookie && $secureCookie){
         return true;
     }

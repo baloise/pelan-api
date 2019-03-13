@@ -24,7 +24,7 @@ $user = new User($db);
 
 if ($api_conf['environment'] === 'test' && !isset($_SERVER['PHP_AUTH_USER'])) {
 
-    header('WWW-Authenticate: Basic realm="My Realm"');
+    header('WWW-Authenticate: Basic realm="Dev-Mode: Auth required"');
     header('HTTP/1.0 401 Unauthorized');
     die('Auth unsuccessful');
 
@@ -80,7 +80,7 @@ if($user->userExists() && password_verify($submitKey, $user->identifier)){
             );
 
             $jwt = JWT::encode($token, $token_conf['secret']);
-            if(setAuth($jwt, $token_conf['expireAt'], $api_conf['cookieDomain'])){
+            if(setAuth($jwt, $token_conf['expireAt'], $api_conf['cookie'])){
                 returnSuccess();
             }
 

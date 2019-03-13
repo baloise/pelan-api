@@ -8,27 +8,30 @@ date_default_timezone_set('Europe/Zurich');
 $api_conf = array(
     "environment" => "test", // 'test', 'prod'
     "corsOrigin" => "http://localhost:8080",
-    "cookieDomain" => "" //IE11 doesn't like this
+    "cookie" => array(
+        "domain" => "", //IE11 doesn't like this
+        "secure" => false //Set TRUE if HTTPS
+    )
 );
 
 $token_conf = array(
-    "secret" => 'asdffae@hjk4352[bnbnmv]lkjhgfr:334',
+    "secret" => 'asdffae@hjk4352[bnbnmv]lkjhgfr:334', //Change for PROD!
     "algorithm" => array('HS256'),
     "issuer" => 'Pelan Application',
     "issuedAt" => time(),
     "notBefore" => time(),
-    "expireAt" => time() + (15*60)
+    "expireAt" => time() + (15*60) // 15*60=15Min
 );
 
-function setAuth($token, $expire, $confDomain){
+function setAuth($token, $expire, $conf){
 
     $secure = false;
     if(isset($_SERVER['HTTPS'])){
         $secure = true;
     }
 
-    $appCookie = setcookie ("appToken", $token, $expire, "/", $confDomain, $secure, false);
-    $secureCookie = setcookie ("secureToken", $token, $expire, "/", $confDomain, $secure, true);
+    $appCookie = setcookie ("appToken", $token, $expire, "/", $conf['domain'], $conf['secure'], false);
+    $secureCookie = setcookie ("secureToken", $token, $expire, "/", $conf['domain'], $conf['secure'], true);
     if($appCookie && $secureCookie){
         return true;
     }

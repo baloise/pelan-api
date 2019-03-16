@@ -44,7 +44,7 @@ class Assignment {
     public function readNotes($from = false, $to = false) {
 
         if($from && $to){
-            
+
             $query = "
             SELECT ID as id, Date as date, Note as note, Users_ID as user
             FROM ". $this->db_table . "
@@ -76,8 +76,15 @@ class Assignment {
         $this->note = htmlspecialchars(strip_tags($this->note));
         $this->date = htmlspecialchars(strip_tags($this->date));
         $this->time = htmlspecialchars(strip_tags($this->time));
-        $this->shift = htmlspecialchars(strip_tags($this->shift));
         $this->user = htmlspecialchars(strip_tags($this->user));
+
+        if(isset($this->shift)){
+            $this->shift = htmlspecialchars(strip_tags($this->shift));
+        } else if(strlen($this->note) > 1){
+            $this->shift = NULL;
+        } else {
+            throw new InvalidArgumentException("Missing Shift or Note");
+        }
 
         $stmt->bindParam(':note', $this->note);
         $stmt->bindParam(':date', $this->date);
@@ -90,7 +97,7 @@ class Assignment {
         } else {
             throw new InvalidArgumentException($stmt->errorInfo()[1]);
         }
-
+        
         return false;
 
     }

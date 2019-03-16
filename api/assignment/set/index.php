@@ -41,21 +41,20 @@ try {
     $exist = ($user->read($data->user))->rowCount();
 
     if($exist){
+
         $assignment->user = $data->user;
         $assignment->time = $data->time;
         $assignment->shift = $data->shift;
         $assignment->date = $data->date;
         $assignment->note = $data->note;
 
-        if ($assignment->set()) {
-            returnSuccess();
-        } else {
-            returnError("Could not set Entry");
-        }
+        $assignment->set();
+        returnSuccess();
+
     } else {
         returnForbidden('User not available');
     }
 
 } catch (Exception $e) {
-    returnBadRequest();
+    returnBadRequest($e);
 }

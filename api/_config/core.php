@@ -6,7 +6,7 @@ error_reporting(E_ALL);
 date_default_timezone_set('Europe/Zurich');
 
 $api_conf = array(
-    "environment" => "test", // 'test', 'prod'
+    "environment" => "testMedusa", // 'test', 'testMedusa', 'prod'
     "corsOrigin" => "http://localhost:8080",
     "cookie" => array(
         "domain" => "", //IE11 doesn't like this

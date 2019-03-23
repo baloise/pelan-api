@@ -22,17 +22,23 @@ $user = new User($db);
 // ---- End of default Configuration
 
 
-if ($api_conf['environment'] === 'test' && !isset($_SERVER['PHP_AUTH_USER'])) {
+if ($api_conf['environment'] === 'test') {
 
-    header('WWW-Authenticate: Basic realm="Dev-Mode: Auth required"');
-    header('HTTP/1.0 401 Unauthorized');
-    die('Auth unsuccessful');
+    if(!isset($_SERVER['PHP_AUTH_USER'])){
+        header('WWW-Authenticate: Basic realm="Dev-Mode: Auth required"');
+        header('HTTP/1.0 401 Unauthorized');
+        die('Auth unsuccessful');
+    } else {
+        //Basic Auth if Test
+        $user->email = $_SERVER['PHP_AUTH_USER'];
+        $submitKey = $_SERVER['PHP_AUTH_PW'];
+    }
 
-} else if($api_conf['environment'] === 'test'){
+} else if($api_conf['environment'] === 'testMedusa'){
 
-    //Basic Auth if Test
-    $user->email = $_SERVER['PHP_AUTH_USER'];
-    $submitKey = $_SERVER['PHP_AUTH_PW'];
+    //MedusaTest
+    $user->email = "xx0001@demo.com";
+    $submitKey = "xx0001";
 
 } else if($api_conf['environment'] === 'prod'){
 

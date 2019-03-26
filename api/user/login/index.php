@@ -94,5 +94,5 @@ if($user->userExists() && password_verify($submitKey, $user->identifier)){
     }
 
 } else {
-    returnNoData();
+    returnBadRequest();
 }

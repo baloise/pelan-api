@@ -53,11 +53,10 @@ try {
     $user->team = $decoded->data->team->id;
     $user->email = $decoded->data->email;
 
-    if($user->edit() && $user->id !== $decoded->data->id){
-        returnSuccess();
-    }
-
-    if($user->edit() && $user->userExists()){
+    if($user->edit()){
+        if($user->id !== $decoded->data->id){
+            returnSuccess();
+        } else if($user->edit() && $user->userExists()){
 
         include_once '../../_config/objects/team.php';
         include_once '../../_config/objects/role.php';
@@ -105,6 +104,7 @@ try {
             }
         }
     }
+}
 
 } catch (Exception $e) {
     returnBadRequest($e->getMessage());

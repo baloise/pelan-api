@@ -37,8 +37,11 @@ if ($api_conf['environment'] === 'test') {
 } else if($api_conf['environment'] === 'testMedusa'){
 
     //MedusaTest
-    $user->email = "xx0001@demo.com";
-    $submitKey = "xx0001";
+    //$user->email = "xx0001@demo.com"; // = Admin
+    //$submitKey = "xx0001";
+
+    $user->email = "xx0003@demo.com"; // = Teammitglied
+    $submitKey = "xx0003";
 
 } else if($api_conf['environment'] === 'prod'){
 

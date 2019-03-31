@@ -7,9 +7,7 @@
         'Stammherr', 'Giganto', 'Koch', 'Marinelli', 'Peters', 'Christian', 'Luca');
 
     $fixUsers = array(
-        array("id"=>1, "firstname"=>"Patrick", "lastname"=>"Schmitt", "admin"=>true),
-        array("id"=>2, "firstname"=>"Patrick", "lastname"=>"Friedrich", "admin"=>true),
-        array("id"=>3, "firstname"=>"Elia", "lastname"=>"Reutlinger", "admin"=>false),
+        array("id"=>1, "firstname"=>"Patrick", "lastname"=>"Schmitt", "admin"=>true)
     );
 
     $keyTmp = "xx00";
@@ -48,8 +46,8 @@
             "hash" => $hashedKey,
             "nick" => $tmpNick,
             "email" => $tmpKey.$mailTmp,
-            "role" => $tmpRole,
-            "team" => $teamID
+            "role" => "2",
+            "team" => "1"
         );
 
         array_push($fullArray, $tmpUser);
@@ -67,7 +65,7 @@
         $tmpNick = substr($tmpFName, 0, 1).".".substr($tmpLName, 0, 3).$tmpUserID;
         $tmpRole = $defaultRoleID;
 
-        if($tmpUserID > 10){
+        if($tmpUserID < 10){
             $tmpKey.= "0".$tmpUserID;
         } else {
             $tmpKey.= $tmpUserID;
@@ -83,15 +81,16 @@
             "hash" => $hashedKey,
             "nick" => $tmpNick,
             "email" => $tmpKey.$mailTmp,
-            "role" => $tmpRole,
-            "team" => $teamID
+            "role" => "2",
+            "team" => "1"
         );
 
         array_push($fullArray, $tmpUser);
 
     }
 
-    echo "INSERT INTO `users` (`ID`, `Firstname`, `Lastname`, `Language`, `Identifier`, `Nickname`, `Email`, `Roles_ID`, `Teams_ID`) VALUES <br />";
+    //    INSERT INTO `user` (`ID`, `Firstname`, `Lastname`, `Nickname`, `Email`, `Lang`, `Team_ID`, `Role_ID`, `Auth_Key`)
+    echo "INSERT INTO `user` (`ID`, `Firstname`, `Lastname`, `Nickname`, `Email`, `Lang`, `Team_ID`, `Role_ID`, `Auth_Key`) VALUES <br />";
 
     $fa = $fullArray;
 
@@ -103,16 +102,16 @@
         }
 
         echo "(
-            ".$fa[$i]['id'].",
+            ".($fa[$i]['id']+1).",
             '".$fa[$i]['fName']."',
             '".$fa[$i]['lName']."',
-            '".$fa[$i]['lang']."',
-            '".$fa[$i]['hash']."',
             '".$fa[$i]['nick']."',
             '".$fa[$i]['email']."',
+            '".$fa[$i]['lang']."',
+            ".$fa[$i]['team'].",
             ".$fa[$i]['role'].",
-            ".$fa[$i]['team']."
-        )".$tmpZ." -- ".$fa[$i]['key']."<br />";
+            '".$fa[$i]['hash']."'
+        )".$tmpZ."<br />";
 
     }
 

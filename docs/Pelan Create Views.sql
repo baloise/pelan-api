@@ -1,3 +1,4 @@
+
 -- -- VIEW 'view_usertoken'
 CREATE VIEW view_usertoken AS
 
@@ -21,3 +22,20 @@ CREATE VIEW view_usertoken AS
     FROM user AS us
     INNER JOIN role AS ro ON us.Role_ID = ro.ID
     INNER JOIN team AS te ON us.Team_ID = te.ID
+
+
+-- -- VIEW 'view_teamassigns'
+CREATE VIEW view_teamassigns AS
+
+    SELECT
+
+        ass.ID as 'id',
+        ass.Date as 'date',
+        ass.Note as 'note',
+        ass.Daytime_ID as 'time',
+        ass.Shift_ID as 'shift',
+        ass.User_ID as 'user',
+        usr.Team_ID as 'user_team'
+
+    FROM assignment AS ass
+    INNER JOIN user AS usr ON usr.ID = ass.User_ID

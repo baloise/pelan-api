@@ -114,7 +114,7 @@ CREATE TABLE IF NOT EXISTS assignment (
     Shift_ID            INT,
     Note                MEDIUMTEXT,
 
-    UNIQUE INDEX UNIQUE_Date_per_User (Date, User_ID),
+    UNIQUE INDEX UNIQUE_Date_per_User_per_Daytime (Date, User_ID, Daytime_ID),
 
     PRIMARY KEY (ID),
     FOREIGN KEY (Daytime_ID) REFERENCES daytime(ID),

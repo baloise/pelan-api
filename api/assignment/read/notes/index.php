@@ -31,6 +31,7 @@ $assignment = new Assignment($db);
 
 try {
 
+    $assignment->team = $decoded->data->team->id;
     $stmt = $assignment->readNotes($data->from, $data->to);
     $num = $stmt->rowCount();
 

@@ -4,6 +4,7 @@ class Assignment {
 
     private $conn;
     private $db_table = "assignment";
+    private $db_teamassigns = "view_teamassigns";
 
     public $id;
     public $time;
@@ -12,6 +13,7 @@ class Assignment {
     public $date;
     public $shift;
     public $note;
+    public $team;
 
     public function __construct($db) {
         $this->conn = $db;
@@ -20,17 +22,18 @@ class Assignment {
     public function read($from = false, $to = false) {
 
         $query = "
-        SELECT ID as id, Date as date, Note as note, Daytime_ID as time, Shift_ID as shift, User_ID as user
-        FROM ". $this->db_table . "
-        WHERE User_ID = :user
+        SELECT * FROM ". $this->db_teamassigns . "
+        WHERE user_team = :team AND user = :user
         ";
 
+
+
         if($from && $to){
-            $query .= "AND Date BETWEEN :from AND :to";
+            $query .= " AND date BETWEEN :from AND :to";
         }
 
-
         $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':team', $this->team);
         $stmt->bindParam(':user', $this->user);
         if($from && $to){
             $stmt->bindParam(':from', $from);
@@ -47,16 +50,16 @@ class Assignment {
         if($from && $to){
 
             $query = "
-            SELECT ID as id, Date as date, Note as note, User_ID as user
-            FROM ". $this->db_table . "
-            WHERE Date BETWEEN :from AND :to
+            SELECT * FROM ". $this->db_teamassigns . "
+            WHERE user_team = :team AND date BETWEEN :from AND :to
             ";
 
             $stmt = $this->conn->prepare($query);
+            $stmt->bindParam(':team', $this->team);
             $stmt->bindParam(':from', $from);
             $stmt->bindParam(':to', $to);
             $stmt->execute();
-            
+
             return $stmt;
 
         }

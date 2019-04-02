@@ -31,6 +31,7 @@ $assignment = new Assignment($db);
 
 try {
 
+    $assignment->team = $decoded->data->team->id;
     $assignment->user = $data->user;
     if($data->from && $data->to){
         $stmt = $assignment->read($data->from, $data->to);

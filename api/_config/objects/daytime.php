@@ -1,14 +1,14 @@
 <?php
 //error_reporting(0);
-class Time {
+class Daytime {
 
     private $conn;
-    private $db_table = "times";
+    private $db_table = "daytime";
 
     public $id;
     public $title;
-    public $abbreviation;
     public $description;
+    public $abbreviation;
     public $position;
     public $team;
 
@@ -21,7 +21,7 @@ class Time {
         $query = "
         SELECT ID as id, Title as title, Abbreviation as abbreviation, Description as description, Position as position
         FROM ". $this->db_table . "
-        WHERE Teams_ID = :team AND Deleted=0
+        WHERE Team_ID = :team AND Active=1
         ";
 
         $stmt = $this->conn->prepare($query);
@@ -36,28 +36,24 @@ class Time {
 
         $query = "
         UPDATE ".$this->db_table . " SET
-        `Title` = :title, `Position` = :position
-        WHERE `times`.`ID` = :id AND `times`.`Teams_ID` = :team;
+        Title = :title, Abbreviation = :abbreviation, Description = :description, Position = :position
+        WHERE ID = :id AND Team_ID = :team;
         ";
-
-        $stmt = $this->conn->prepare($query);
 
         $this->id = htmlspecialchars(strip_tags($this->id));
         $this->title = htmlspecialchars(strip_tags($this->title));
         $this->position = htmlspecialchars(strip_tags($this->position));
         $this->team = htmlspecialchars(strip_tags($this->team));
-        //$this->abbreviation = htmlspecialchars(strip_tags($this->abbreviation));
-        //$this->description = htmlspecialchars(strip_tags($this->description));
+        $this->abbreviation = htmlspecialchars(strip_tags($this->abbreviation));
+        $this->description = htmlspecialchars(strip_tags($this->description));
 
-        if(strlen($this->title) < 1){throw new InvalidArgumentException('Title is required');}
-        if($this->position < 1){throw new InvalidArgumentException('Min. position is 1');}
-
+        $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':id', $this->id);
         $stmt->bindParam(':title', $this->title);
         $stmt->bindParam(':position', $this->position);
         $stmt->bindParam(':team', $this->team);
-        //$stmt->bindParam(':abbreviation', $this->abbreviation);
-        //$stmt->bindParam(':description', $this->description);
+        $stmt->bindParam(':abbreviation', $this->abbreviation);
+        $stmt->bindParam(':description', $this->description);
 
         if ($stmt->execute()) {
             return true;
@@ -71,22 +67,22 @@ class Time {
 
         $query = "
             INSERT INTO ".$this->db_table . "
-            (Title, Position, Teams_ID) VALUES
-            (:title, :position, :team);
+            (Title, Abbreviation, Description, Position, Team_ID, Active) VALUES
+            (:title, :abbreviation, :description, :position, :team, '1');
         ";
 
         $this->title = htmlspecialchars(strip_tags($this->title));
+        $this->abbreviation = htmlspecialchars(strip_tags($this->abbreviation));
+        $this->description = htmlspecialchars(strip_tags($this->description));
         $this->position = htmlspecialchars(strip_tags($this->position));
         $this->team = htmlspecialchars(strip_tags($this->team));
-        //$this->abbreviation = htmlspecialchars(strip_tags($this->abbreviation));
-        //$this->description = htmlspecialchars(strip_tags($this->description));
 
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':title', $this->title);
+        $stmt->bindParam(':abbreviation', $this->abbreviation);
+        $stmt->bindParam(':description', $this->description);
         $stmt->bindParam(':position', $this->position);
         $stmt->bindParam(':team', $this->team);
-        //$stmt->bindParam(':abbreviation', $this->abbreviation);
-        //$stmt->bindParam(':description', $this->description);
 
         if ($stmt->execute()) {
             $this->id = $this->conn->lastInsertId();
@@ -97,14 +93,12 @@ class Time {
 
     }
 
-
     public function delete() {
 
-
         $query = "
-            UPDATE " . $this->db_table . "
-            SET `Deleted` = '1', Position = NULL, Title = CONCAT( IFNULL(Title,' '), :newTitle )
-            WHERE ID = :id AND Teams_ID = :team
+            UPDATE ".$this->db_table." SET
+            Active = '0', Position = NULL, Title = :newTitle
+            WHERE ID = :id AND Team_ID = :team
         ";
 
         $this->id = htmlspecialchars(strip_tags($this->id));
@@ -116,7 +110,7 @@ class Time {
         $stmt->bindParam(":id", $this->id);
         $stmt->bindParam(":team", $this->team);
 
-        if ($stmt->execute()) {
+        if ( $stmt->execute() ) {
             return true;
         } else {
             throw new InvalidArgumentException($stmt->errorInfo()[1]);

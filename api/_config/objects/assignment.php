@@ -3,13 +3,14 @@
 class Assignment {
 
     private $conn;
-    private $db_table = "assignments";
+    private $db_table = "assignment";
 
     public $id;
-    public $user;
     public $time;
-    public $shift;
+    public $user;
+    public $creator;
     public $date;
+    public $shift;
     public $note;
 
     public function __construct($db) {
@@ -19,9 +20,9 @@ class Assignment {
     public function read($from = false, $to = false) {
 
         $query = "
-        SELECT ID as id, Date as date, Note as note, Times_ID as time, Shifts_ID as shift, Users_ID as user
+        SELECT ID as id, Date as date, Note as note, Daytime_ID as time, Shift_ID as shift, User_ID as user
         FROM ". $this->db_table . "
-        WHERE Users_ID = :user
+        WHERE User_ID = :user
         ";
 
         if($from && $to){
@@ -46,7 +47,7 @@ class Assignment {
         if($from && $to){
 
             $query = "
-            SELECT ID as id, Date as date, Note as note, Users_ID as user
+            SELECT ID as id, Date as date, Note as note, User_ID as user
             FROM ". $this->db_table . "
             WHERE Date BETWEEN :from AND :to
             ";
@@ -54,9 +55,8 @@ class Assignment {
             $stmt = $this->conn->prepare($query);
             $stmt->bindParam(':from', $from);
             $stmt->bindParam(':to', $to);
-
-
             $stmt->execute();
+            
             return $stmt;
 
         }
@@ -67,16 +67,15 @@ class Assignment {
 
         $query = "
         REPLACE INTO ". $this->db_table . "
-        (`Note`, `Date`, `Times_ID`, `Shifts_ID`, `Users_ID`) VALUES
-        (:note, :date, :time, :shift, :user);
+        (`Note`, `Date`, `Daytime_ID`, `Shift_ID`, `User_ID`, `Creator_ID`) VALUES
+        (:note, :date, :time, :shift, :user, :creator);
         ";
-
-        $stmt = $this->conn->prepare($query);
 
         $this->note = htmlspecialchars(strip_tags($this->note));
         $this->date = htmlspecialchars(strip_tags($this->date));
         $this->time = htmlspecialchars(strip_tags($this->time));
         $this->user = htmlspecialchars(strip_tags($this->user));
+        $this->creator = htmlspecialchars(strip_tags($this->creator));
 
         if(isset($this->shift)){
             $this->shift = htmlspecialchars(strip_tags($this->shift));
@@ -86,18 +85,20 @@ class Assignment {
             throw new InvalidArgumentException("Missing Shift or Note");
         }
 
+        $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':note', $this->note);
         $stmt->bindParam(':date', $this->date);
         $stmt->bindParam(':time', $this->time);
         $stmt->bindParam(':shift', $this->shift);
         $stmt->bindParam(':user', $this->user);
+        $stmt->bindParam(':creator', $this->creator);
 
         if ($stmt->execute()) {
             return true;
         } else {
             throw new InvalidArgumentException($stmt->errorInfo()[1]);
         }
-        
+
         return false;
 
     }
@@ -106,7 +107,7 @@ class Assignment {
 
         $query = "
         DELETE FROM " . $this->db_table . " WHERE
-        Date = :date AND Times_ID = :time AND Users_ID = :user
+        Date = :date AND Daytime_ID = :time AND User_ID = :user
         ";
 
         $this->date = htmlspecialchars(strip_tags($this->date));

@@ -10,7 +10,7 @@ include_once '../../_config/libraries/php-jwt-master/src/SignatureInvalidExcepti
 include_once '../../_config/libraries/php-jwt-master/src/JWT.php';
 use \Firebase\JWT\JWT;
 $database = new Database();
-$db = $database->connect();
+$db = $database->connect($db_conf);
 $data = json_decode(file_get_contents("php://input"));
 // ---- End of Initialize Default
 

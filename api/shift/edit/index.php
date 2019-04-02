@@ -10,7 +10,7 @@ include_once '../../_config/libraries/php-jwt-master/src/SignatureInvalidExcepti
 include_once '../../_config/libraries/php-jwt-master/src/JWT.php';
 use \Firebase\JWT\JWT;
 $database = new Database();
-$db = $database->connect();
+$db = $database->connect($db_conf);
 $data = json_decode(file_get_contents("php://input"));
 // ---- End of Initialize Default
 
@@ -38,9 +38,12 @@ try {
     $shift->id = $data->id;
     $shift->title = $data->title;
     $shift->color = $data->color;
-    $shift->abbreviation = $data->abbreviation;
     $shift->description = $data->description;
     $shift->team = $decoded->data->team->id;
+
+    if(substr($shift->color, 0, 1) === "#"){
+        $shift->color = substr($shift->color, 1, 6);
+    }
 
     if ($shift->edit()) {
         returnSuccess();

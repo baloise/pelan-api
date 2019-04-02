@@ -1,17 +1,18 @@
 <?php
-
 //error_reporting(0);
 
 class User {
 
     private $conn;
-    private $db_table = "users";
+    private $db_table = "user";
+    private $db_table_role = "role";
+    private $db_view_token = "view_usertoken";
 
     public $id;
     public $firstname;
     public $lastname;
     public $language;
-    public $identifier;
+    public $authkey;
     public $nickname;
     public $email;
     public $team;
@@ -24,10 +25,8 @@ class User {
     public function userExists() {
 
         $query = "
-        SELECT ID, Firstname, Lastname, Language, Identifier, Nickname, Email, Roles_ID, Teams_ID
-        FROM " . $this->db_table . "
-        WHERE Email = ?
-        LIMIT 0,1
+        SELECT ID, Auth_Key, Role_ID, Team_ID FROM " . $this->db_table . "
+        WHERE Email = ? LIMIT 0,1
         ";
 
         if (filter_var($this->email, FILTER_VALIDATE_EMAIL)) {
@@ -41,17 +40,42 @@ class User {
         $stmt->execute();
 
         if ($stmt->rowCount() > 0) {
-
             $row = $stmt->fetch(PDO::FETCH_ASSOC);
             $this->id = $row['ID'];
+            $this->authkey = $row['Auth_Key'];
+            return true;
+        }
+
+        return false;
+
+    }
+
+    public function readToken() {
+
+        $query = "SELECT * FROM " . $this->db_view_token . " WHERE id = ?";
+
+        $stmt = $this->conn->prepare($query);
+        $this->id = htmlspecialchars(strip_tags($this->id));
+        $stmt->bindParam(1, $this->id);
+        $stmt->execute();
+
+        if ($stmt->rowCount() === 1) {
+
+            $this->role = new stdClass();
+            $this->team = new stdClass();
+
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
             $this->firstname = $row['Firstname'];
             $this->lastname = $row['Lastname'];
             $this->language = $row['Language'];
-            $this->identifier = $row['Identifier'];
             $this->nickname = $row['Nickname'];
             $this->email = $row['Email'];
-            $this->role = $row['Roles_ID'];
-            $this->team = $row['Teams_ID'];
+            $this->role->id = $row['Role_ID'];
+            $this->role->title = $row['Role_Title'];
+            $this->role->description = $row['Role_Description'];
+            $this->role->admin = $row['Role_Admin'];
+            $this->team->id = $row['Team_ID'];
+            $this->team->title = $row['Team_Title'];
 
             return true;
 
@@ -61,44 +85,16 @@ class User {
 
     }
 
-    public function edit() {
+    public function editLanguage() {
 
-        $query = "
-        UPDATE " . $this->db_table . " SET
-        Firstname = :firstname,
-        Lastname = :lastname,
-        Language = :language,
-        Nickname = :nickname,
-        Roles_ID = :role
-        WHERE ID = :id AND Teams_ID = :team
-        ";
+        $query = "UPDATE " . $this->db_table . " SET Lang = :language WHERE ID = :id";
 
-        $this->firstname = htmlspecialchars(strip_tags($this->firstname));
-        $this->lastname = htmlspecialchars(strip_tags($this->lastname));
         $this->language = htmlspecialchars(strip_tags($this->language));
-        $this->nickname = htmlspecialchars(strip_tags($this->nickname));
-        $this->role = htmlspecialchars(strip_tags($this->role));
         $this->id = htmlspecialchars(strip_tags($this->id));
-        $this->team = htmlspecialchars(strip_tags($this->team));
 
-        if (strlen($this->firstname) < 1 || strlen($this->lastname) < 1 || strlen($this->nickname) < 1){
-            if(strlen($this->language) < 1){
-                throw new InvalidArgumentException('Min. 1 Value missing');
-            } else {
-                $query = "UPDATE " . $this->db_table . " SET Language = :language WHERE ID = :id AND Teams_ID = :team";
-                $stmt = $this->conn->prepare($query);
-            }
-        } else {
-            $stmt = $this->conn->prepare($query);
-            $stmt->bindParam(':firstname', $this->firstname);
-            $stmt->bindParam(':lastname', $this->lastname);
-            $stmt->bindParam(':nickname', $this->nickname);
-            $stmt->bindParam(':role', $this->role);
-        }
-
+        $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':language', $this->language);
         $stmt->bindParam(':id', $this->id);
-        $stmt->bindParam(':team', $this->team);
 
         if ($stmt->execute()) {
             return true;
@@ -108,12 +104,62 @@ class User {
 
     }
 
+    public function editDetails() {
+
+        $this->id = htmlspecialchars(strip_tags($this->id));
+        $this->firstname = htmlspecialchars(strip_tags($this->firstname));
+        $this->lastname = htmlspecialchars(strip_tags($this->lastname));
+        $this->language = htmlspecialchars(strip_tags($this->language));
+        $this->nickname = htmlspecialchars(strip_tags($this->nickname));
+        $this->role = htmlspecialchars(strip_tags($this->role));
+        $this->team = htmlspecialchars(strip_tags($this->team));
+
+        $checkQuery = "SELECT * FROM ".$this->db_table_role." WHERE ID = :id AND Team_ID = :team";
+        $stmt = $this->conn->prepare($checkQuery);
+        $stmt->bindParam(':team', $this->team);
+        $stmt->bindParam(':id', $this->role);
+        $stmt->execute();
+
+        if ( $stmt->rowCount() === 1 ) {
+
+            $query = "
+                UPDATE ".$this->db_table." SET
+                Firstname = :firstname,
+                Lastname = :lastname,
+                Nickname = :nickname,
+                Lang = :language,
+                Role_ID = :role
+                WHERE ID = :id AND Team_ID = :team
+            ";
+
+            $stmt = $this->conn->prepare($query);
+
+            $stmt->bindParam(':id', $this->id);
+            $stmt->bindParam(':firstname', $this->firstname);
+            $stmt->bindParam(':lastname', $this->lastname);
+            $stmt->bindParam(':nickname', $this->nickname);
+            $stmt->bindParam(':language', $this->language);
+            $stmt->bindParam(':role', $this->role);
+            $stmt->bindParam(':team', $this->team);
+
+            if ($stmt->execute()) {
+                return true;
+            } else {
+                throw new InvalidArgumentException($stmt->errorInfo()[1]);
+            }
+
+        } else {
+            throw new InvalidArgumentException("Role doesn't match team");
+        }
+
+    }
+
     public function read($userid = false) {
 
         $query = "
-        SELECT ID as id, Firstname as firstname, Lastname as lastname, Nickname as nickname, Roles_ID as role
+        SELECT ID as id, Firstname as firstname, Lastname as lastname, Nickname as nickname, Role_ID as role
         FROM ". $this->db_table . "
-        WHERE Teams_ID = :team
+        WHERE Team_ID = :team
         ";
 
         if($userid){
@@ -130,7 +176,6 @@ class User {
         return $stmt;
 
     }
-
 
     public function create() {
 
@@ -190,6 +235,5 @@ class User {
         return false;
 
     }
-
 
 }

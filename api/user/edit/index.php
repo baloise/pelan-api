@@ -10,7 +10,7 @@ include_once '../../_config/libraries/php-jwt-master/src/SignatureInvalidExcepti
 include_once '../../_config/libraries/php-jwt-master/src/JWT.php';
 use \Firebase\JWT\JWT;
 $database = new Database();
-$db = $database->connect();
+$db = $database->connect($db_conf);
 $data = json_decode(file_get_contents("php://input"));
 // ---- End of Initialize Default
 
@@ -31,51 +31,45 @@ $user = new User($db);
 
 try {
 
-    if (!$decoded->data->role->admin) {
-        $user->id = $decoded->data->id;
-        $user->role = $decoded->data->role->id;
-        if(isset($data->language)){
-            $user->language = $data->language;
-        } else {
-            returnBadRequest('What are you trying to do???');
-        }
-    } else {
+    if($decoded->data->role->admin && isset($data->firstname)){
+        //User is Admin
+
         $user->id = $data->id;
-        $user->role = $data->role;
         $user->firstname = $data->firstname;
         $user->lastname = $data->lastname;
         $user->nickname = $data->nickname;
-        if(isset($data->language)){
-            $user->language = $data->language;
+        $user->language = $data->language;
+        $user->role = $data->role;
+        $user->team = $decoded->data->team->id;
+
+
+        if ( $user->editDetails() ){
+            if ( $decoded->data->id !== $data->id ){
+                returnSuccess();
+            }
+        } else {
+            returnError();
         }
+
+    } else {
+        //User is not Admin
+
+        $user->id = $decoded->data->id;
+        $user->language = $data->language;
+        if ( !$user->editLanguage() ){
+            returnError();
+        }
+
     }
 
-    $user->team = $decoded->data->team->id;
-    $user->email = $decoded->data->email;
+    if ( $user->readToken() && $decoded->data->id === $user->id){
 
-    if($user->edit()){
-        if($user->id !== $decoded->data->id){
-            returnSuccess();
-        } else if($user->edit() && $user->userExists()){
-
-        include_once '../../_config/objects/team.php';
-        include_once '../../_config/objects/role.php';
-
-        $team = new Team($db);
-        $team->id = $decoded->data->team->id;
-
-        if($team->read()){
-
-            $role = new Role($db);
-            $role->id = $user->role;
-            if($role->read()){
-
-                $token = array(
-                "iss" => $token_conf['issuer'],
-                "iat" => $token_conf['issuedAt'],
-                "exp" => $token_conf['expireAt'],
-                "nbf" => $token_conf['notBefore'],
-                "data" => array(
+        $token = array(
+            "iss" => $token_conf['issuer'],
+            "iat" => $token_conf['issuedAt'],
+            "exp" => $token_conf['expireAt'],
+            "nbf" => $token_conf['notBefore'],
+            "data" => array(
                 "id" => $user->id,
                 "firstname" => $user->firstname,
                 "lastname" => $user->lastname,
@@ -83,28 +77,26 @@ try {
                 "nickname" => $user->nickname,
                 "email" => $user->email,
                 "role" => array(
-                "id" => $role->id,
-                "title" => $role->title,
-                "abbreviation" => $role->abbreviation,
-                "admin" => $role->admin,
+                    "id" => $user->role->id,
+                    "title" => $user->role->title,
+                    "description" => $user->role->description,
+                    "admin" => $user->role->admin,
                 ),
                 "team" => array(
-                "id" => $team->id,
-                "title" => $team->title,
-                "abbreviation" => $team->abbreviation
+                    "id" => $user->team->id,
+                    "title" => $user->team->title
                 ),
-                )
-                );
+            )
+        );
 
-                $jwt = JWT::encode($token, $token_conf['secret']);
-                if(setAuth($jwt, $token_conf['expireAt'], $api_conf['cookie'])){
-                    returnSuccess();
-                }
-
-            }
+        $jwt = JWT::encode($token, $token_conf['secret']);
+        if(setAuth($jwt, $token_conf['expireAt'], $api_conf['cookie'])){
+            returnSuccess("TOKEN");
         }
+
+    } else {
+        returnError();
     }
-}
 
 } catch (Exception $e) {
     returnBadRequest($e->getMessage());

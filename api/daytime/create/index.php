@@ -10,7 +10,7 @@ include_once '../../_config/libraries/php-jwt-master/src/SignatureInvalidExcepti
 include_once '../../_config/libraries/php-jwt-master/src/JWT.php';
 use \Firebase\JWT\JWT;
 $database = new Database();
-$db = $database->connect();
+$db = $database->connect($db_conf);
 $data = json_decode(file_get_contents("php://input"));
 // ---- End of Initialize Default
 
@@ -24,8 +24,8 @@ try {
 // ---- End of Authenticate Request
 
 // ---- Get needed Objects
-include_once '../../_config/objects/time.php';
-$time = new Time($db);
+include_once '../../_config/objects/daytime.php';
+$time = new Daytime($db);
 // ---- End of Get needed Objects
 
 
@@ -36,9 +36,9 @@ if (!$decoded->data->role->admin) {
 try {
 
     $time->title = $data->title;
-    //$time->abbreviation = $data->abbreviation;
+    $time->abbreviation = $data->abbreviation;
+    $time->description = $data->description;
     $time->position = $data->position;
-    //$time->description = $data->description;
     $time->team = $decoded->data->team->id;
 
     $time->create();

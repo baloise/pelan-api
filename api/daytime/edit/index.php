@@ -10,7 +10,7 @@ include_once '../../_config/libraries/php-jwt-master/src/SignatureInvalidExcepti
 include_once '../../_config/libraries/php-jwt-master/src/JWT.php';
 use \Firebase\JWT\JWT;
 $database = new Database();
-$db = $database->connect();
+$db = $database->connect($db_conf);
 $data = json_decode(file_get_contents("php://input"));
 // ---- End of Initialize Default
 
@@ -24,38 +24,26 @@ try {
 // ---- End of Authenticate Request
 
 // ---- Get needed Objects
-include_once '../../_config/objects/time.php';
-$time = new Time($db);
+include_once '../../_config/objects/daytime.php';
+$time = new Daytime($db);
 // ---- End of Get needed Objects
+
+if (!$decoded->data->role->admin) {
+    returnForbidden('Not Admin');
+}
 
 try {
 
+    $time->id = $data->id;
+    $time->title = $data->title;
+    $time->abbreviation = $data->abbreviation;
+    $time->description = $data->description;
+    $time->position = $data->position;
     $time->team = $decoded->data->team->id;
-    $stmt = $time->read();
-    $num = $stmt->rowCount();
 
-    if ($num > 0) {
-
-        $times_arr = array();
-
-        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            extract($row);
-            $time_item = array(
-                "id" => $id,
-                "title" => $title,
-                "abbreviation" => $abbreviation,
-                "position" => $position,
-                "description" => $description
-            );
-            array_push($times_arr, $time_item);
-        }
-
-        returnSuccess($times_arr);
-
-    } else {
-        returnNoData();
-    }
+    $time->edit();
+    returnSuccess();
 
 } catch (Exception $e) {
-    returnBadRequest();
+    returnBadRequest($e->getMessage());
 }

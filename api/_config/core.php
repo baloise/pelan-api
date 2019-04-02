@@ -1,5 +1,4 @@
 <?php
-
 // Application Params
 error_reporting(E_ALL);
 //error_reporting(0); <-- to deactivate
@@ -21,6 +20,13 @@ $token_conf = array(
     "issuedAt" => time(),
     "notBefore" => time(),
     "expireAt" => time() + (15*60) // 15*60=15Min
+);
+
+$db_conf = array(
+    "host" => "localhost",
+    "database" => "pelan_api",
+    "user" => "root",
+    "pass" => "",
 );
 
 function setAuth($token, $expire, $conf){
@@ -61,14 +67,14 @@ function returnSuccess($data = false) {
     http_response_code(200);
     if ($data) {
         echo json_encode(array(
-            "status" => "success",
-            "message" => "Request successfully handled",
-            "content" => $data
+        "status" => "success",
+        "message" => "Request successfully handled",
+        "content" => $data
         ));
     } else {
         echo json_encode(array(
-            "status" => "success",
-            "message" => "Request successfully handled (Returning no content)"
+        "status" => "success",
+        "message" => "Request successfully handled (Returning no content)"
         ));
     }
     die();

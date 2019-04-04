@@ -211,15 +211,13 @@ class User {
             throw new InvalidArgumentException('Invalid E-Mail Adress');
         }
 
+        $authkey_hash = password_hash($this->authkey, PASSWORD_BCRYPT);
+        $stmt->bindParam(':authkey', $authkey_hash);
         $stmt->bindParam(':firstname', $this->firstname);
         $stmt->bindParam(':lastname', $this->lastname);
         $stmt->bindParam(':language', $this->language);
-        $stmt->bindParam(':authkey', $this->authkey);
         $stmt->bindParam(':nickname', $this->nickname);
         $stmt->bindParam(':email', $this->email);
-
-        $identifier_hash = password_hash($this->identifier, PASSWORD_BCRYPT);
-        $stmt->bindParam(':identifier', $identifier_hash);
 
         if ($stmt->execute()) {
             $this->id = $this->conn->lastInsertId();

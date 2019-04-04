@@ -5,6 +5,7 @@ include_once '../../_config/settings.php';
 include_once '../../_config/core.php';
 include_once '../../_config/headers.php';
 include_once '../../_config/database.php';
+include_once '../../_config/validate.php';
 include_once '../../_config/libraries/php-jwt-master/src/BeforeValidException.php';
 include_once '../../_config/libraries/php-jwt-master/src/ExpiredException.php';
 include_once '../../_config/libraries/php-jwt-master/src/SignatureInvalidException.php';
@@ -36,10 +37,10 @@ if (!$decoded->data->role->admin) {
 
 try {
 
-    $shift->id = $data->id;
-    $shift->title = $data->title;
-    $shift->color = $data->color;
-    $shift->description = $data->description;
+    $shift->id = val_number($data->id, 1);
+    $shift->title = val_string($data->title, 1, 255);
+    $shift->color = val_string($data->color, 6, 7);
+    $shift->description = val_string($data->description, 1);
     $shift->team = $decoded->data->team->id;
 
     if (substr($shift->color, 0, 1) === "#") {

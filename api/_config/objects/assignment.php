@@ -102,8 +102,6 @@ class Assignment {
             throw new InvalidArgumentException($stmt->errorInfo()[1]);
         }
 
-        return false;
-
     }
 
     public function delete() {
@@ -127,8 +125,6 @@ class Assignment {
         } else {
             throw new InvalidArgumentException($stmt->errorInfo()[1]);
         }
-
-        return false;
 
     }
 

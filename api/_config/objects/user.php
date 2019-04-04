@@ -46,8 +46,6 @@ class User {
             return true;
         }
 
-        return false;
-
     }
 
     public function readToken() {
@@ -179,8 +177,6 @@ class User {
 
     public function create() {
 
-
-
         $query = "
         INSERT INTO " . $this->db_table . "
         (`Firstname`, `Lastname`, `Language`, `Identifier`, `Nickname`, `Email`) VALUES
@@ -194,7 +190,7 @@ class User {
             mb_strlen($this->lastname) < 1 ||
             mb_strlen($this->language) < 1 ||
             mb_strlen($this->language) < 2 ||
-            mb_strlen($this->identifier) < 1 ||
+            mb_strlen($this->authkey) < 1 ||
             mb_strlen($this->nickname) < 1 ||
             mb_strlen($this->nickname) > 6
         ) { throw new InvalidArgumentException('Missing Values'); }
@@ -202,7 +198,7 @@ class User {
         $this->firstname = htmlspecialchars(strip_tags($this->firstname));
         $this->lastname = htmlspecialchars(strip_tags($this->lastname));
         $this->language = htmlspecialchars(strip_tags($this->language));
-        $this->identifier = htmlspecialchars(strip_tags($this->identifier));
+        $this->authkey = htmlspecialchars(strip_tags($this->authkey));
         $this->nickname = htmlspecialchars(strip_tags($this->nickname));
 
         if ($this->userExists()) {

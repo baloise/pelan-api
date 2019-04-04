@@ -60,8 +60,6 @@ class Shift {
             throw new InvalidArgumentException($stmt->errorInfo()[1]);
         }
 
-        return false;
-
     }
 
     public function create() {
@@ -94,8 +92,6 @@ class Shift {
             throw new InvalidArgumentException($stmt->errorInfo()[1]);
         }
 
-        return false;
-
     }
 
     public function delete() {
@@ -108,7 +104,7 @@ class Shift {
 
         $this->id = htmlspecialchars(strip_tags($this->id));
         $this->team = htmlspecialchars(strip_tags($this->team));
-        $newTitle = ('_deletetAt_'.date_timestamp_get(date_create()));
+        $newTitle = ('_deletetAt_'.date_timestamp_get(/** @scrutinizer ignore-type */date_create()));
 
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(":newTitle", $newTitle);
@@ -120,8 +116,6 @@ class Shift {
         } else {
             throw new InvalidArgumentException($stmt->errorInfo()[1]);
         }
-
-        return false;
 
     }
 

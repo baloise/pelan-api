@@ -103,7 +103,7 @@ class Daytime {
 
         $this->id = htmlspecialchars(strip_tags($this->id));
         $this->team = htmlspecialchars(strip_tags($this->team));
-        $newTitle = ('_deletetAt_'.date_timestamp_get(date_create()));
+        $newTitle = ('_deletetAt_'.date_timestamp_get(/** @scrutinizer ignore-type */date_create()));
 
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(":newTitle", $newTitle);

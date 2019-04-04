@@ -31,11 +31,6 @@ $db_conf = array(
 
 function setAuth($token, $expire, $conf){
 
-    $secure = false;
-    if(isset($_SERVER['HTTPS'])){
-        $secure = true;
-    }
-
     $appCookie = setcookie ("appToken", $token, $expire, "/", $conf['domain'], $conf['secure'], false);
     $secureCookie = setcookie ("secureToken", $token, $expire, "/", $conf['domain'], $conf['secure'], true);
     if($appCookie && $secureCookie){

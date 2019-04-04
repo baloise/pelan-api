@@ -43,7 +43,7 @@ try {
             $shift_item = array(
                 "id" => $id,
                 "title" => $title,
-                "color" => "#".$color,
+                "color" => "#" . $color,
                 "description" => $description
             );
             array_push($shifts_arr, $shift_item);

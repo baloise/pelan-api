@@ -34,7 +34,7 @@ try {
 
     $assignment->team = $decoded->data->team->id;
     $assignment->user = $data->user;
-    if($data->from && $data->to){
+    if ($data->from && $data->to) {
         $stmt = $assignment->read($data->from, $data->to);
     } else {
         $stmt = $assignment->read();

@@ -96,21 +96,21 @@ class Daytime {
     public function delete() {
 
         $query = "
-            UPDATE ".$this->db_table." SET
+            UPDATE ".$this->db_table . " SET
             Active = '0', Position = NULL, Title = :newTitle
             WHERE ID = :id AND Team_ID = :team
         ";
 
         $this->id = htmlspecialchars(strip_tags($this->id));
         $this->team = htmlspecialchars(strip_tags($this->team));
-        $newTitle = ('_deletetAt_'.date_timestamp_get(/** @scrutinizer ignore-type */date_create()));
+        $newTitle = ('_deletetAt_' . date_timestamp_get(/** @scrutinizer ignore-type */date_create()));
 
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(":newTitle", $newTitle);
         $stmt->bindParam(":id", $this->id);
         $stmt->bindParam(":team", $this->team);
 
-        if ( $stmt->execute() ) {
+        if ($stmt->execute()) {
             return true;
         } else {
             throw new InvalidArgumentException($stmt->errorInfo()[1]);

@@ -41,7 +41,7 @@ try {
     $user->team = $decoded->data->team->id;
     $exist = ($user->read($data->user))->rowCount();
 
-    if($exist){
+    if ($exist) {
 
         $assignment->user = $data->user;
         $assignment->time = $data->time;

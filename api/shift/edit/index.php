@@ -42,7 +42,7 @@ try {
     $shift->description = $data->description;
     $shift->team = $decoded->data->team->id;
 
-    if(substr($shift->color, 0, 1) === "#"){
+    if (substr($shift->color, 0, 1) === "#") {
         $shift->color = substr($shift->color, 1, 6);
     }
 

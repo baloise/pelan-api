@@ -38,7 +38,7 @@ try {
     $time->id = $data->id;
     $time->team = $decoded->data->team->id;
 
-    if( $time->delete() ){
+    if ($time->delete()) {
         returnSuccess();
     }
 

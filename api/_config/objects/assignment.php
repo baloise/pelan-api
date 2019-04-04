@@ -28,14 +28,14 @@ class Assignment {
 
 
 
-        if($from && $to){
+        if ($from && $to) {
             $query .= " AND date BETWEEN :from AND :to";
         }
 
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':team', $this->team);
         $stmt->bindParam(':user', $this->user);
-        if($from && $to){
+        if ($from && $to) {
             $stmt->bindParam(':from', $from);
             $stmt->bindParam(':to', $to);
         }
@@ -47,7 +47,7 @@ class Assignment {
 
     public function readNotes($from = false, $to = false) {
 
-        if($from && $to){
+        if ($from && $to) {
 
             $query = "
             SELECT * FROM ". $this->db_teamassigns . "
@@ -80,9 +80,9 @@ class Assignment {
         $this->user = htmlspecialchars(strip_tags($this->user));
         $this->creator = htmlspecialchars(strip_tags($this->creator));
 
-        if(isset($this->shift)){
+        if (isset($this->shift)) {
             $this->shift = htmlspecialchars(strip_tags($this->shift));
-        } else if(strlen($this->note) > 1){
+        } else if (strlen($this->note) > 1) {
             $this->shift = NULL;
         } else {
             throw new InvalidArgumentException("Missing Shift or Note");

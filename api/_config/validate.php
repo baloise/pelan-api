@@ -1,16 +1,19 @@
 <?php
 
-function val_string ($value, $min=false, $max=false) {
+function val_string ($value, $min=false, $max=true) {
 
     $value = trim($value);
-    $value = htmlspecialchars($value);
-
-    $value = filter_var($value, FILTER_SANITIZE_STRING);
-    if ( ($min && $max) && (($min && strlen($value) < $min) || ($max && strlen($value) > $max)) ) {
-        returnBadRequest("Value-Check (String) failed");
-    } else {
+    if(strlen($value) === 0 && !$min){
         return $value;
+    } else {
+        $value = htmlspecialchars($value);
+        $value = filter_var($value, FILTER_SANITIZE_STRING);
+        if($min <= strlen($value) && $max >= strlen($value)){
+            return $value;
+        }
     }
+
+    returnBadRequest("Value-Check (String) failed");
 
 }
 
@@ -32,17 +35,20 @@ function val_number ($value, $min=false, $max=true) {
 
 }
 
-function val_email ($value, $min=false, $max=false) {
+function val_email ($value, $min=false, $max=true) {
 
     $value = trim($value);
-    $value = htmlspecialchars($value);
-
-    $value = filter_var($value, FILTER_SANITIZE_EMAIL);
-    $state = filter_var($value, FILTER_VALIDATE_EMAIL);
-    if (($min && $value < $min) || ($max && $value > $max) || !$state && $min && $max) {
-        returnBadRequest("Value-Check (E-Mail) failed");
-    } else {
+    if(strlen($value) === 0 && !$min){
         return $value;
+    } else {
+        $value = htmlspecialchars($value);
+        $value = filter_var($value, FILTER_SANITIZE_EMAIL);
+        $state = filter_var($value, FILTER_VALIDATE_EMAIL);
+        if($state && $min <= strlen($value) && $max >= strlen($value)){
+            return $value;
+        }
     }
+
+    returnBadRequest("Value-Check (E-Mail) failed");
 
 }

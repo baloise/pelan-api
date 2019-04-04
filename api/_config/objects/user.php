@@ -112,16 +112,16 @@ class User {
         $this->role = htmlspecialchars(strip_tags($this->role));
         $this->team = htmlspecialchars(strip_tags($this->team));
 
-        $checkQuery = "SELECT * FROM ".$this->db_table_role." WHERE ID = :id AND Team_ID = :team";
+        $checkQuery = "SELECT * FROM " . $this->db_table_role . " WHERE ID = :id AND Team_ID = :team";
         $stmt = $this->conn->prepare($checkQuery);
         $stmt->bindParam(':team', $this->team);
         $stmt->bindParam(':id', $this->role);
         $stmt->execute();
 
-        if ( $stmt->rowCount() === 1 ) {
+        if ($stmt->rowCount() === 1) {
 
             $query = "
-                UPDATE ".$this->db_table." SET
+                UPDATE ".$this->db_table . " SET
                 Firstname = :firstname,
                 Lastname = :lastname,
                 Nickname = :nickname,
@@ -160,13 +160,13 @@ class User {
         WHERE Team_ID = :team
         ";
 
-        if($userid){
-            $query.= " AND ID = :userid";
+        if ($userid) {
+            $query .= " AND ID = :userid";
         }
 
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':team', $this->team);
-        if($userid){
+        if ($userid) {
             $stmt->bindParam(':userid', $userid);
         }
         $stmt->execute();

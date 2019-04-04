@@ -23,7 +23,7 @@ $user = new User($db);
 
 if ($api_conf['environment'] === 'test') {
 
-    if(!isset($_SERVER['PHP_AUTH_USER'])){
+    if (!isset($_SERVER['PHP_AUTH_USER'])) {
         header('WWW-Authenticate: Basic realm="Dev-Mode: Auth required"');
         header('HTTP/1.0 401 Unauthorized');
         die('Auth unsuccessful');
@@ -33,7 +33,7 @@ if ($api_conf['environment'] === 'test') {
         $submitKey = $_SERVER['PHP_AUTH_PW'];
     }
 
-} else if($api_conf['environment'] === 'testMedusa'){
+} else if ($api_conf['environment'] === 'testMedusa') {
 
     //MedusaTest
     $user->email = "xx0001@demo.com"; // = Admin
@@ -42,7 +42,7 @@ if ($api_conf['environment'] === 'test') {
     //$user->email = "xx0003@demo.com"; // = Teammitglied
     //$submitKey = "xx0003";
 
-} else if($api_conf['environment'] === 'prod'){
+} else if ($api_conf['environment'] === 'prod') {
 
     //Medusa Login if Prod
     $user->email = 'mailByMedusa';
@@ -50,9 +50,9 @@ if ($api_conf['environment'] === 'test') {
 
 }
 
-if($user->userExists() && password_verify($submitKey, $user->authkey)){
+if ($user->userExists() && password_verify($submitKey, $user->authkey)) {
 
-    if($user->readToken()){
+    if ($user->readToken()) {
 
         $token = array(
             "iss" => $token_conf['issuer'],
@@ -80,8 +80,8 @@ if($user->userExists() && password_verify($submitKey, $user->authkey)){
         );
 
         $jwt = JWT::encode($token, $token_conf['secret']);
-        if(setAuth($jwt, $token_conf['expireAt'], $api_conf['cookie'])){
-            returnSuccess($user->email." authenticated");
+        if (setAuth($jwt, $token_conf['expireAt'], $api_conf['cookie'])) {
+            returnSuccess($user->email . " authenticated");
         }
 
     }

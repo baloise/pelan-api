@@ -32,7 +32,7 @@ $user = new User($db);
 
 try {
 
-    if($decoded->data->role->admin && isset($data->firstname)){
+    if ($decoded->data->role->admin && isset($data->firstname)) {
         //User is Admin
 
         $user->id = $data->id;
@@ -44,8 +44,8 @@ try {
         $user->team = $decoded->data->team->id;
 
 
-        if ( $user->editDetails() ){
-            if ( $decoded->data->id !== $data->id ){
+        if ($user->editDetails()) {
+            if ($decoded->data->id !== $data->id) {
                 returnSuccess();
             }
         } else {
@@ -57,13 +57,13 @@ try {
 
         $user->id = $decoded->data->id;
         $user->language = $data->language;
-        if ( !$user->editLanguage() ){
+        if (!$user->editLanguage()) {
             returnError();
         }
 
     }
 
-    if ( $user->readToken() && $decoded->data->id === $user->id){
+    if ($user->readToken() && $decoded->data->id === $user->id) {
 
         $token = array(
             "iss" => $token_conf['issuer'],
@@ -91,7 +91,7 @@ try {
         );
 
         $jwt = JWT::encode($token, $token_conf['secret']);
-        if(setAuth($jwt, $token_conf['expireAt'], $api_conf['cookie'])){
+        if (setAuth($jwt, $token_conf['expireAt'], $api_conf['cookie'])) {
             returnSuccess("TOKEN");
         }
 

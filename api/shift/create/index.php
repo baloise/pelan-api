@@ -41,11 +41,11 @@ try {
     $shift->team = $decoded->data->team->id;
     $shift->description = $data->description;
 
-    if(substr($shift->color, 0, 1) === "#"){
+    if (substr($shift->color, 0, 1) === "#") {
         $shift->color = substr($shift->color, 1, 6);
     }
 
-    if( $shift->create() ){
+    if ($shift->create()) {
         returnSuccess($shift->id);
     }
 

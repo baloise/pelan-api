@@ -35,12 +35,12 @@ try {
     if ($decoded->data->role->admin && isset($data->firstname)) {
         //User is Admin
 
-        $user->id = validate($data->id,"number",1);
-        $user->firstname = validate($data->firstname,"string",1,255);
-        $user->lastname = validate($data->lastname,"string",1,255);
-        $user->nickname = validate($data->nickname,"string",1,10);
-        $user->language = validate($data->language,"string",2,2);
-        $user->role = validate($data->role,"number",1);
+        $user->id = val_number($data->id, 1);
+        $user->firstname = val_string($data->firstname, 1, 255);
+        $user->lastname = val_string($data->lastname, 1, 255);
+        $user->nickname = val_string($data->nickname, 1, 10);
+        $user->language = val_string($data->language, 2, 2);
+        $user->role = val_number($data->role, 1);
         $user->team = $decoded->data->team->id;
 
         if ($user->editDetails()) {
@@ -55,7 +55,7 @@ try {
         //User is not Admin
 
         $user->id = $decoded->data->id;
-        $user->language = validate($data->language,"string",2,2);
+        $user->language = val_string($data->language, 2, 2);
 
         if (!$user->editLanguage()) {
             returnError();

@@ -226,8 +226,6 @@ class User {
             throw new InvalidArgumentException($stmt->errorInfo()[1]);
         }
 
-        return false;
-
     }
 
 }

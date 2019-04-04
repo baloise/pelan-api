@@ -26,8 +26,6 @@ class Assignment {
         WHERE user_team = :team AND user = :user
         ";
 
-
-
         if ($from && $to) {
             $query .= " AND date BETWEEN :from AND :to";
         }
@@ -74,18 +72,10 @@ class Assignment {
         (:note, :date, :time, :shift, :user, :creator);
         ";
 
-        $this->note = htmlspecialchars(strip_tags($this->note));
-        $this->date = htmlspecialchars(strip_tags($this->date));
-        $this->time = htmlspecialchars(strip_tags($this->time));
-        $this->user = htmlspecialchars(strip_tags($this->user));
-        $this->creator = htmlspecialchars(strip_tags($this->creator));
-
-        if (isset($this->shift)) {
-            $this->shift = htmlspecialchars(strip_tags($this->shift));
-        } else if (strlen($this->note) > 1) {
-            $this->shift = NULL;
-        } else {
+        if ($this->shift <= 0 && strlen($this->note) <= 0) {
             throw new InvalidArgumentException("Missing Shift or Note");
+        } else if($this->shift <= 0) {
+            $this->shift = NULL;
         }
 
         $stmt = $this->conn->prepare($query);
@@ -106,24 +96,38 @@ class Assignment {
 
     public function delete() {
 
-        $query = "
-        DELETE FROM " . $this->db_table . " WHERE
-        Date = :date AND Daytime_ID = :time AND User_ID = :user
+        $getid = "
+        SELECT id FROM ". $this->db_teamassigns . "
+        WHERE date = :date AND time = :time AND user = :user AND user_team = :team
         ";
 
-        $this->date = htmlspecialchars(strip_tags($this->date));
-        $this->time = htmlspecialchars(strip_tags($this->time));
-        $this->user = htmlspecialchars(strip_tags($this->user));
+        $query = "
+        DELETE FROM " . $this->db_table . "
+        WHERE ID = :id
+        ";
 
-        $stmt = $this->conn->prepare($query);
+        $stmt = $this->conn->prepare($getid);
         $stmt->bindParam(":date", $this->date);
         $stmt->bindParam(":time", $this->time);
         $stmt->bindParam(":user", $this->user);
+        $stmt->bindParam(":team", $this->team);
 
-        if ($stmt->execute()) {
-            return true;
+        if ($stmt->execute() && $stmt->rowCount() === 1) {
+
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+            extract($row);
+
+            $stmt = $this->conn->prepare($query);
+            $stmt->bindParam(":id", $id);
+
+            if ($stmt->execute()) {
+                return true;
+            } else {
+                throw new InvalidArgumentException($stmt->errorInfo()[1]);
+            }
+
         } else {
-            throw new InvalidArgumentException($stmt->errorInfo()[1]);
+            throw new InvalidArgumentException("No matching assign");
         }
 
     }

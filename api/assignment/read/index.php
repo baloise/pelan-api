@@ -5,6 +5,7 @@ include_once '../../_config/settings.php';
 include_once '../../_config/core.php';
 include_once '../../_config/headers.php';
 include_once '../../_config/database.php';
+include_once '../../_config/validate.php';
 include_once '../../_config/libraries/php-jwt-master/src/BeforeValidException.php';
 include_once '../../_config/libraries/php-jwt-master/src/ExpiredException.php';
 include_once '../../_config/libraries/php-jwt-master/src/SignatureInvalidException.php';
@@ -33,15 +34,15 @@ $assignment = new Assignment($db);
 try {
 
     $assignment->team = $decoded->data->team->id;
-    $assignment->user = $data->user;
+    $assignment->user = val_number($data->user, 1);
+
     if ($data->from && $data->to) {
-        $stmt = $assignment->read($data->from, $data->to);
+        $stmt = $assignment->read(val_string($data->from,8,10), val_string($data->to,8,10));
     } else {
         $stmt = $assignment->read();
     }
-    $num = $stmt->rowCount();
 
-    if ($num > 0) {
+    if ($stmt->rowCount() > 0) {
 
         $assignments_arr = array();
 

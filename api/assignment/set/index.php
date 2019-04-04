@@ -5,6 +5,7 @@ include_once '../../_config/settings.php';
 include_once '../../_config/core.php';
 include_once '../../_config/headers.php';
 include_once '../../_config/database.php';
+include_once '../../_config/validate.php';
 include_once '../../_config/libraries/php-jwt-master/src/BeforeValidException.php';
 include_once '../../_config/libraries/php-jwt-master/src/ExpiredException.php';
 include_once '../../_config/libraries/php-jwt-master/src/SignatureInvalidException.php';
@@ -39,15 +40,15 @@ try {
     include_once '../../_config/objects/user.php';
     $user = new User($db);
     $user->team = $decoded->data->team->id;
-    $exist = ($user->read($data->user))->rowCount();
+    $exist = ($user->read(val_number($data->user, 1)))->rowCount();
 
     if ($exist) {
 
-        $assignment->user = $data->user;
-        $assignment->time = $data->time;
-        $assignment->shift = $data->shift;
-        $assignment->date = $data->date;
-        $assignment->note = $data->note;
+        $assignment->user = val_number($data->user, 1);
+        $assignment->time = val_number($data->time, 1);
+        $assignment->shift = val_number($data->shift);
+        $assignment->date = val_string($data->date, 8, 10);
+        $assignment->note = val_string($data->note);
         $assignment->creator = $decoded->data->id;
 
         $assignment->set();

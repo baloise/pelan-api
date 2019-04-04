@@ -5,6 +5,7 @@ include_once '../../../_config/settings.php';
 include_once '../../../_config/core.php';
 include_once '../../../_config/headers.php';
 include_once '../../../_config/database.php';
+include_once '../../../_config/validate.php';
 include_once '../../../_config/libraries/php-jwt-master/src/BeforeValidException.php';
 include_once '../../../_config/libraries/php-jwt-master/src/ExpiredException.php';
 include_once '../../../_config/libraries/php-jwt-master/src/SignatureInvalidException.php';
@@ -33,20 +34,21 @@ $assignment = new Assignment($db);
 try {
 
     $assignment->team = $decoded->data->team->id;
-    $stmt = $assignment->readNotes($data->from, $data->to);
-    $num = $stmt->rowCount();
+    $stmt = $assignment->readNotes(val_string($data->from,8,10), val_string($data->to,8,10));
 
-    if ($num > 0) {
+    if ($stmt->rowCount() > 0) {
 
         $assignments_arr = array();
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             extract($row);
-            $assignment_item = array(
-                "date" => (new DateTime($date))->format('Y/m/d'),
-                "user" => $user,
-                "note" => $note
-            );
-            array_push($assignments_arr, $assignment_item);
+            if(strlen($note) > 0){
+                $assignment_item = array(
+                    "date" => (new DateTime($date))->format('Y/m/d'),
+                    "user" => $user,
+                    "note" => $note
+                );
+                array_push($assignments_arr, $assignment_item);
+            }
         }
 
         returnSuccess($assignments_arr);

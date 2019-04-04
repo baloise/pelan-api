@@ -179,8 +179,8 @@ class User {
 
         $query = "
         INSERT INTO " . $this->db_table . "
-        (`Firstname`, `Lastname`, `Language`, `Identifier`, `Nickname`, `Email`) VALUES
-        (:firstname, :lastname, :language, :identifier, :nickname, :email);
+        (`Firstname`, `Lastname`, `Language`, `Auth_Key`, `Nickname`, `Email`) VALUES
+        (:firstname, :lastname, :language, :authkey, :nickname, :email);
         ";
 
         $stmt = $this->conn->prepare($query);
@@ -214,7 +214,7 @@ class User {
         $stmt->bindParam(':firstname', $this->firstname);
         $stmt->bindParam(':lastname', $this->lastname);
         $stmt->bindParam(':language', $this->language);
-        $stmt->bindParam(':identifier', $this->identifier);
+        $stmt->bindParam(':authkey', $this->authkey);
         $stmt->bindParam(':nickname', $this->nickname);
         $stmt->bindParam(':email', $this->email);
 

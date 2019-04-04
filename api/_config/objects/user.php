@@ -177,6 +177,9 @@ class User {
 
     public function create() {
 
+        throw new InvalidArgumentException('Function not yet implemented');
+
+        /*
         $query = "
         INSERT INTO " . $this->db_table . "
         (`Firstname`, `Lastname`, `Language`, `Auth_Key`, `Nickname`, `Email`) VALUES
@@ -184,16 +187,6 @@ class User {
         ";
 
         $stmt = $this->conn->prepare($query);
-
-        if (
-            mb_strlen($this->firstname) < 1 ||
-            mb_strlen($this->lastname) < 1 ||
-            mb_strlen($this->language) < 1 ||
-            mb_strlen($this->language) < 2 ||
-            mb_strlen($this->authkey) < 1 ||
-            mb_strlen($this->nickname) < 1 ||
-            mb_strlen($this->nickname) > 6
-        ) { throw new InvalidArgumentException('Missing Values'); }
 
         $this->firstname = htmlspecialchars(strip_tags($this->firstname));
         $this->lastname = htmlspecialchars(strip_tags($this->lastname));
@@ -225,6 +218,8 @@ class User {
         } else {
             throw new InvalidArgumentException($stmt->errorInfo()[1]);
         }
+
+        */
 
     }
 

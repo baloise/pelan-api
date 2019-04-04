@@ -30,6 +30,50 @@ function authenticate() {
     }
 }
 
+function validate($value, $type, $min=false, $max=false) {
+
+    //Types: string, number, email
+
+    $value = trim($value);
+    $value = htmlspecialchars($value);
+    $state = false;
+
+    switch ($type) {
+
+        case "string":
+            $value = filter_var($value, FILTER_SANITIZE_STRING);
+            $state = true;
+            if($min && strlen($value) < $min || $max && strlen($value) > $max){
+                $state = false;
+            }
+            break;
+
+        case "number":
+            $value = filter_var($value, FILTER_SANITIZE_NUMBER_FLOAT);
+            $state = filter_var($value, FILTER_VALIDATE_FLOAT);
+            if($min && $value < $min || $max && $value > $max){
+                $state = false;
+            }
+            break;
+
+        case "email":
+            $value = filter_var($value, FILTER_SANITIZE_EMAIL);
+            $state = filter_var($value, FILTER_VALIDATE_EMAIL);
+            if($min && strlen($value) < $min || $max && strlen($value) > $max){
+                $state = false;
+            }
+            break;
+
+    }
+
+    if($state === false){
+        returnBadRequest("Value-Check failed");
+    } else {
+        return $value;
+    }
+
+}
+
 function returnSuccess($data = false) {
     http_response_code(200);
     if ($data) {

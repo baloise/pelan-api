@@ -1,5 +1,5 @@
 <?php
-//error_reporting(0);
+
 class Shift {
 
     private $conn;
@@ -41,12 +41,6 @@ class Shift {
         WHERE ID = :id AND Team_ID = :team;
         ";
 
-        $this->id = htmlspecialchars(strip_tags($this->id));
-        $this->title = htmlspecialchars(strip_tags($this->title));
-        $this->color = htmlspecialchars(strip_tags($this->color));
-        $this->description = htmlspecialchars(strip_tags($this->description));
-        $this->team = htmlspecialchars(strip_tags($this->team));
-
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':id', $this->id);
         $stmt->bindParam(':title', $this->title);
@@ -69,11 +63,6 @@ class Shift {
             (`Title`, `Color`, `Description`, `Team_ID`, `Active`) VALUES
             (:title, :color, :description, :team, '1');
         ";
-
-        $this->title = htmlspecialchars(strip_tags($this->title));
-        $this->color = htmlspecialchars(strip_tags($this->color));
-        $this->description = htmlspecialchars(strip_tags($this->description));
-        $this->team = htmlspecialchars(strip_tags($this->team));
 
         if (strlen($this->title) < 1) {throw new InvalidArgumentException('Title is required'); }
         if (strlen($this->color) !== 6) {throw new InvalidArgumentException('Hex-Color is required'); }
@@ -102,8 +91,6 @@ class Shift {
         WHERE ID = :id AND Team_ID = :team
         ";
 
-        $this->id = htmlspecialchars(strip_tags($this->id));
-        $this->team = htmlspecialchars(strip_tags($this->team));
         $newTitle = ('_deletetAt_' . date_timestamp_get(/** @scrutinizer ignore-type */date_create()));
 
         $stmt = $this->conn->prepare($query);

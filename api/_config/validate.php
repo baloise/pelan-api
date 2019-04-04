@@ -16,16 +16,21 @@ function val_string ($value, $min=false, $max=false) {
 
 function val_number ($value, $min=false, $max=false) {
 
-    $value = trim($value);
-    $value = htmlspecialchars($value);
+    if (isset($value) && $value !== 0){
+        $value = trim($value);
+        $value = htmlspecialchars($value);
+        $value = filter_var($value, FILTER_SANITIZE_NUMBER_FLOAT);
+        $state = filter_var($value, FILTER_VALIDATE_FLOAT);
 
-    $value = filter_var($value, FILTER_SANITIZE_NUMBER_FLOAT);
-    $state = filter_var($value, FILTER_VALIDATE_FLOAT);
-    if (($min && $value < $min) || ($max && $value > $max) || !$state && $min && $max) {
-        returnBadRequest("Value-Check (Number) failed");
-    } else {
+        if($state && (!$min || $value >= $min) && (!$max || $value <= $max) ){
+            return $value;
+        }
+
+    } else if (!$min) {
         return $value;
     }
+
+    returnBadRequest("Value-Check (Number) failed");
 
 }
 

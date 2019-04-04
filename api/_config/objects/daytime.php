@@ -1,5 +1,5 @@
 <?php
-//error_reporting(0);
+
 class Daytime {
 
     private $conn;
@@ -40,13 +40,6 @@ class Daytime {
         WHERE ID = :id AND Team_ID = :team;
         ";
 
-        $this->id = htmlspecialchars(strip_tags($this->id));
-        $this->title = htmlspecialchars(strip_tags($this->title));
-        $this->position = htmlspecialchars(strip_tags($this->position));
-        $this->team = htmlspecialchars(strip_tags($this->team));
-        $this->abbreviation = htmlspecialchars(strip_tags($this->abbreviation));
-        $this->description = htmlspecialchars(strip_tags($this->description));
-
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':id', $this->id);
         $stmt->bindParam(':title', $this->title);
@@ -70,12 +63,6 @@ class Daytime {
             (Title, Abbreviation, Description, Position, Team_ID, Active) VALUES
             (:title, :abbreviation, :description, :position, :team, '1');
         ";
-
-        $this->title = htmlspecialchars(strip_tags($this->title));
-        $this->abbreviation = htmlspecialchars(strip_tags($this->abbreviation));
-        $this->description = htmlspecialchars(strip_tags($this->description));
-        $this->position = htmlspecialchars(strip_tags($this->position));
-        $this->team = htmlspecialchars(strip_tags($this->team));
 
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':title', $this->title);
@@ -101,8 +88,6 @@ class Daytime {
             WHERE ID = :id AND Team_ID = :team
         ";
 
-        $this->id = htmlspecialchars(strip_tags($this->id));
-        $this->team = htmlspecialchars(strip_tags($this->team));
         $newTitle = ('_deletetAt_' . date_timestamp_get(/** @scrutinizer ignore-type */date_create()));
 
         $stmt = $this->conn->prepare($query);

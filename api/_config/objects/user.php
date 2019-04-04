@@ -1,5 +1,4 @@
 <?php
-//error_reporting(0);
 
 class User {
 
@@ -29,12 +28,6 @@ class User {
         WHERE Email = ? LIMIT 0,1
         ";
 
-        if (filter_var($this->email, FILTER_VALIDATE_EMAIL)) {
-            $this->email = htmlspecialchars(strip_tags($this->email));
-        } else {
-            throw new InvalidArgumentException('Invalid E-Mail Adress');
-        }
-
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(1, $this->email);
         $stmt->execute();
@@ -53,7 +46,6 @@ class User {
         $query = "SELECT * FROM " . $this->db_view_token . " WHERE id = ?";
 
         $stmt = $this->conn->prepare($query);
-        $this->id = htmlspecialchars(strip_tags($this->id));
         $stmt->bindParam(1, $this->id);
         $stmt->execute();
 
@@ -87,9 +79,6 @@ class User {
 
         $query = "UPDATE " . $this->db_table . " SET Lang = :language WHERE ID = :id";
 
-        $this->language = htmlspecialchars(strip_tags($this->language));
-        $this->id = htmlspecialchars(strip_tags($this->id));
-
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':language', $this->language);
         $stmt->bindParam(':id', $this->id);
@@ -103,14 +92,6 @@ class User {
     }
 
     public function editDetails() {
-
-        $this->id = htmlspecialchars(strip_tags($this->id));
-        $this->firstname = htmlspecialchars(strip_tags($this->firstname));
-        $this->lastname = htmlspecialchars(strip_tags($this->lastname));
-        $this->language = htmlspecialchars(strip_tags($this->language));
-        $this->nickname = htmlspecialchars(strip_tags($this->nickname));
-        $this->role = htmlspecialchars(strip_tags($this->role));
-        $this->team = htmlspecialchars(strip_tags($this->team));
 
         $checkQuery = "SELECT * FROM " . $this->db_table_role . " WHERE ID = :id AND Team_ID = :team";
         $stmt = $this->conn->prepare($checkQuery);
@@ -172,54 +153,6 @@ class User {
         $stmt->execute();
 
         return $stmt;
-
-    }
-
-    public function create() {
-
-        throw new InvalidArgumentException('Function not yet implemented');
-
-        /*
-        $query = "
-        INSERT INTO " . $this->db_table . "
-        (`Firstname`, `Lastname`, `Language`, `Auth_Key`, `Nickname`, `Email`) VALUES
-        (:firstname, :lastname, :language, :authkey, :nickname, :email);
-        ";
-
-        $stmt = $this->conn->prepare($query);
-
-        $this->firstname = htmlspecialchars(strip_tags($this->firstname));
-        $this->lastname = htmlspecialchars(strip_tags($this->lastname));
-        $this->language = htmlspecialchars(strip_tags($this->language));
-        $this->authkey = htmlspecialchars(strip_tags($this->authkey));
-        $this->nickname = htmlspecialchars(strip_tags($this->nickname));
-
-        if ($this->userExists()) {
-            throw new InvalidArgumentException('User already exists');
-        }
-
-        if (filter_var($this->email, FILTER_VALIDATE_EMAIL)) {
-            $this->email = htmlspecialchars(strip_tags($this->email));
-        } else {
-            throw new InvalidArgumentException('Invalid E-Mail Adress');
-        }
-
-        $authkey_hash = password_hash($this->authkey, PASSWORD_BCRYPT);
-        $stmt->bindParam(':authkey', $authkey_hash);
-        $stmt->bindParam(':firstname', $this->firstname);
-        $stmt->bindParam(':lastname', $this->lastname);
-        $stmt->bindParam(':language', $this->language);
-        $stmt->bindParam(':nickname', $this->nickname);
-        $stmt->bindParam(':email', $this->email);
-
-        if ($stmt->execute()) {
-            $this->id = $this->conn->lastInsertId();
-            return true;
-        } else {
-            throw new InvalidArgumentException($stmt->errorInfo()[1]);
-        }
-
-        */
 
     }
 

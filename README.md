@@ -4,9 +4,11 @@
 API for the coming staff-planning tool by Baloise.
 
 
-## Work in Progress
+## Docs
 This API is made for the coming Pelan-UI made by [Elia Reutlinger](https://github.com/eliareutlinger).
 The development of the UI will be part of the final project of his apprenticeship at Baloise.
+
+[You can find the API-Docs here.](https://documenter.getpostman.com/view/6073079/S17jVXSG)
 
 ### Details
 - Made in PHP (7.3+).

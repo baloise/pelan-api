@@ -5,6 +5,7 @@ include_once '../../_config/settings.php';
 include_once '../../_config/core.php';
 include_once '../../_config/headers.php';
 include_once '../../_config/database.php';
+include_once '../../_config/validate.php';
 include_once '../../_config/libraries/php-jwt-master/src/BeforeValidException.php';
 include_once '../../_config/libraries/php-jwt-master/src/ExpiredException.php';
 include_once '../../_config/libraries/php-jwt-master/src/SignatureInvalidException.php';
@@ -50,6 +51,7 @@ if ($api_conf['environment'] === 'test') {
 
 }
 
+//TODO: Validation
 if ($user->userExists() && password_verify($submitKey, $user->authkey)) {
 
     if ($user->readToken()) {

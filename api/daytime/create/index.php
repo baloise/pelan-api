@@ -5,6 +5,7 @@ include_once '../../_config/settings.php';
 include_once '../../_config/core.php';
 include_once '../../_config/headers.php';
 include_once '../../_config/database.php';
+include_once '../../_config/validate.php';
 include_once '../../_config/libraries/php-jwt-master/src/BeforeValidException.php';
 include_once '../../_config/libraries/php-jwt-master/src/ExpiredException.php';
 include_once '../../_config/libraries/php-jwt-master/src/SignatureInvalidException.php';
@@ -36,10 +37,10 @@ if (!$decoded->data->role->admin) {
 
 try {
 
-    $time->title = $data->title;
-    $time->abbreviation = $data->abbreviation;
-    $time->description = $data->description;
-    $time->position = $data->position;
+    $time->title = val_string($data->title, 1);
+    $time->abbreviation = val_string($data->abbreviation, 1, 5);
+    $time->description = val_string($data->description, 1);
+    $time->position = val_number($data->position, 1, 200);
     $time->team = $decoded->data->team->id;
 
     $time->create();

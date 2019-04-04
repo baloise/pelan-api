@@ -14,20 +14,18 @@ function val_string ($value, $min=false, $max=false) {
 
 }
 
-function val_number ($value, $min=false, $max=false) {
+function val_number ($value, $min=false, $max=true) {
 
-    if (isset($value) && $value !== 0){
+    if($value == 0 && !$min){
+        return $value;
+    } else {
         $value = trim($value);
         $value = htmlspecialchars($value);
         $value = filter_var($value, FILTER_SANITIZE_NUMBER_FLOAT);
         $state = filter_var($value, FILTER_VALIDATE_FLOAT);
-
-        if($state && (!$min || $value >= $min) && (!$max || $value <= $max) ){
+        if($state && $min <= $value && $max >= $value){
             return $value;
         }
-
-    } else if (!$min) {
-        return $value;
     }
 
     returnBadRequest("Value-Check (Number) failed");

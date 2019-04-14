@@ -136,7 +136,7 @@ class User {
     public function read($userid = false) {
 
         $query = "
-        SELECT ID as id, Firstname as firstname, Lastname as lastname, Nickname as nickname, Role_ID as role
+        SELECT ID as id, Firstname as firstname, Lastname as lastname, Nickname as nickname, Lang as language, Role_ID as role
         FROM ". $this->db_table . "
         WHERE Team_ID = :team
         ";

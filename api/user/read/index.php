@@ -54,6 +54,7 @@ try {
                 "firstname" => $firstname,
                 "lastname" => $lastname,
                 "nickname" => $nickname,
+                "language" => $language,
                 "role" => $role
             );
             array_push($users_arr, $user_item);

@@ -37,7 +37,10 @@ INSERT INTO `shift` (`ID`, `Title`, `Description`, `Color`, `Active`, `Team_ID`)
 (3, 'Krank', 'Mitarbeiter fällt aus weil krank.', 'FF9F00', '1', '1'),
 (4, 'Ferien', 'Mitarbeiter fällt aus weil Ferien.', '0059D3', '1', '1'),
 (5, 'Anwesend', 'Verkauf-Mitarbeiter ist anwesend', '00E500', '1', '2'),
-(6, 'Abwesend', 'Verkauf-Mitarbeiter ist abwesend', 'FF0000', '1', '2');
+(6, 'Abwesend', 'Verkauf-Mitarbeiter ist abwesend', 'FF0000', '1', '2'),
+(7, 'Task', 'Muss hier etwas spezifisches erledigen.', 'ffe867', '1', '1'),
+(8, 'Bez. Absenz', 'Ist abwesend.', '7c671d', '1', '1'),
+(9, 'HomeOffice', 'Telefon, aber zu Hause.', 'bfbfbf', '1', '1');
 
 -- ---- TABLE 'user' Team: Helpdesk
 INSERT INTO `user` (`ID`, `Firstname`, `Lastname`, `Nickname`, `Email`, `Lang`, `Team_ID`, `Role_ID`, `Auth_Key`) VALUES

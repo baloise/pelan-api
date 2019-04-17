@@ -20,7 +20,7 @@ $token_conf = array(
     "issuer" => 'Pelan Application',
     "issuedAt" => time(),
     "notBefore" => time(),
-    "expireAt" => time() + (15*60) // 15*60=15Min
+    "expireAt" => time() + (3*60*60) // 3*60*60=3H; 15*60=15Min
 );
 
 $db_conf = array(

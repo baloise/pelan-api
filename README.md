@@ -13,6 +13,5 @@ The development of the UI will be part of the final project of his apprenticeshi
 ### Details
 - Made in PHP (7.3+).
 - Authorization using JWT
-- Default Access-Control-Allow-Origin: *
 
 For Details about Database structures etc. please visit /docs

@@ -1,13 +1,15 @@
 <?php
 
-function val_string ($value, $min=false, $max=true) {
+function val_string ($value, $min=false, $max=true, $entities=true) {
 
     $value = trim($value);
     if(strlen($value) === 0 && !$min){
         return $value;
     } else {
-        $value = htmlspecialchars($value);
-        $value = filter_var($value, FILTER_SANITIZE_STRING);
+        if($entities){
+            $value = htmlspecialchars($value);
+            $value = filter_var($value, FILTER_SANITIZE_STRING);
+        }
         if($min <= strlen($value) && $max >= strlen($value)){
             return $value;
         }

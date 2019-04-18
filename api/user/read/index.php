@@ -36,7 +36,7 @@ try {
     $user->team = $decoded->data->team->id;
 
     if ($data && $data->user) {
-        $stmt = $user->read(val_number($data->user,1));
+        $stmt = $user->read(val_number($data->user, 1));
     } else {
         $stmt = $user->read();
     }

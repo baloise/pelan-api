@@ -74,7 +74,7 @@ class Assignment {
 
         if ($this->shift <= 0 && strlen($this->note) <= 0) {
             throw new InvalidArgumentException("Missing Shift or Note");
-        } else if($this->shift <= 0) {
+        } else if ($this->shift <= 0) {
             $this->shift = NULL;
         }
 

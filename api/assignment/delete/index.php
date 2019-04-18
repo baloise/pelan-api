@@ -37,9 +37,9 @@ if (!$decoded->data->role->admin) {
 
 try {
 
-    $assignment->user = val_number($data->user,1);
-    $assignment->time = val_number($data->time,1);
-    $assignment->date = val_string($data->date,8,10);
+    $assignment->user = val_number($data->user, 1);
+    $assignment->time = val_number($data->time, 1);
+    $assignment->date = val_string($data->date, 8, 10);
     $assignment->team = $decoded->data->team->id;
 
     $assignment->delete();

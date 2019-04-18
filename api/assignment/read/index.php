@@ -37,7 +37,7 @@ try {
     $assignment->user = val_number($data->user, 1);
 
     if ($data->from && $data->to) {
-        $stmt = $assignment->read(val_string($data->from,8,10), val_string($data->to,8,10));
+        $stmt = $assignment->read(val_string($data->from, 8, 10), val_string($data->to, 8, 10));
     } else {
         $stmt = $assignment->read();
     }

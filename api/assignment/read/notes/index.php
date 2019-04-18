@@ -34,14 +34,14 @@ $assignment = new Assignment($db);
 try {
 
     $assignment->team = $decoded->data->team->id;
-    $stmt = $assignment->readNotes(val_string($data->from,8,10), val_string($data->to,8,10));
+    $stmt = $assignment->readNotes(val_string($data->from, 8, 10), val_string($data->to, 8, 10));
 
     if ($stmt->rowCount() > 0) {
 
         $assignments_arr = array();
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             extract($row);
-            if(strlen($note) > 0){
+            if (strlen($note) > 0) {
                 $assignment_item = array(
                     "date" => (new DateTime($date))->format('Y/m/d'),
                     "user" => $user,

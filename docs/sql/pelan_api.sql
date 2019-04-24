@@ -19,10 +19,10 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Datenbank: `pelan_api`
+-- Datenbank: `pelan`
 --
-CREATE DATABASE IF NOT EXISTS `pelan_api` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
-USE `pelan_api`;
+CREATE DATABASE IF NOT EXISTS `pelan` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+USE `pelan`;
 
 -- --------------------------------------------------------
 

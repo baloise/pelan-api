@@ -1,6 +1,6 @@
--- -------------- INITIALISIERUNG 'pelan_api'
-CREATE DATABASE IF NOT EXISTS pelan_api DEFAULT CHARACTER SET utf8;
-USE pelan_api;
+-- -------------- INITIALISIERUNG 'pelan'
+CREATE DATABASE IF NOT EXISTS pelan DEFAULT CHARACTER SET utf8;
+USE pelan;
 
 -- ---- TABLE 'user'
 CREATE TABLE IF NOT EXISTS user (

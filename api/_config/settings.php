@@ -25,7 +25,7 @@ $token_conf = array(
 
 $db_conf = array(
     "host" => "localhost",
-    "database" => "pelan_api",
+    "database" => "pelan",
     "user" => "root",
     "pass" => "",
 );

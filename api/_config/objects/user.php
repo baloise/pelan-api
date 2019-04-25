@@ -106,7 +106,6 @@ class User {
                 Firstname = :firstname,
                 Lastname = :lastname,
                 Nickname = :nickname,
-                Lang = :language,
                 Role_ID = :role
                 WHERE ID = :id AND Team_ID = :team
             ";
@@ -117,7 +116,7 @@ class User {
             $stmt->bindParam(':firstname', $this->firstname);
             $stmt->bindParam(':lastname', $this->lastname);
             $stmt->bindParam(':nickname', $this->nickname);
-            $stmt->bindParam(':language', $this->language);
+            //$stmt->bindParam(':language', $this->language);
             $stmt->bindParam(':role', $this->role);
             $stmt->bindParam(':team', $this->team);
 

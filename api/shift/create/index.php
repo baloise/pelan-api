@@ -39,7 +39,7 @@ try {
 
     $shift->title = val_string($data->title, 1, 255, false);
     $shift->color = val_string($data->color, 6, 7);
-    $shift->description = val_string($data->description, 1, false);
+    $shift->description = val_string($data->description, 1, 9999, false);
     $shift->team = $decoded->data->team->id;
 
     if (substr($shift->color, 0, 1) === "#") {

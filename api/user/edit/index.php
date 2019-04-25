@@ -40,7 +40,7 @@ try {
         $user->firstname = val_string($data->firstname, 1, 255);
         $user->lastname = val_string($data->lastname, 1, 255);
         $user->nickname = val_string($data->nickname, 1, 10, false);
-        $user->language = val_string($data->language, 2, 2);
+        //$user->language = val_string($data->language, 2, 2);
         $user->role = val_number($data->role, 1);
         $user->team = $decoded->data->team->id;
 

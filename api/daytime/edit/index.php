@@ -37,9 +37,9 @@ if (!$decoded->data->role->admin) {
 try {
 
     $time->id = val_number($data->id, 1);
-    $time->title = val_string($data->title, 1, false);
+    $time->title = val_string($data->title, 1, 9999, false);
     $time->abbreviation = val_string($data->abbreviation, 1, 5, false);
-    $time->description = val_string($data->description, 1, false);
+    $time->description = val_string($data->description, 1, 9999, false);
     $time->position = val_number($data->position, 1, 200);
     $time->team = $decoded->data->team->id;
 

@@ -25,22 +25,22 @@ UPDATE `user` SET `Role_ID` = '3' WHERE `user`.`ID` = 2;
 
 -- -- TABLE 'daytime'
 INSERT INTO `daytime` (`ID`, `Title`, `Description`, `Abbreviation`, `Position`, `Active`, `Team_ID`) VALUES
-(1, 'Morgens', 'Morning-Hours has Gold in the mouth.', 'Morg', '1', '1', '1'),
-(2, 'Mittags', 'Mittach.', 'Mitt', '2', '1', '1'),
-(3, 'Abends', 'After-Hour', 'Aben', '3', '1', '1'),
+(1, 'Superfrüh', 'Morning-Hours has Gold in the mouth.', 'Super', '1', '1', '1'),
+(2, 'Früh', 'Mittach.', 'Früh', '2', '1', '1'),
+(3, 'Spät', 'After-Hour', 'Spät', '3', '1', '1'),
 (4, 'Ganztägig', 'Der Verkauf hat nur eine Schicht pro Tag', 'GT', '1', '1', '2');
 
 -- -- TABLE 'shift'
 INSERT INTO `shift` (`ID`, `Title`, `Description`, `Color`, `Active`, `Team_ID`) VALUES
-(1, 'Telefon', 'Telefon-Support leisten.', 'A1F600', '1', '1'),
-(2, 'Vor-Ort', 'Vor-Ort-Support leisten.', 'E7007E', '1', '1'),
-(3, 'Krank', 'Mitarbeiter fällt aus weil krank.', 'FF9F00', '1', '1'),
-(4, 'Ferien', 'Mitarbeiter fällt aus weil Ferien.', '0059D3', '1', '1'),
+(1, 'Telefon', 'Telefon-Support leisten.', '3366FF', '1', '1'),
+(2, 'IBS', 'Vor-Ort-Support leisten.', 'FF00FF', '1', '1'),
+(3, 'Krank', 'Mitarbeiter fällt aus weil krank.', 'FF0000', '1', '1'),
+(4, 'Ferien', 'Mitarbeiter fällt aus weil Ferien.', 'FF6600', '1', '1'),
 (5, 'Anwesend', 'Verkauf-Mitarbeiter ist anwesend', '00E500', '1', '2'),
 (6, 'Abwesend', 'Verkauf-Mitarbeiter ist abwesend', 'FF0000', '1', '2'),
-(7, 'Task', 'Muss hier etwas spezifisches erledigen.', 'ffe867', '1', '1'),
-(8, 'Bez. Absenz', 'Ist abwesend.', '7c671d', '1', '1'),
-(9, 'HomeOffice', 'Telefon, aber zu Hause.', 'bfbfbf', '1', '1');
+(7, 'Task', 'Muss hier etwas spezifisches erledigen.', 'FFFF00', '1', '1'),
+(8, 'Bez. Absenz', 'Ist abwesend.', '808000', '1', '1'),
+(9, 'HomeOffice', 'Telefon, aber zu Hause.', 'D3D3D3', '1', '1');
 
 -- ---- TABLE 'user' Team: Helpdesk
 INSERT INTO `user` (`ID`, `Firstname`, `Lastname`, `Nickname`, `Email`, `Lang`, `Team_ID`, `Role_ID`, `Auth_Key`) VALUES

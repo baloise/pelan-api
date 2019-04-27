@@ -8,8 +8,8 @@ $last_user = 31;
 $shifts = [1, 2, 3, 4, 7, 8, 9];
 $daytimes = [1, 2, 3];
 
-$year = '2020';
-$month = '01';
+$year = '2019';
+$month = '04';
 $day_from = 1;
 $day_to = 31;
 

@@ -4,6 +4,7 @@ class Shift {
 
     private $conn;
     private $db_table = "shift";
+    private $db_assign = "assignment";
 
     public $id;
     public $title;
@@ -91,6 +92,11 @@ class Shift {
         WHERE ID = :id AND Team_ID = :team
         ";
 
+        $query2 = "
+        DELETE FROM " . $this->db_assign . "
+        WHERE Shift_ID = :id
+        ";
+
         $newTitle = ('_deletetAt_' . date_timestamp_get(/** @scrutinizer ignore-type */date_create()));
 
         $stmt = $this->conn->prepare($query);
@@ -99,10 +105,17 @@ class Shift {
         $stmt->bindParam(":team", $this->team);
 
         if ($stmt->execute()) {
-            return true;
-        } else {
-            throw new InvalidArgumentException($stmt->errorInfo()[1]);
+
+            $stmt = $this->conn->prepare($query2);
+            $stmt->bindParam(":id", $this->id);
+
+            if ($stmt->execute()){
+                return true;
+            }
+
         }
+
+        throw new InvalidArgumentException($stmt->errorInfo()[1]);
 
     }
 

@@ -2,11 +2,11 @@
 
 echo 'INSERT INTO `assignment`(`User_ID`, `Daytime_ID`, `Shift_ID`, `Date`,  `Note`, `Creator_ID`) VALUES <br/>';
 
-$first_user = 1;
-$last_user = 1;
+$first_user = 3;
+$last_user = 31;
 
 $shifts = ['1', '2', '3', '4', '7', '8', '9', 'NULL', 'NULL'];
-$notes = ["'Dies ist ein Kommentar.'", 'NULL', 'NULL', 'NULL', 'NULL'];
+$notes = ["'Dies ist ein Kommentar.'", 'NULL', 'NULL', 'NULL', 'NULL', 'NULL', 'NULL', 'NULL', 'NULL'];
 $daytimes = [1, 2, 3];
 
 $year = '2019';
@@ -33,5 +33,3 @@ for ($current_user = $first_user; $current_user <= $last_user; $current_user++) 
         }
     }
 }
-
-?>

@@ -28,7 +28,7 @@ for ($current_user = $first_user; $current_user <= $last_user; $current_user++) 
             $shift = $shifts[array_rand($shifts)];
             $note = $notes[array_rand($notes)];
             echo "
-            ('".$current_user."', '".$time."', ".$shift.", '".$date."', ".$note.", '".$creator_id."'), <br/>
+            ('".$current_user . "', '" . $time . "', " . $shift . ", '" . $date . "', " . $note . ", '" . $creator_id . "'), <br/>
             ";
 
         }

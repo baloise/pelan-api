@@ -3,8 +3,8 @@
 $allow_origins = $api_conf['corsOrigins'];
 $origin = array_search($_SERVER['HTTP_ORIGIN'], $allow_origins);
 
-if(is_numeric($origin)){
-    header("Access-Control-Allow-Origin: ".$allow_origins[$origin]);
+if (is_numeric($origin)) {
+    header("Access-Control-Allow-Origin: " . $allow_origins[$origin]);
 } else {
     http_response_code(403);
     die();

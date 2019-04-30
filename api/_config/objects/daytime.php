@@ -106,7 +106,7 @@ class Daytime {
             $stmt = $this->conn->prepare($query2);
             $stmt->bindParam(":id", $this->id);
 
-            if ($stmt->execute()){
+            if ($stmt->execute()) {
                 return true;
             }
 

@@ -130,11 +130,11 @@ INSERT INTO `shift` (`ID`, `Title`, `Description`, `Color`, `Active`, `Team_ID`)
 (2, 'IBS', 'Vor-Ort-Support leisten.', 'FF00FF', 1, 1),
 (3, 'Krank', 'Mitarbeiter fällt aus weil krank.', 'FF0000', 1, 1),
 (4, 'Ferien', 'Mitarbeiter fällt aus weil Ferien.', 'FF6600', 1, 1),
-(5, 'Anwesend', 'Verkauf-Mitarbeiter ist anwesend', '00E500', 1, 2),
-(6, 'Abwesend', 'Verkauf-Mitarbeiter ist abwesend', 'FF0000', 1, 2),
-(7, 'Task', 'Muss hier etwas spezifisches erledigen.', 'FFFF00', 1, 1),
-(8, 'Bez. Absenz', 'Ist abwesend.', '808000', 1, 1),
-(9, 'HomeOffice', 'Telefon, aber zu Hause.', 'D3D3D3', 1, 1);
+(5, 'Task', 'Muss hier etwas spezifisches erledigen.', 'FFFF00', 1, 1),
+(6, 'Bez. Absenz', 'Ist abwesend.', '808000', 1, 1),
+(7, 'HomeOffice', 'Telefon, aber zu Hause.', 'D3D3D3', 1, 1),
+(8, 'Anwesend', 'Verkauf-Mitarbeiter ist anwesend', '00E500', 1, 2),
+(9, 'Abwesend', 'Verkauf-Mitarbeiter ist abwesend', 'FF0000', 1, 2);
 
 -- --------------------------------------------------------
 
@@ -155,8 +155,8 @@ CREATE TABLE `team` (
 --
 
 INSERT INTO `team` (`ID`, `Title`, `Description`, `Public`, `Owner_ID`) VALUES
-(1, 'Helpdesk', 'Das Helpdesk-Team', NULL, 1),
-(2, 'Verkauf', 'Das Verkauf-Team', NULL, 2);
+(1, 'Helpdesk', 'Das Helpdesk-Team', NULL, 2),
+(2, 'Verkauf', 'Das Verkauf-Team', NULL, 1);
 
 -- --------------------------------------------------------
 
@@ -182,8 +182,8 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`ID`, `Firstname`, `Lastname`, `Nickname`, `Email`, `Auth_Key`, `Lang`, `Last_Login`, `Team_ID`, `Role_ID`) VALUES
-(1, 'Patrick', 'Helpdeskadmin', 'HelpPat', 'xx0001@demo.com', '$2y$10$T/P6GS7zKBQKP70m1Cf4zO/jKEKbuS.vP8ZyJw2GCkid9z4dwpsia', 'de', '2019-04-02 11:41:07', 1, 1),
-(2, 'Andreas', 'Verkaufadmin', 'VerkAnd', 'yy0001@demo.com', '$2y$10$Kk/LvBk9Y1Ku93ZpX48JIOfZG3fCAFAfjd08A.mg3D0eaLQlSJkP.', 'de', '2019-04-02 11:41:07', 2, 3),
+(1, 'Andreas', 'Verkaufadmin', 'V.Admin', 'yy0001@demo.com', '$2y$10$Kk/LvBk9Y1Ku93ZpX48JIOfZG3fCAFAfjd08A.mg3D0eaLQlSJkP.', 'de', '2019-04-02 11:41:07', 2, 3),
+(2, 'Patrick', 'Helpdeskadmin', 'HelpPat', 'xx0001@demo.com', '$2y$10$T/P6GS7zKBQKP70m1Cf4zO/jKEKbuS.vP8ZyJw2GCkid9z4dwpsia', 'de', '2019-04-02 11:41:07', 1, 1),
 (3, 'Kropf', 'Christian', 'K.Chr2', 'xx0002@demo.com', '$2y$10$OdC995tG0DkxkVA1KfNTG.ykIgQaomf1rWn9nphaYlVTzVSQUbo3S', 'de', '2019-04-02 11:41:07', 1, 2),
 (4, 'Schmitt', 'Peters', 'S.Pet3', 'xx0003@demo.com', '$2y$10$0TBN/pxMghIHllNBTw8Z1.X6/fWaT020G7U6kM.Qnp/2wuefEklvK', 'de', '2019-04-02 11:41:07', 1, 2),
 (5, 'Berbett', 'Olivier', 'B.Oli4', 'xx0004@demo.com', '$2y$10$rj7G54M14jXcx8jIt1ya.uklU3KvQwn5PfCccq7JcUlOu7pEFbW7W', 'de', '2019-04-02 11:41:07', 1, 2),
@@ -212,7 +212,9 @@ INSERT INTO `user` (`ID`, `Firstname`, `Lastname`, `Nickname`, `Email`, `Auth_Ke
 (28, 'Ba', 'Bianca', 'B.Bia27', 'xx0027@demo.com', '$2y$10$vD4D.x8ehgX2Gw6nwTCaquTojRh.QpZ9PCyNxE7owrDqpaNK.Fmmi', 'de', '2019-04-02 11:41:07', 1, 2),
 (29, 'Kropf', 'Yusuf', 'K.Yus28', 'xx0028@demo.com', '$2y$10$6Z/QdQVAzwNwpjKfOF/bZutrJYFCwiXZM2FbortBbC8HPuppLza1u', 'de', '2019-04-02 11:41:07', 1, 2),
 (30, 'Koch', 'Kropf', 'K.Kro29', 'xx0029@demo.com', '$2y$10$CqlHf0um.Qa.SCRk1HYqv.B8ao.icQpeOEYXjBCFFr.ywlGXhnydS', 'de', '2019-04-02 11:41:07', 1, 2),
-(31, 'Civale', 'Bianca', 'C.Bia30', 'xx0030@demo.com', '$2y$10$iSOg30EbzYkcajmwt8d0MO/HVbuHo7bKlbD1gq177TF0QZpHqndwi', 'de', '2019-04-02 11:41:07', 1, 2);
+(31, 'Civale', 'Bianca', 'C.Bia30', 'xx0030@demo.com', '$2y$10$iSOg30EbzYkcajmwt8d0MO/HVbuHo7bKlbD1gq177TF0QZpHqndwi', 'de', '2019-04-02 11:41:07', 1, 2),
+(32, 'Verkaufs', 'Mann', 'V.Mann', 'yy0002@demo.com', 'abrakeindabra', 'de', '2019-04-02 11:41:07', 2, 4),
+(33, 'Verkaufs', 'Frau', 'V.Frau', 'yy0003@demo.com', 'abrakeindabradeux', 'de', '2019-04-02 11:41:07', 2, 4);
 
 -- --------------------------------------------------------
 

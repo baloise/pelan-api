@@ -1,7 +1,15 @@
 <?php
 
-$http_origin = $api_conf['corsOrigin'];
-header("Access-Control-Allow-Origin: $http_origin");
+$allow_origins = $api_conf['corsOrigins'];
+$origin = array_search($_SERVER['HTTP_ORIGIN'], $allow_origins);
+
+if(is_numeric($origin)){
+    header("Access-Control-Allow-Origin: ".$allow_origins[$origin]);
+} else {
+    http_response_code(403);
+    die();
+}
+
 header("Content-Type: application/json; charset=UTF-8");
 header("Access-Control-Allow-Methods: POST, GET");
 header("Access-Control-Allow-Credentials: true");

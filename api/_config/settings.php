@@ -7,7 +7,10 @@ date_default_timezone_set('Europe/Zurich');
 
 $api_conf = array(
     "environment" => "testMedusa", // 'test', 'testMedusa', 'prod'
-    "corsOrigin" => "http://localhost:8080",
+    "corsOrigins" => array(
+        "http://localhost:8080",
+        "https://pelan.netlify.com",
+    ),
     "cookie" => array(
         "domain" => "", //IE11 doesn't like this
         "secure" => false //Set TRUE if HTTPS

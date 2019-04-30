@@ -1,46 +1,74 @@
 -- -------------- DEMODATA FOR 'pelan_api'
 
--- ---- TABLE 'user' ADMINS
+-- ---- TABLE 'user' ADMIN Team: Verkauf
 INSERT INTO `user` (`ID`, `Firstname`, `Lastname`, `Nickname`, `Email`, `Lang`, `Auth_Key`) VALUES
-(1, 'Patrick', 'Helpdeskadmin', 'HelpPat', 'xx0001@demo.com', 'de', '$2y$10$T/P6GS7zKBQKP70m1Cf4zO/jKEKbuS.vP8ZyJw2GCkid9z4dwpsia'),
-(2, 'Andreas', 'Verkaufadmin', 'VerkAnd', 'yy0001@demo.com', 'de', '$2y$10$Kk/LvBk9Y1Ku93ZpX48JIOfZG3fCAFAfjd08A.mg3D0eaLQlSJkP.');
+(1, 'Andreas', 'Verkaufadmin', 'VerkAnd', 'yy0001@demo.com', 'de', '$2y$10$Kk/LvBk9Y1Ku93ZpX48JIOfZG3fCAFAfjd08A.mg3D0eaLQlSJkP.'),
 
--- ---- TABLE 'team'
+-- ---- TABLE 'team' Team: Verkauf
 INSERT INTO `team` (`ID`, `Title`, `Description`, `Public`, `Owner_ID`) VALUES
-(1, 'Helpdesk', 'Das Helpdesk-Team', NULL, '1'),
-(2, 'Verkauf', 'Das Verkauf-Team', NULL, '2');
+(2, 'Verkauf', 'Das Verkauf-Team', NULL, '1');
 
--- ---- TABLE 'role'
+-- ---- TABLE 'role' Team: Verkauf
 INSERT INTO `role` (`ID`, `Title`, `Description`, `Admin`, `Team_ID`) VALUES
-(1, 'Teamleiter', 'Der Leiter des Helpdesk-Teams', '1', '1'),
-(2, 'Mitglied', 'Ein Helpdesk-Teammitglied', NULL, '1'),
 (3, 'Leitung', 'Die Verkauf-Teamleitung', '1', '2'),
 (4, 'Normal', 'Ein Verkauf-Teammitglied', NULL, '2');
 
--- -- TABLE 'user' ADJUST
-UPDATE `user` SET `Team_ID` = '1' WHERE `user`.`ID` = 1;
-UPDATE `user` SET `Role_ID` = '1' WHERE `user`.`ID` = 1;
-UPDATE `user` SET `Team_ID` = '2' WHERE `user`.`ID` = 2;
-UPDATE `user` SET `Role_ID` = '3' WHERE `user`.`ID` = 2;
+-- -- TABLE 'user' ADJUST Team: Verkauf
+UPDATE `user` SET `Team_ID` = '2' WHERE `user`.`ID` = 1;
+UPDATE `user` SET `Role_ID` = '3' WHERE `user`.`ID` = 1;
 
--- -- TABLE 'daytime'
+-- -- TABLE 'daytime' Team: Verkauf
+INSERT INTO `daytime` (`ID`, `Title`, `Description`, `Abbreviation`, `Position`, `Active`, `Team_ID`) VALUES
+(4, 'Ganztägig', 'Der Verkauf hat nur eine Schicht pro Tag', 'GT', '1', '1', '2');
+
+-- -- TABLE 'shift' Team: Verkauf
+INSERT INTO `shift` (`ID`, `Title`, `Description`, `Color`, `Active`, `Team_ID`) VALUES
+(8, 'Anwesend', 'Verkauf-Mitarbeiter ist anwesend', '00E500', '1', '2'),
+(9, 'Abwesend', 'Verkauf-Mitarbeiter ist abwesend', 'FF0000', '1', '2');
+
+-- ---- TABLE 'user' Team: Verkauf
+INSERT INTO `user` (`ID`, `Firstname`, `Lastname`, `Nickname`, `Email`, `Lang`, `Team_ID`, `Role_ID`, `Auth_Key`) VALUES
+( 32, 'Verkaufs', 'Mann', 'V.Mann', 'yy0002@demo.com', 'de', 2, 4, 'abrakeindabra' ),
+( 33, 'Verkaufs', 'Frau', 'V.Frau', 'yy0003@demo.com', 'de', 2, 4, 'abrakeindabradeux' );
+
+
+
+-- --------------------------------------------------------------------------------------------------------------------
+
+
+
+-- ---- TABLE 'user' ADMIN Team: Helpdesk
+INSERT INTO `user` (`ID`, `Firstname`, `Lastname`, `Nickname`, `Email`, `Lang`, `Auth_Key`) VALUES
+(2, 'Patrick', 'Helpdeskadmin', 'HelpPat', 'xx0001@demo.com', 'de', '$2y$10$T/P6GS7zKBQKP70m1Cf4zO/jKEKbuS.vP8ZyJw2GCkid9z4dwpsia');
+
+-- ---- TABLE 'team' Team: Helpdesk
+INSERT INTO `team` (`ID`, `Title`, `Description`, `Public`, `Owner_ID`) VALUES
+(1, 'Helpdesk', 'Das Helpdesk-Team', NULL, '2');
+
+-- ---- TABLE 'role' Team: Helpdesk
+INSERT INTO `role` (`ID`, `Title`, `Description`, `Admin`, `Team_ID`) VALUES
+(1, 'Teamleiter', 'Der Leiter des Helpdesk-Teams', '1', '1'),
+(2, 'Mitglied', 'Ein Helpdesk-Teammitglied', NULL, '1');
+
+-- -- TABLE 'user' ADJUST Team: Helpdesk
+UPDATE `user` SET `Team_ID` = '1' WHERE `user`.`ID` = 2;
+UPDATE `user` SET `Role_ID` = '1' WHERE `user`.`ID` = 2;
+
+-- -- TABLE 'daytime' Team: Helpdesk
 INSERT INTO `daytime` (`ID`, `Title`, `Description`, `Abbreviation`, `Position`, `Active`, `Team_ID`) VALUES
 (1, 'Superfrüh', 'Morning-Hours has Gold in the mouth.', 'Super', '1', '1', '1'),
 (2, 'Früh', 'Mittach.', 'Früh', '2', '1', '1'),
-(3, 'Spät', 'After-Hour', 'Spät', '3', '1', '1'),
-(4, 'Ganztägig', 'Der Verkauf hat nur eine Schicht pro Tag', 'GT', '1', '1', '2');
+(3, 'Spät', 'After-Hour', 'Spät', '3', '1', '1');
 
--- -- TABLE 'shift'
+-- -- TABLE 'shift' Team: Helpdesk
 INSERT INTO `shift` (`ID`, `Title`, `Description`, `Color`, `Active`, `Team_ID`) VALUES
 (1, 'Telefon', 'Telefon-Support leisten.', '3366FF', '1', '1'),
 (2, 'IBS', 'Vor-Ort-Support leisten.', 'FF00FF', '1', '1'),
 (3, 'Krank', 'Mitarbeiter fällt aus weil krank.', 'FF0000', '1', '1'),
 (4, 'Ferien', 'Mitarbeiter fällt aus weil Ferien.', 'FF6600', '1', '1'),
-(5, 'Anwesend', 'Verkauf-Mitarbeiter ist anwesend', '00E500', '1', '2'),
-(6, 'Abwesend', 'Verkauf-Mitarbeiter ist abwesend', 'FF0000', '1', '2'),
-(7, 'Task', 'Muss hier etwas spezifisches erledigen.', 'FFFF00', '1', '1'),
-(8, 'Bez. Absenz', 'Ist abwesend.', '808000', '1', '1'),
-(9, 'HomeOffice', 'Telefon, aber zu Hause.', 'D3D3D3', '1', '1');
+(5, 'Task', 'Muss hier etwas spezifisches erledigen.', 'FFFF00', '1', '1'),
+(6, 'Bez. Absenz', 'Ist abwesend.', '808000', '1', '1'),
+(7, 'HomeOffice', 'Telefon, aber zu Hause.', 'D3D3D3', '1', '1');
 
 -- ---- TABLE 'user' Team: Helpdesk
 INSERT INTO `user` (`ID`, `Firstname`, `Lastname`, `Nickname`, `Email`, `Lang`, `Team_ID`, `Role_ID`, `Auth_Key`) VALUES

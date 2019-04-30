@@ -2,8 +2,8 @@
 
 function setAuth($token, $expire, $conf) {
 
-    $appCookie = setcookie("appToken", $token, $expire, "/", $conf['domain'], $conf['secure'], false);
-    $secureCookie = setcookie("secureToken", $token, $expire, "/", $conf['domain'], $conf['secure'], true);
+    $appCookie = setcookie("app_token", $token, $expire, "/", $conf['domain'], $conf['secure'], false);
+    $secureCookie = setcookie("secure_token", $token, $expire, "/", $conf['domain'], $conf['secure'], true);
 
     if ($appCookie && $secureCookie) {
         return true;
@@ -14,11 +14,11 @@ function setAuth($token, $expire, $conf) {
 }
 
 function authenticate() {
-    if (isset($_COOKIE["appToken"]) && isset(getallheaders()['Authorization'])) {
+    if (isset($_COOKIE["secure_token"]) && isset(getallheaders()['Authorization'])) {
         list($type, $data) = explode(" ", getallheaders()['Authorization'], 2);
         if (strcasecmp($type, "Bearer") == 0) {
-            if ($_COOKIE["appToken"] === $data) {
-                return $_COOKIE["appToken"];
+            if ($_COOKIE["secure_token"] === $data) {
+                return $_COOKIE["secure_token"];
             } else {
                 returnForbidden("Tokens not correct");
             }

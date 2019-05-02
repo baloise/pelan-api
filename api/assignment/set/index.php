@@ -48,7 +48,7 @@ try {
         $assignment->time = val_number($data->time, 1);
         $assignment->shift = val_number($data->shift);
         $assignment->date = val_string($data->date, 8, 10);
-        $assignment->note = val_string($data->note, false);
+        $assignment->note = val_string($data->note, 0, 9999, false);
         $assignment->creator = $decoded->data->id;
 
         $assignment->set();

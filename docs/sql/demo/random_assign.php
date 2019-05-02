@@ -2,16 +2,16 @@
 
 echo 'INSERT INTO `assignment`(`User_ID`, `Daytime_ID`, `Shift_ID`, `Date`,  `Note`, `Creator_ID`) VALUES <br/>';
 
+$creator_id = 2;
 $first_user = 2;
-$last_user = 10;
+$last_user = 31;
 
 $shifts = ['1', '2', '3', '4', '5', '6', '7', 'NULL', 'NULL'];
 $notes = ["'Dies ist ein Kommentar.'", 'NULL', 'NULL', 'NULL', 'NULL', 'NULL', 'NULL', 'NULL', 'NULL'];
 $daytimes = [1, 2, 3];
 
 $year = '2019';
-$month = '04';
-$creator_id = 2;
+$month = '12';
 $day_from = 1;
 $day_to = 31;
 
@@ -24,13 +24,11 @@ for ($current_user = $first_user; $current_user <= $last_user; $current_user++) 
         }
 
         foreach ($daytimes as &$time) {
-
             $shift = $shifts[array_rand($shifts)];
             $note = $notes[array_rand($notes)];
             echo "
             ('".$current_user . "', '" . $time . "', " . $shift . ", '" . $date . "', " . $note . ", '" . $creator_id . "'), <br/>
             ";
-
         }
     }
 }

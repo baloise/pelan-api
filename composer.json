@@ -1,0 +1,16 @@
+{
+    "name": "baloise/pelan-api",
+    "description": "API for the Pelan UI",
+    "keywords": ["api", "pelam"],
+    "homepage": "https://github.com/baloise/pelan-api",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Elia Reutlinger",
+            "email": "mail@eliareutlinger.ch"
+        }
+    ],
+    "require": {
+        "php": ">=7.2.18"
+    }
+}

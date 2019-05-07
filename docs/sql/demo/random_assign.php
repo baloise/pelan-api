@@ -11,9 +11,9 @@ $notes = ["'Dies ist ein Kommentar.'", 'NULL', 'NULL', 'NULL', 'NULL', 'NULL', '
 $daytimes = [1, 2, 3];
 
 $year = '2019';
-$month = '12';
+$month = '06';
 $day_from = 1;
-$day_to = 31;
+$day_to = 30;
 
 for ($current_user = $first_user; $current_user <= $last_user; $current_user++) {
     for ($current_day = $day_from; $current_day <= $day_to; $current_day++) {

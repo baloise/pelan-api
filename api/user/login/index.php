@@ -46,17 +46,13 @@ if ($api_conf['environment'] === 'test') {
     $user->email = "xx0001@demo.com";
     $submitKey = "xx0001";
 
-    try {
-        $user->id = val_number('2', 1);
-        $user->firstname = val_string('Nemo', 1, 255);
-        $user->lastname = val_string('Nobody', 1, 255);
-        $user->nickname = val_string('MrNobody', 1, 10, false);
-        $user->role = val_number('1', 1);
-        $user->team = '1';
-        $user->editDetails();
-    } catch (Exception $e) {
-        print_r($e);
-    }
+    $user->id = val_number('2', 1);
+    $user->firstname = val_string('Nemo', 1, 255);
+    $user->lastname = val_string('Nobody', 1, 255);
+    $user->nickname = val_string('MrNobody', 1, 10, false);
+    $user->role = val_number('1', 1);
+    $user->team = '1';
+    $user->editDetails();
 
 } else if ($api_conf['environment'] === 'prod') {
     $user->email = 'mailByMedusa';

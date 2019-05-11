@@ -2,7 +2,7 @@
 
 -- ---- TABLE 'user' ADMIN Team: Verkauf
 INSERT INTO `user` (`ID`, `Firstname`, `Lastname`, `Nickname`, `Email`, `Lang`, `Auth_Key`) VALUES
-(1, 'Andreas', 'Verkaufadmin', 'VerkAnd', 'yy0001@demo.com', 'de', '$2y$10$Kk/LvBk9Y1Ku93ZpX48JIOfZG3fCAFAfjd08A.mg3D0eaLQlSJkP.'),
+(1, 'Andreas', 'Verkaufadmin', 'VerkAnd', 'yy0001@demo.com', 'de', '$2y$10$Kk/LvBk9Y1Ku93ZpX48JIOfZG3fCAFAfjd08A.mg3D0eaLQlSJkP.');
 
 -- ---- TABLE 'team' Team: Verkauf
 INSERT INTO `team` (`ID`, `Title`, `Description`, `Public`, `Owner_ID`) VALUES

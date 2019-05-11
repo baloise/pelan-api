@@ -6,10 +6,10 @@ error_reporting(E_ALL);
 date_default_timezone_set('Europe/Zurich');
 
 $api_conf = array(
-    "environment" => "testMedusa", // 'test', 'testMedusa', 'prod'
+    "environment" => "demo", // 'test', 'testMedusa', 'demo', 'prod'
     "corsOrigins" => array(
         "http://localhost:8080",
-        "https://pelan.netlify.com",
+        "https://pelan.osis.io"
     ),
     "cookie" => array(
         "domain" => "", //IE11 doesn't like this

@@ -183,7 +183,7 @@ CREATE TABLE `user` (
 
 INSERT INTO `user` (`ID`, `Firstname`, `Lastname`, `Nickname`, `Email`, `Auth_Key`, `Lang`, `Last_Login`, `Team_ID`, `Role_ID`) VALUES
 (1, 'Andreas', 'Verkaufadmin', 'V.Admin', 'yy0001@demo.com', '$2y$10$Kk/LvBk9Y1Ku93ZpX48JIOfZG3fCAFAfjd08A.mg3D0eaLQlSJkP.', 'de', '2019-04-02 11:41:07', 2, 3),
-(2, 'Patrick', 'Helpdeskadmin', 'HelpPat', 'xx0001@demo.com', '$2y$10$T/P6GS7zKBQKP70m1Cf4zO/jKEKbuS.vP8ZyJw2GCkid9z4dwpsia', 'de', '2019-04-02 11:41:07', 1, 1),
+(2, 'Pathetic', 'Helpdeskadmin', 'HelpPat', 'xx0001@demo.com', '$2y$10$T/P6GS7zKBQKP70m1Cf4zO/jKEKbuS.vP8ZyJw2GCkid9z4dwpsia', 'de', '2019-04-02 11:41:07', 1, 1),
 (3, 'Kropf', 'Christian', 'K.Chr2', 'xx0002@demo.com', '$2y$10$OdC995tG0DkxkVA1KfNTG.ykIgQaomf1rWn9nphaYlVTzVSQUbo3S', 'de', '2019-04-02 11:41:07', 1, 2),
 (4, 'Schmitt', 'Peters', 'S.Pet3', 'xx0003@demo.com', '$2y$10$0TBN/pxMghIHllNBTw8Z1.X6/fWaT020G7U6kM.Qnp/2wuefEklvK', 'de', '2019-04-02 11:41:07', 1, 2),
 (5, 'Berbett', 'Olivier', 'B.Oli4', 'xx0004@demo.com', '$2y$10$rj7G54M14jXcx8jIt1ya.uklU3KvQwn5PfCccq7JcUlOu7pEFbW7W', 'de', '2019-04-02 11:41:07', 1, 2),

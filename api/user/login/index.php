@@ -21,7 +21,6 @@ include_once '../../_config/objects/user.php';
 $user = new User($db);
 // ---- End of default Configuration
 
-
 if ($api_conf['environment'] === 'test') {
 
     if (!isset($_SERVER['PHP_AUTH_USER'])) {
@@ -29,32 +28,42 @@ if ($api_conf['environment'] === 'test') {
         header('HTTP/1.0 401 Unauthorized');
         die('Auth unsuccessful');
     } else {
-        //Basic Auth if Test
         $user->email = $_SERVER['PHP_AUTH_USER'];
         $submitKey = $_SERVER['PHP_AUTH_PW'];
     }
 
 } else if ($api_conf['environment'] === 'testMedusa') {
 
-    //MedusaTest
     $user->email = "xx0001@demo.com"; // = Admin Helpdesk
     $submitKey = "xx0001";
-
     //$user->email = "xx0003@demo.com"; // = Teammitglied Helpdesk
     //$submitKey = "xx0003";
-
     //$user->email = "yy0001@demo.com"; // = Admin Verkauf
     //$submitKey = "yy0001";
 
-} else if ($api_conf['environment'] === 'prod') {
+} else if ($api_conf['environment'] === 'demo') {
 
-    //Medusa Login if Prod
+    $user->email = "xx0001@demo.com";
+    $submitKey = "xx0001";
+
+    try {
+        $user->id = val_number('2', 1);
+        $user->firstname = val_string('Nemo', 1, 255);
+        $user->lastname = val_string('Nobody', 1, 255);
+        $user->nickname = val_string('MrNobody', 1, 10, false);
+        $user->role = val_number('1', 1);
+        $user->team = '1';
+        $user->editDetails();
+    } catch (Exception $e) {
+        print_r($e);
+    }
+
+} else if ($api_conf['environment'] === 'prod') {
     $user->email = 'mailByMedusa';
     $submitKey = 'keyByMedusa';
-
 }
 
-//TODO: Validation
+
 if ($user->userExists() && password_verify($submitKey, $user->authkey)) {
 
     if ($user->readToken()) {

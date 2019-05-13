@@ -19,6 +19,29 @@ class Assignment {
         $this->conn = $db;
     }
 
+    public function readTeam($from = false, $to = false) {
+
+        $query = "
+        SELECT * FROM ". $this->db_teamassigns . "
+        WHERE user_team = :team
+        ";
+
+        if ($from && $to) {
+            $query .= " AND date BETWEEN :from AND :to";
+        }
+
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':team', $this->team);
+        if ($from && $to) {
+            $stmt->bindParam(':from', $from);
+            $stmt->bindParam(':to', $to);
+        }
+
+        $stmt->execute();
+        return $stmt;
+
+    }
+
     public function read($from = false, $to = false) {
 
         $query = "

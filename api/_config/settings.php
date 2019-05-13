@@ -6,7 +6,7 @@ error_reporting(E_ALL);
 date_default_timezone_set('Europe/Zurich');
 
 $api_conf = array(
-    "environment" => "demo", // 'test', 'testMedusa', 'demo', 'prod'
+    "environment" => "testMedusa", // 'test', 'testMedusa', 'demo', 'prod'
     "corsOrigins" => array(
         "http://localhost:8080",
         "https://pelan.osis.io"

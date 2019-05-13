@@ -40,6 +40,8 @@ if ($api_conf['environment'] === 'test') {
     //$submitKey = "xx0003";
     //$user->email = "yy0001@demo.com"; // = Admin Verkauf
     //$submitKey = "yy0001";
+    //$user->email = "b123321@demo.com"; // = Not existing
+    //$submitKey = "b123321";
 
 } else if ($api_conf['environment'] === 'demo') {
 
@@ -60,7 +62,9 @@ if ($api_conf['environment'] === 'test') {
 }
 
 
-if ($user->userExists() && password_verify($submitKey, $user->authkey)) {
+if(!$user->userExists()){
+    returnForbidden('not_registered');
+} else if (password_verify($submitKey, $user->authkey)) {
 
     if ($user->readToken()) {
 

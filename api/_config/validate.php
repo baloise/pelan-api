@@ -7,8 +7,7 @@ function val_string($value, $min = false, $max = true, $entities = true) {
         return $value;
     } else {
         if ($entities) {
-            $value = htmlspecialchars($value);
-            $value = filter_var($value, FILTER_SANITIZE_STRING);
+            $value = filter_var($value, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
         }
         if ($min <= strlen($value) && $max >= strlen($value)) {
             return $value;

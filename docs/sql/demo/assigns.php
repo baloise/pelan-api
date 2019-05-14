@@ -1,8 +1,9 @@
 <?php
 
-echo 'INSERT INTO `assignment`(`User_ID`, `Daytime_ID`, `Shift_ID`, `Date`,  `Note`, `Creator_ID`) VALUES <br/>';
+echo 'INSERT INTO `assignment`(`User_ID`, `Date`, `Daytime_ID`, `Shift_ID`, `Note`, `Team_ID`, `Creator_ID`) VALUES <br/>';
 
 $creator_id = 2;
+$team_id = 1;
 $first_user = 2;
 $last_user = 31;
 
@@ -27,7 +28,7 @@ for ($current_user = $first_user; $current_user <= $last_user; $current_user++) 
             $shift = $shifts[array_rand($shifts)];
             $note = $notes[array_rand($notes)];
             echo "
-            ('".$current_user . "', '" . $time . "', " . $shift . ", '" . $date . "', " . $note . ", '" . $creator_id . "'), <br/>
+            ('".$current_user . "', '" . $date . "', '" . $time . "', " . $shift . ", " . $note . ", '" . $team_id . "', '" . $creator_id . "'), <br/>
             ";
         }
     }

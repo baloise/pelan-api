@@ -2,6 +2,9 @@
 CREATE DATABASE IF NOT EXISTS pelan DEFAULT CHARACTER SET utf8;
 USE pelan;
 
+
+-- -------------- CREATE TABLES
+
 -- ---- TABLE 'user'
 CREATE TABLE IF NOT EXISTS user (
     ID                  INT NOT NULL AUTO_INCREMENT,
@@ -12,8 +15,6 @@ CREATE TABLE IF NOT EXISTS user (
     Auth_Key            VARCHAR(255) NOT NULL,
     Lang                ENUM('de', 'en') NOT NULL,
     Last_Login          TIMESTAMP,
-    Team_ID             INT,
-    Role_ID             INT,
 
     UNIQUE INDEX UNIQUE_Email (Email),
 
@@ -50,14 +51,25 @@ CREATE TABLE IF NOT EXISTS role (
     Description         MEDIUMTEXT NOT NULL,
     Admin               BOOLEAN,
     Team_ID             INT NOT NULL,
+    Main                BOOLEAN,
 
     PRIMARY KEY (ID),
     FOREIGN KEY (Team_ID) REFERENCES team(ID)
 );
 
--- ---- ALTER TABLE 'user'
-ALTER TABLE user ADD FOREIGN KEY (Team_ID) REFERENCES team(ID);
-ALTER TABLE user ADD FOREIGN KEY (Role_ID) REFERENCES role(ID);
+-- ---- TABLE 'user_has_team'
+CREATE TABLE IF NOT EXISTS user_has_team (
+    User_ID             INT NOT NULL,
+    Team_ID             INT NOT NULL,
+    Role_ID             INT NOT NULL,
+
+    UNIQUE INDEX UNIQUE_User_per_Team (User_ID, Team_ID),
+
+    PRIMARY KEY (User_ID, Team_ID),
+    FOREIGN KEY (User_ID) REFERENCES user(ID),
+    FOREIGN KEY (Team_ID) REFERENCES team(ID),
+    FOREIGN KEY (Role_ID) REFERENCES role(ID)
+);
 
 -- ---- TABLE 'invitation'
 CREATE TABLE IF NOT EXISTS invitation (
@@ -106,26 +118,27 @@ CREATE TABLE IF NOT EXISTS shift (
 
 -- ---- TABLE 'assignment'
 CREATE TABLE IF NOT EXISTS assignment (
-    ID                  INT NOT NULL AUTO_INCREMENT,
-    Daytime_ID          INT NOT NULL,
     User_ID             INT NOT NULL,
-    Creator_ID          INT NOT NULL,
     Date                DATE NOT NULL,
+    Daytime_ID          INT NOT NULL,
     Shift_ID            INT,
     Note                MEDIUMTEXT,
+    Team_ID             INT NOT NULL,
+    Creator_ID          INT NOT NULL,
 
-    UNIQUE INDEX UNIQUE_Date_per_User_per_Daytime (Date, User_ID, Daytime_ID),
-
-    PRIMARY KEY (ID),
+    PRIMARY KEY (User_ID, Date, Daytime_ID),
     FOREIGN KEY (Daytime_ID) REFERENCES daytime(ID),
     FOREIGN KEY (User_ID) REFERENCES user(ID),
     FOREIGN KEY (Creator_ID) REFERENCES user(ID),
+    FOREIGN KEY (Team_ID) REFERENCES team(ID),
     FOREIGN KEY (Shift_ID) REFERENCES shift(ID)
 );
 
 
--- -- VIEW 'view_usertoken'
-CREATE VIEW view_usertoken AS
+-- -------------- CREATE VIEWS
+
+-- -- VIEW 'view_userdetail'
+CREATE VIEW view_userdetail AS
 
     SELECT
 
@@ -134,19 +147,25 @@ CREATE VIEW view_usertoken AS
         us.Lastname AS 'Lastname',
         us.Lang AS 'Language',
         us.Nickname AS 'Nickname',
-        us.Email AS 'Email',
+        us.Email AS 'Email'
 
-        ro.ID AS 'Role_ID',
-        ro.Title AS 'Role_Title',
-        ro.Description AS 'Role_Description',
-        ro.Admin AS 'Role_Admin',
+    FROM user AS us;
+
+
+-- -- VIEW 'view_userteams'
+CREATE VIEW view_userteams AS
+
+    SELECT
 
         te.ID AS 'Team_ID',
-        te.Title AS 'Team_Title'
+        ro.ID AS 'Role_ID',
+        te.Title AS 'Team_Title',
+        ro.Title AS 'Role_Title',
+        ro.Admin AS 'Role_Admin'
 
-    FROM user AS us
-    INNER JOIN role AS ro ON us.Role_ID = ro.ID
-    INNER JOIN team AS te ON us.Team_ID = te.ID;
+    FROM user_has_team AS uht
+    INNER JOIN role AS ro ON uht.Role_ID = ro.ID
+    INNER JOIN team AS te ON uht.Team_ID = te.ID;
 
 
 -- -- VIEW 'view_teamassigns'
@@ -154,13 +173,12 @@ CREATE VIEW view_teamassigns AS
 
     SELECT
 
-        ass.ID as 'id',
+        ass.User_ID as 'user',
         ass.Date as 'date',
-        ass.Note as 'note',
         ass.Daytime_ID as 'time',
         ass.Shift_ID as 'shift',
-        ass.User_ID as 'user',
-        usr.Team_ID as 'user_team'
+        ass.Note as 'note',
+        ass.Team_ID as 'team',
+        ass.Creator_ID as 'creator'
 
-    FROM assignment AS ass
-    INNER JOIN user AS usr ON usr.ID = ass.User_ID;
+    FROM assignment AS ass;

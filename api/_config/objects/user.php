@@ -16,6 +16,8 @@ class User {
     public $authkey;
     public $nickname;
     public $email;
+    public $team;
+    public $role;
 
     public $team;
 
@@ -26,7 +28,7 @@ class User {
     public function userExists() {
 
         $query = "
-        SELECT ID, Auth_Key FROM " . $this->db_table . "
+        SELECT ID, Auth_Key, Role_ID, Team_ID FROM " . $this->db_table . "
         WHERE Email = ? LIMIT 0,1
         ";
 
@@ -45,29 +47,31 @@ class User {
 
     public function readToken() {
 
-        $query1 = "SELECT * FROM " . $this->db_view_detail . " WHERE ID = ?";
-        $query2 = "SELECT * FROM " . $this->db_view_team . " WHERE ID = ?";
+        $query = "SELECT * FROM " . $this->db_view_token . " WHERE id = ?";
 
-        $stmt = $this->conn->prepare($query1);
+        $stmt = $this->conn->prepare($query);
         $stmt->bindParam(1, $this->id);
         $stmt->execute();
 
         if ($stmt->rowCount() === 1) {
 
-            $rowUser = $stmt->fetch(PDO::FETCH_ASSOC);
-            $this->firstname = $rowUser['firstname'];
-            $this->lastname = $rowUser['lastname'];
-            $this->language = $rowUser['language'];
-            $this->nickname = $rowUser['nickname'];
-            $this->email = $rowUser['email'];
+            $this->role = new stdClass();
+            $this->team = new stdClass();
 
-            $stmt = $this->conn->prepare($query2);
-            $stmt->bindParam(1, $this->id);
-            $stmt->execute();
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+            $this->firstname = $row['Firstname'];
+            $this->lastname = $row['Lastname'];
+            $this->language = $row['Language'];
+            $this->nickname = $row['Nickname'];
+            $this->email = $row['Email'];
+            $this->role->id = $row['Role_ID'];
+            $this->role->title = $row['Role_Title'];
+            $this->role->description = $row['Role_Description'];
+            $this->role->admin = $row['Role_Admin'];
+            $this->team->id = $row['Team_ID'];
+            $this->team->title = $row['Team_Title'];
 
-            if ($stmt->rowCount() >= 1) {
-                return $stmt;
-            }
+            return true;
 
         }
 

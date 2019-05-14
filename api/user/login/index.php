@@ -66,7 +66,25 @@ if(!$user->userExists()){
     returnForbidden('not_registered');
 } else if (password_verify($submitKey, $user->authkey)) {
 
-    if ($user->readToken()) {
+    $user_team = $user->readToken();
+
+    if ($user_team) {
+
+        $teams_arr = array();
+
+        while ($row = $user_team->fetch(PDO::FETCH_ASSOC)) {
+            extract($row);
+            $team_item = array(
+                "id" => $team_id,
+                "title" => $team_title,
+                "role" => array(
+                    "id" => $role_id,
+                    "title" => $role_title,
+                    "admin" => $role_admin
+                )
+            );
+            array_push($teams_arr, $team_item);
+        }
 
         $token = array(
             "iss" => $token_conf['issuer'],
@@ -80,16 +98,7 @@ if(!$user->userExists()){
                 "language" => $user->language,
                 "nickname" => $user->nickname,
                 "email" => $user->email,
-                "role" => array(
-                    "id" => $user->role->id,
-                    "title" => $user->role->title,
-                    "description" => $user->role->description,
-                    "admin" => $user->role->admin,
-                ),
-                "team" => array(
-                    "id" => $user->team->id,
-                    "title" => $user->team->title
-                ),
+                "teams" => $teams_arr
             )
         );
 
@@ -100,6 +109,6 @@ if(!$user->userExists()){
 
     }
 
-} else {
-    returnBadRequest();
 }
+
+returnBadRequest();

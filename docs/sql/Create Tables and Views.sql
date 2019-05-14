@@ -137,39 +137,40 @@ CREATE TABLE IF NOT EXISTS assignment (
 
 -- -------------- CREATE VIEWS
 
--- -- VIEW 'view_userdetail'
-CREATE VIEW view_userdetail AS
+-- -- VIEW 'view_user_detail'
+CREATE VIEW view_user_detail AS
 
     SELECT
 
-        us.ID AS 'ID',
-        us.Firstname AS 'Firstname',
-        us.Lastname AS 'Lastname',
-        us.Lang AS 'Language',
-        us.Nickname AS 'Nickname',
-        us.Email AS 'Email'
+        us.ID AS 'id',
+        us.Firstname AS 'firstname',
+        us.Lastname AS 'lastname',
+        us.Lang AS 'language',
+        us.Nickname AS 'nickname',
+        us.Email AS 'email'
 
     FROM user AS us;
 
 
--- -- VIEW 'view_userteams'
-CREATE VIEW view_userteams AS
+-- -- VIEW 'view_user_team'
+CREATE VIEW view_user_team AS
 
     SELECT
 
-        te.ID AS 'Team_ID',
-        ro.ID AS 'Role_ID',
-        te.Title AS 'Team_Title',
-        ro.Title AS 'Role_Title',
-        ro.Admin AS 'Role_Admin'
+        uht.User_ID AS 'id',
+        te.ID AS 'team_id',
+        te.Title AS 'team_title',
+        ro.ID AS 'role_id',
+        ro.Title AS 'role_title',
+        ro.Admin AS 'role_admin'
 
     FROM user_has_team AS uht
     INNER JOIN role AS ro ON uht.Role_ID = ro.ID
     INNER JOIN team AS te ON uht.Team_ID = te.ID;
 
 
--- -- VIEW 'view_teamassigns'
-CREATE VIEW view_teamassigns AS
+-- -- VIEW 'view_assigns_team'
+CREATE VIEW view_assigns_team AS
 
     SELECT
 

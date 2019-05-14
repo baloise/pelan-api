@@ -4,8 +4,8 @@ class User {
 
     private $conn;
     private $db_table = "user";
-    private $db_table_role = "role";
-    private $db_view_token = "view_usertoken";
+    private $db_view_detail = "view_user_detail";
+    private $db_view_team = "view_user_team";
 
     public $id;
     public $firstname;
@@ -14,8 +14,6 @@ class User {
     public $authkey;
     public $nickname;
     public $email;
-    public $team;
-    public $role;
 
     public function __construct($db) {
         $this->conn = $db;
@@ -24,7 +22,7 @@ class User {
     public function userExists() {
 
         $query = "
-        SELECT ID, Auth_Key, Role_ID, Team_ID FROM " . $this->db_table . "
+        SELECT ID, Auth_Key FROM " . $this->db_table . "
         WHERE Email = ? LIMIT 0,1
         ";
 
@@ -43,31 +41,29 @@ class User {
 
     public function readToken() {
 
-        $query = "SELECT * FROM " . $this->db_view_token . " WHERE id = ?";
+        $query1 = "SELECT * FROM " . $this->db_view_detail . " WHERE ID = ?";
+        $query2 = "SELECT * FROM " . $this->db_view_team . " WHERE ID = ?";
 
-        $stmt = $this->conn->prepare($query);
+        $stmt = $this->conn->prepare($query1);
         $stmt->bindParam(1, $this->id);
         $stmt->execute();
 
         if ($stmt->rowCount() === 1) {
 
-            $this->role = new stdClass();
-            $this->team = new stdClass();
+            $rowUser = $stmt->fetch(PDO::FETCH_ASSOC);
+            $this->firstname = $rowUser['firstname'];
+            $this->lastname = $rowUser['lastname'];
+            $this->language = $rowUser['language'];
+            $this->nickname = $rowUser['nickname'];
+            $this->email = $rowUser['email'];
 
-            $row = $stmt->fetch(PDO::FETCH_ASSOC);
-            $this->firstname = $row['Firstname'];
-            $this->lastname = $row['Lastname'];
-            $this->language = $row['Language'];
-            $this->nickname = $row['Nickname'];
-            $this->email = $row['Email'];
-            $this->role->id = $row['Role_ID'];
-            $this->role->title = $row['Role_Title'];
-            $this->role->description = $row['Role_Description'];
-            $this->role->admin = $row['Role_Admin'];
-            $this->team->id = $row['Team_ID'];
-            $this->team->title = $row['Team_Title'];
+            $stmt = $this->conn->prepare($query2);
+            $stmt->bindParam(1, $this->id);
+            $stmt->execute();
 
-            return true;
+            if ($stmt->rowCount() >= 1) {
+                return $stmt;
+            }
 
         }
 

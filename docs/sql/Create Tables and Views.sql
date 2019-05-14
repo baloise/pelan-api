@@ -159,6 +159,7 @@ CREATE VIEW view_user_team AS
     SELECT
 
         uht.User_ID AS 'id',
+        uht.Current AS 'current',
         te.ID AS 'team_id',
         te.Title AS 'team_title',
         ro.ID AS 'role_id',
@@ -184,3 +185,19 @@ CREATE VIEW view_assigns_team AS
         ass.Creator_ID as 'creator'
 
     FROM assignment AS ass;
+
+-- -- VIEW 'view_team_users'
+CREATE VIEW view_team_users AS
+
+    SELECT
+
+        us.ID as 'id',
+        us.Firstname as 'firstname',
+        us.Lastname as 'lastname',
+        us.Nickname as 'nickname',
+        us.Lang as 'language',
+        uht.Team_ID as 'team_id',
+        uht.Role_ID as 'role_id'
+
+    FROM user_has_team AS uht
+    INNER JOIN user AS us ON uht.User_ID = us.ID

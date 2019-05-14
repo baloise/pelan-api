@@ -83,7 +83,6 @@ if(!$user->userExists()){
                 "role" => array(
                     "id" => $user->role->id,
                     "title" => $user->role->title,
-                    "description" => $user->role->description,
                     "admin" => $user->role->admin,
                 ),
                 "team" => array(
@@ -95,7 +94,7 @@ if(!$user->userExists()){
 
         $jwt = JWT::encode($token, $token_conf['secret']);
         if (setAuth($jwt, $token_conf['expireAt'], $api_conf['cookie'])) {
-            returnSuccess($user->email . " authenticated");
+            returnSuccess("Authenticated '".$user->email."' in team '".$user->team->title."'");
         }
 
     }

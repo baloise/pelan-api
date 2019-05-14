@@ -45,10 +45,12 @@ try {
     if ($exist) {
 
         $assignment->user = val_number($data->user, 1);
+        $assignment->date = val_string($data->date, 8, 10);
         $assignment->time = val_number($data->time, 1);
         $assignment->shift = val_number($data->shift);
-        $assignment->date = val_string($data->date, 8, 10);
         $assignment->note = val_string($data->note, 0, 9999, false);
+
+        $assignment->team = $decoded->data->team->id;
         $assignment->creator = $decoded->data->id;
 
         $assignment->set();

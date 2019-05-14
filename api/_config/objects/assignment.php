@@ -4,16 +4,15 @@ class Assignment {
 
     private $conn;
     private $db_table = "assignment";
-    private $db_teamassigns = "view_teamassigns";
+    private $db_team_assigns = "view_assigns_team";
 
-    public $id;
-    public $time;
     public $user;
-    public $creator;
     public $date;
+    public $time;
     public $shift;
     public $note;
     public $team;
+    public $creator;
 
     public function __construct($db) {
         $this->conn = $db;
@@ -22,8 +21,8 @@ class Assignment {
     public function readTeam($from = false, $to = false) {
 
         $query = "
-        SELECT * FROM ". $this->db_teamassigns . "
-        WHERE user_team = :team
+        SELECT * FROM ". $this->db_team_assigns . "
+        WHERE team = :team
         ";
 
         if ($from && $to) {
@@ -45,8 +44,8 @@ class Assignment {
     public function read($from = false, $to = false) {
 
         $query = "
-        SELECT * FROM ". $this->db_teamassigns . "
-        WHERE user_team = :team AND user = :user
+        SELECT * FROM ". $this->db_team_assigns . "
+        WHERE team = :team AND user = :user
         ";
 
         if ($from && $to) {
@@ -71,8 +70,8 @@ class Assignment {
         if ($from && $to) {
 
             $query = "
-            SELECT * FROM ". $this->db_teamassigns . "
-            WHERE user_team = :team AND date BETWEEN :from AND :to
+            SELECT * FROM ". $this->db_team_assigns . "
+            WHERE team = :team AND date BETWEEN :from AND :to
             ";
 
             $stmt = $this->conn->prepare($query);
@@ -91,8 +90,8 @@ class Assignment {
 
         $query = "
         REPLACE INTO ". $this->db_table . "
-        (`Note`, `Date`, `Daytime_ID`, `Shift_ID`, `User_ID`, `Creator_ID`) VALUES
-        (:note, :date, :time, :shift, :user, :creator);
+        (`User_ID`, `Date`, `Daytime_ID`, `Shift_ID`, `Note`, `Team_ID`, `Creator_ID`) VALUES
+        (:user, :date, :time, :shift, :note, :team, :creator);
         ";
 
         if ($this->shift <= 0 && strlen($this->note) <= 0) {
@@ -102,11 +101,12 @@ class Assignment {
         }
 
         $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(':note', $this->note);
+        $stmt->bindParam(':user', $this->user);
         $stmt->bindParam(':date', $this->date);
         $stmt->bindParam(':time', $this->time);
         $stmt->bindParam(':shift', $this->shift);
-        $stmt->bindParam(':user', $this->user);
+        $stmt->bindParam(':note', $this->note);
+        $stmt->bindParam(':team', $this->team);
         $stmt->bindParam(':creator', $this->creator);
 
         if ($stmt->execute()) {
@@ -119,29 +119,30 @@ class Assignment {
 
     public function delete() {
 
-        $getid = "
-        SELECT id FROM ". $this->db_teamassigns . "
-        WHERE date = :date AND time = :time AND user = :user AND user_team = :team
+        $sql1 = "
+        SELECT * FROM " . $this->db_table . "
+        WHERE User_ID = :user AND Date = :date AND Daytime_ID = :time AND Team_ID = :team
         ";
 
-        $query = "
+        $sql2 = "
         DELETE FROM " . $this->db_table . "
-        WHERE ID = :id
+        WHERE User_ID = :user AND Date = :date AND Daytime_ID = :time AND Team_ID = :team
         ";
 
-        $stmt = $this->conn->prepare($getid);
+        $stmt = $this->conn->prepare($sql1);
+        $stmt->bindParam(":user", $this->user);
         $stmt->bindParam(":date", $this->date);
         $stmt->bindParam(":time", $this->time);
-        $stmt->bindParam(":user", $this->user);
         $stmt->bindParam(":team", $this->team);
+        $stmt->execute();
 
-        if ($stmt->execute() && $stmt->rowCount() === 1) {
+        if ($stmt->rowCount() === 1) {
 
-            $row = $stmt->fetch(PDO::FETCH_ASSOC);
-            extract($row);
-
-            $stmt = $this->conn->prepare($query);
-            $stmt->bindParam(":id", $id);
+            $stmt = $this->conn->prepare($sql2);
+            $stmt->bindParam(":user", $this->user);
+            $stmt->bindParam(":date", $this->date);
+            $stmt->bindParam(":time", $this->time);
+            $stmt->bindParam(":team", $this->team);
 
             if ($stmt->execute()) {
                 return true;

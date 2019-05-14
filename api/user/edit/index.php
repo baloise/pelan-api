@@ -33,38 +33,31 @@ $user = new User($db);
 
 try {
 
-    if ($decoded->data->role->admin && isset($data->firstname)) {
-        //User is Admin
+    if(!isset($data->firstname)){
+
+        $user->id = $decoded->data->id;
+        $user->language = val_string($data->language, 2, 2);
+        $user->editLanguage();
+
+    } else if($decoded->data->role->admin){
 
         $user->id = val_number($data->id, 1);
         $user->firstname = val_string($data->firstname, 1, 255);
         $user->lastname = val_string($data->lastname, 1, 255);
         $user->nickname = val_string($data->nickname, 1, 10, false);
-        //$user->language = val_string($data->language, 2, 2);
         $user->role = val_number($data->role, 1);
         $user->team = $decoded->data->team->id;
 
-        if ($user->editDetails()) {
-            if ($decoded->data->id !== $data->id) {
-                returnSuccess();
-            }
-        } else {
-            returnError();
+        $user->editDetails();
+        if ($decoded->data->id !== $user->id) {
+            returnSuccess();
         }
 
     } else {
-        //User is not Admin
-
-        $user->id = $decoded->data->id;
-        $user->language = val_string($data->language, 2, 2);
-
-        if (!$user->editLanguage()) {
-            returnError();
-        }
-
+        returnForbidden();
     }
 
-    if ($user->readToken() && $decoded->data->id === $user->id) {
+    if ($user->readToken()) {
 
         $token = array(
             "iss" => $token_conf['issuer'],
@@ -81,7 +74,6 @@ try {
                 "role" => array(
                     "id" => $user->role->id,
                     "title" => $user->role->title,
-                    "description" => $user->role->description,
                     "admin" => $user->role->admin,
                 ),
                 "team" => array(

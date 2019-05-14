@@ -42,6 +42,8 @@ try {
         $stmt = $assignment->read();
     }
 
+    
+
     if ($stmt->rowCount() > 0) {
 
         $assignments_arr = array();

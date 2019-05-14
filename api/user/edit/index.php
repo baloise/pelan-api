@@ -28,32 +28,15 @@ try {
 // ---- Get needed Objects
 include_once '../../_config/objects/user.php';
 $user = new User($db);
+include_once '../../_config/objects/auth.php';
+$auth = new Auth($db, $decoded->data->id);
 // ---- End of Get needed Objects
+
 
 
 try {
 
-    if ($decoded->data->role->admin && isset($data->firstname)) {
-        //User is Admin
-
-        $user->id = val_number($data->id, 1);
-        $user->firstname = val_string($data->firstname, 1, 255);
-        $user->lastname = val_string($data->lastname, 1, 255);
-        $user->nickname = val_string($data->nickname, 1, 10, false);
-        //$user->language = val_string($data->language, 2, 2);
-        $user->role = val_number($data->role, 1);
-        $user->team = $decoded->data->team->id;
-
-        if ($user->editDetails()) {
-            if ($decoded->data->id !== $data->id) {
-                returnSuccess();
-            }
-        } else {
-            returnError();
-        }
-
-    } else {
-        //User is not Admin
+    if(!isset($data->id)){
 
         $user->id = $decoded->data->id;
         $user->language = val_string($data->language, 2, 2);
@@ -62,9 +45,34 @@ try {
             returnError();
         }
 
+    } else if ( $auth->editUser( val_number($data->id, 1) ) ) {
+        //User is Admin
+
+        $user->id = $data->id;
+        //TODO: Maybe check team-id?
+        $user->team = val_number($data->team, 1);
+        $user->firstname = val_string($data->firstname, 1, 255);
+        $user->lastname = val_string($data->lastname, 1, 255);
+        $user->nickname = val_string($data->nickname, 1, 10, false);
+        $user->language = val_string($data->language, 2, 2);
+
+        if($auth->editRole( val_number($data->role, 1) )){
+            $user->role = $data->role;
+        } else {
+            returnForbidden('No Permissions to assign this role');
+        }
+
+        if (!$user->editDetails()) {
+            returnError();
+        }
+
+        if ($decoded->data->id !== $data->id) {
+            returnSuccess();
+        }
+
     }
 
-    if ($user->readToken() && $decoded->data->id === $user->id) {
+    if ($user->readToken()) {
 
         $token = array(
             "iss" => $token_conf['issuer'],

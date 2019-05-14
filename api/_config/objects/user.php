@@ -6,6 +6,8 @@ class User {
     private $db_table = "user";
     private $db_view_detail = "view_user_detail";
     private $db_view_team = "view_user_team";
+    private $db_table_role = "role";
+    private $db_table_user_team = "user_has_team";
 
     public $id;
     public $firstname;
@@ -14,6 +16,8 @@ class User {
     public $authkey;
     public $nickname;
     public $email;
+
+    public $team;
 
     public function __construct($db) {
         $this->conn = $db;
@@ -89,42 +93,42 @@ class User {
 
     public function editDetails() {
 
-        $checkQuery = "SELECT * FROM " . $this->db_table_role . " WHERE ID = :id AND Team_ID = :team";
-        $stmt = $this->conn->prepare($checkQuery);
-        $stmt->bindParam(':team', $this->team);
-        $stmt->bindParam(':id', $this->role);
-        $stmt->execute();
+        $sql1 = "
+            UPDATE ".$this->db_table . " SET
+            Firstname = :firstname,
+            Lastname = :lastname,
+            Nickname = :nickname
+            WHERE ID = :id
+        ";
 
-        if ($stmt->rowCount() === 1) {
+        $sql2 = "
+            UPDATE ".$this->db_table_user_team." SET
+            Role_ID = :role
+            WHERE User_ID = :id AND Team_ID = :team
+        ";
 
-            $query = "
-                UPDATE ".$this->db_table . " SET
-                Firstname = :firstname,
-                Lastname = :lastname,
-                Nickname = :nickname,
-                Role_ID = :role
-                WHERE ID = :id AND Team_ID = :team
-            ";
+        $stmt1 = $this->conn->prepare($sql1);
+        $stmt2 = $this->conn->prepare($sql2);
 
-            $stmt = $this->conn->prepare($query);
+        $stmt1->bindParam(':firstname', $this->firstname);
+        $stmt1->bindParam(':lastname', $this->lastname);
+        $stmt1->bindParam(':nickname', $this->nickname);
+        $stmt1->bindParam(':id', $this->id);
 
-            $stmt->bindParam(':id', $this->id);
-            $stmt->bindParam(':firstname', $this->firstname);
-            $stmt->bindParam(':lastname', $this->lastname);
-            $stmt->bindParam(':nickname', $this->nickname);
-            //$stmt->bindParam(':language', $this->language);
-            $stmt->bindParam(':role', $this->role);
-            $stmt->bindParam(':team', $this->team);
+        $stmt2->bindParam(':role', $this->role);
+        $stmt2->bindParam(':id', $this->id);
+        //TODO: Maybe check team-id?
+        $stmt2->bindParam(':team', $this->team);
 
-            if ($stmt->execute()) {
-                return true;
-            } else {
-                throw new InvalidArgumentException($stmt->errorInfo()[1]);
-            }
-
-        } else {
-            throw new InvalidArgumentException("Role doesn't match team");
+        if (!$stmt1->execute()) {
+            throw new InvalidArgumentException($stmt1->errorInfo()[1]);
         }
+
+        if(!$stmt2->execute()){
+            throw new InvalidArgumentException($stmt2->errorInfo()[1]);
+        }
+
+        return true;
 
     }
 

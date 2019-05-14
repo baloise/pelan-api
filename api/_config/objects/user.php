@@ -44,21 +44,33 @@ class User {
 
     }
 
-    public function readToken() {
+    public function readToken($teamid = false) {
 
         $sql1 = "SELECT * FROM ".$this->db_view_detail." WHERE id = ?";
-        $sql2 = "SELECT * FROM ".$this->db_view_team." WHERE id = ? ORDER BY current DESC LIMIT 1";
+        $sql2 = "SELECT * FROM ".$this->db_view_team." WHERE id = ? ";
+        $sql3 = "
+            UPDATE ".$this->db_user_team." SET Current = NULL
+            WHERE User_ID = ? AND Current = 1
+        ";
+        $sql4 = "
+            UPDATE ".$this->db_user_team." SET Current = 1
+            WHERE User_ID = ? AND Team_ID = ?
+        ";
+
+        if ($teamid) {
+            $sql2 .= " AND team_id = ?";
+        }
+        $sql2 .= " ORDER BY current DESC LIMIT 1";
 
         $stmt = $this->conn->prepare($sql1);
         $stmt->bindParam(1, $this->id);
         $stmt->execute();
 
         if ($stmt->rowCount() === 1) {
-
             $dRow = $stmt->fetch(PDO::FETCH_ASSOC);
-
             $stmt = $this->conn->prepare($sql2);
             $stmt->bindParam(1, $this->id);
+            if ($teamid) { $stmt->bindParam(2, $teamid); }
             $stmt->execute();
 
             if ($stmt->rowCount() === 1) {
@@ -80,8 +92,18 @@ class User {
                 $this->team->id = $tRow['team_id'];
                 $this->team->title = $tRow['team_title'];
 
+                $stmt = $this->conn->prepare($sql3);
+                $stmt->bindParam(1, $this->id);
+                $stmt->execute();
+                $stmt = $this->conn->prepare($sql4);
+                $stmt->bindParam(1, $this->id);
+                $stmt->bindParam(2, $tRow['team_id']);
+                $stmt->execute();
+
                 return true;
 
+            } else {
+                throw new InvalidArgumentException('STMT: '.$stmt->errorInfo()[1]);
             }
 
 

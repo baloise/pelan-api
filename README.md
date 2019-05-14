@@ -6,7 +6,7 @@ API for [Pelan](https://github.com/baloise/pelan/) by Baloise.
 
 
 ## Docs
-This API is made for the Pelan-UI made by [Elia Reutlinger](https://github.com/eliareutlinger).
+This API is made for the Pelan-UI made by [Elia Reutlinger](https://github.com/erleiuat).
 The development of the UI is part of the final project of his apprenticeship at Baloise.
 
 [You can find the API-Docs here.](https://documenter.getpostman.com/view/6073079/S17jVXSG)

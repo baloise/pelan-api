@@ -62,8 +62,9 @@ CREATE TABLE IF NOT EXISTS user_has_team (
     User_ID             INT NOT NULL,
     Team_ID             INT NOT NULL,
     Role_ID             INT NOT NULL,
+    Current             BOOLEAN,
 
-    UNIQUE INDEX UNIQUE_User_per_Team (User_ID, Team_ID),
+    UNIQUE INDEX UNIQUE_Current_per_User (User_ID, Current),
 
     PRIMARY KEY (User_ID, Team_ID),
     FOREIGN KEY (User_ID) REFERENCES user(ID),

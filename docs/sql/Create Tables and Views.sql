@@ -162,6 +162,7 @@ CREATE VIEW view_user_team AS
         uht.Current AS 'current',
         te.ID AS 'team_id',
         te.Title AS 'team_title',
+        te.Description AS 'team_description',
         ro.ID AS 'role_id',
         ro.Title AS 'role_title',
         ro.Admin AS 'role_admin'
@@ -186,6 +187,7 @@ CREATE VIEW view_assigns_team AS
 
     FROM assignment AS ass;
 
+
 -- -- VIEW 'view_team_users'
 CREATE VIEW view_team_users AS
 
@@ -201,3 +203,23 @@ CREATE VIEW view_team_users AS
 
     FROM user_has_team AS uht
     INNER JOIN user AS us ON uht.User_ID = us.ID
+
+
+-- -- VIEW 'view_assign_notes'
+CREATE VIEW view_assign_notes AS
+
+    SELECT
+
+        us.ID as 'user_id',
+        ass.Team_ID as 'team_id',
+        ass.Date as 'date',
+        ass.Note as 'note',
+        day.ID as 'time_id',
+        day.Title as 'time_title',
+        CONCAT(
+            us.Firstname, ' ', us.Lastname
+        ) as 'user_fullname'
+
+    FROM assignment AS ass
+    INNER JOIN daytime AS day ON ass.Daytime_ID = day.ID
+    INNER JOIN user AS us ON ass.User_ID = us.ID;

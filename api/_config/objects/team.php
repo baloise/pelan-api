@@ -3,11 +3,13 @@
 class Team {
 
     private $conn;
-    private $db_table = "teams";
+    private $db_table = "team";
+    private $db_view_user = "view_user_team";
 
     public $id;
     public $title;
     public $abbreviation;
+    public $user_id;
 
     public function __construct($db) {
         $this->conn = $db;
@@ -15,27 +17,16 @@ class Team {
 
     public function read() {
 
-        $query = "
-        SELECT ID, Title, Abbreviation
-        FROM " . $this->db_table . "
-        WHERE ID = ?
-        LIMIT 0,1
-        ";
+        $sql = "SELECT * FROM " . $this->db_view_user . " WHERE id = ?";
 
-        $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(1, $this->id);
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindParam(1, $this->user_id);
         $stmt->execute();
 
-        if ($stmt->rowCount() > 0) {
-
-            $row = $stmt->fetch(PDO::FETCH_ASSOC);
-
-            $this->id = $row['ID'];
-            $this->title = $row['Title'];
-            $this->abbreviation = $row['Abbreviation'];
-
-            return true;
-
+        if ($stmt->execute()) {
+            return $stmt;
+        } else {
+            throw new InvalidArgumentException($stmt->errorInfo()[1]);
         }
 
     }

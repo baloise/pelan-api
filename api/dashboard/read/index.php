@@ -46,7 +46,7 @@ try {
 
     $stmt_time = $time->read();
     $stmt_shift = $shift->read();
-    $stmt_assign = $assignment->read($date, $date);
+    $stmt_assign = $assignment->read($date, $date, $decoded->data->id);
     $stmt_note = $assignment->readNotes($date, $date);
 
     $dash_arr = array(

@@ -34,12 +34,10 @@ $assignment = new Assignment($db);
 try {
 
     $assignment->team = $decoded->data->team->id;
+    $from = val_string($data->from, 8, 10);
+    $to = val_string($data->to, 8, 10);
 
-    if ($data->from && $data->to) {
-        $stmt = $assignment->readTeam(val_string($data->from, 8, 10), val_string($data->to, 8, 10));
-    } else {
-        $stmt = $assignment->readTeam();
-    }
+    $stmt = $assignment->read($from, $to);
 
     if ($stmt->rowCount() > 0) {
 

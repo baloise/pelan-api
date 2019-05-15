@@ -44,7 +44,8 @@ try {
             if (strlen($note) > 0) {
                 $assignment_item = array(
                     "date" => (new DateTime($date))->format('Y/m/d'),
-                    "user" => $user,
+                    "user" => $user_fullname,
+                    "time" => $time_title,
                     "note" => $note
                 );
                 array_push($assignments_arr, $assignment_item);

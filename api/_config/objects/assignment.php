@@ -4,9 +4,9 @@ class Assignment {
 
     private $conn;
     private $db_table = "assignment";
-    private $db_team_assigns = "view_assigns_team";
+    private $db_view_team = "view_assigns_team";
+    private $db_view_notes = "view_assign_notes";
 
-    public $user;
     public $date;
     public $time;
     public $shift;
@@ -18,46 +18,28 @@ class Assignment {
         $this->conn = $db;
     }
 
-    public function readTeam($from = false, $to = false) {
+    public function read($from = false, $to = false, $user = false) {
 
-        $query = "
-        SELECT * FROM ". $this->db_team_assigns . "
-        WHERE team = :team
+        if (!$from || !$to) {
+            throw new InvalidArgumentException("start or end date not found");
+        }
+
+        $sql = "
+            SELECT * FROM ". $this->db_view_team . "
+            WHERE team = :team AND date BETWEEN :from AND :to
         ";
 
-        if ($from && $to) {
-            $query .= " AND date BETWEEN :from AND :to";
-        }
+        if($user){ $sql .= " AND user = :user"; }
 
-        $stmt = $this->conn->prepare($query);
+        $sql .= " ORDER BY user, date, time";
+
+        $stmt = $this->conn->prepare($sql);
         $stmt->bindParam(':team', $this->team);
-        if ($from && $to) {
-            $stmt->bindParam(':from', $from);
-            $stmt->bindParam(':to', $to);
-        }
+        $stmt->bindParam(':from', $from);
+        $stmt->bindParam(':to', $to);
 
-        $stmt->execute();
-        return $stmt;
-
-    }
-
-    public function read($from = false, $to = false) {
-
-        $query = "
-        SELECT * FROM ". $this->db_team_assigns . "
-        WHERE team = :team AND user = :user
-        ";
-
-        if ($from && $to) {
-            $query .= " AND date BETWEEN :from AND :to";
-        }
-
-        $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(':team', $this->team);
-        $stmt->bindParam(':user', $this->user);
-        if ($from && $to) {
-            $stmt->bindParam(':from', $from);
-            $stmt->bindParam(':to', $to);
+        if ($user) {
+            $stmt->bindParam(':user', $user);
         }
 
         $stmt->execute();
@@ -70,8 +52,9 @@ class Assignment {
         if ($from && $to) {
 
             $query = "
-            SELECT * FROM ". $this->db_team_assigns . "
-            WHERE team = :team AND date BETWEEN :from AND :to
+            SELECT * FROM ". $this->db_view_notes . "
+            WHERE team_id = :team AND date BETWEEN :from AND :to
+            ORDER BY date, time_id
             ";
 
             $stmt = $this->conn->prepare($query);

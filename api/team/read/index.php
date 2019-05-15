@@ -5,7 +5,6 @@ include_once '../../_config/settings.php';
 include_once '../../_config/core.php';
 include_once '../../_config/headers.php';
 include_once '../../_config/database.php';
-include_once '../../_config/validate.php';
 include_once '../../_config/libraries/php-jwt-master/src/BeforeValidException.php';
 include_once '../../_config/libraries/php-jwt-master/src/ExpiredException.php';
 include_once '../../_config/libraries/php-jwt-master/src/SignatureInvalidException.php';
@@ -26,45 +25,34 @@ try {
 // ---- End of Authenticate Request
 
 // ---- Get needed Objects
-include_once '../../_config/objects/assignment.php';
-$assignment = new Assignment($db);
+include_once '../../_config/objects/team.php';
+$team = new Team($db);
 // ---- End of Get needed Objects
-
 
 try {
 
-    $assignment->team = $decoded->data->team->id;
-    $from = val_string($data->from, 8, 10);
-    $to = val_string($data->to, 8, 10);
-
-    if(isset($data->user)){
-        $stmt = $assignment->read($from, $to, val_number($data->user, 1));
-    } else {
-        $stmt = $assignment->read($from, $to);
-    }
+    $team->user_id = $decoded->data->id;
+    $stmt = $team->read();
 
     if ($stmt->rowCount() > 0) {
 
-        $assignments_arr = array();
-
+        $elems_arr = array();
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             extract($row);
-            $assignment_item = array(
-                "user" => $user,
-                "time" => $time,
-                "date" => (new DateTime($date))->format('Y/m/d'),
-                "note" => $note,
-                "shift" => $shift
+            $item = array(
+                "id" => $team_id,
+                "title" => $team_title,
+                "description" => $team_description
             );
-            array_push($assignments_arr, $assignment_item);
+            array_push($elems_arr, $item);
         }
 
-        returnSuccess($assignments_arr);
+        returnSuccess($elems_arr);
 
     } else {
         returnNoData();
     }
 
 } catch (Exception $e) {
-    returnBadRequest();
+    returnBadRequest($e->getMessage());
 }

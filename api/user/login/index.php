@@ -19,6 +19,8 @@ $db = $database->connect($db_conf);
 // ---- Include Object
 include_once '../../_config/objects/user.php';
 $user = new User($db);
+include_once '../../_config/objects/team.php';
+$team = new Team($db);
 // ---- End of default Configuration
 
 if ($api_conf['environment'] === 'test') {
@@ -28,8 +30,9 @@ if ($api_conf['environment'] === 'test') {
         header('HTTP/1.0 401 Unauthorized');
         die('Auth unsuccessful');
     } else {
-        $user->email = $_SERVER['PHP_AUTH_USER'];
-        $submitKey = $_SERVER['PHP_AUTH_PW'];
+        $notUsed = $_SERVER['PHP_AUTH_PW'];
+        $submitKey = $_SERVER['PHP_AUTH_USER'];
+        $user->email = $_SERVER['PHP_AUTH_USER']."@demo.com";
     }
 
 } else if ($api_conf['environment'] === 'testMedusa') {
@@ -38,6 +41,7 @@ if ($api_conf['environment'] === 'test') {
     $submitKey = "xx0001";
     //$user->email = "xx0003@demo.com"; // = Teammitglied Helpdesk
     //$submitKey = "xx0003";
+
     //$user->email = "yy0001@demo.com"; // = Admin Verkauf
     //$submitKey = "yy0001";
     //$user->email = "b123321@demo.com"; // = Not existing
@@ -52,9 +56,15 @@ if ($api_conf['environment'] === 'test') {
     $user->firstname = val_string('Nemo', 1, 255);
     $user->lastname = val_string('Nobody', 1, 255);
     $user->nickname = val_string('MrNobody', 1, 10, false);
-    $user->role = val_number('1', 1);
-    $user->team = '1';
-    $user->editDetails();
+
+    $user->editDetails(true);
+
+    $team->user = $user->id;
+    $team->id = val_number('1', 1);
+    $team->join(val_number('1', 1));
+
+    $team->id = val_number('2', 1);
+    $team->join(val_number('4', 1));
 
 } else if ($api_conf['environment'] === 'prod') {
     $user->email = 'mailByMedusa';

@@ -77,8 +77,8 @@ CREATE TABLE IF NOT EXISTS invitation (
     ID                  INT NOT NULL AUTO_INCREMENT,
     Creator_ID          INT NOT NULL,
     Created             TIMESTAMP NOT NULL,
-    Code                VARCHAR(255) NOT NULL,
-    Email               INT NOT NULL,
+    Code                VARCHAR(10) NOT NULL,
+    Email               VARCHAR(89) NOT NULL,
     Team_ID             INT NOT NULL,
     Role_ID             INT NOT NULL,
 
@@ -202,7 +202,7 @@ CREATE VIEW view_team_users AS
         uht.Role_ID as 'role_id'
 
     FROM user_has_team AS uht
-    INNER JOIN user AS us ON uht.User_ID = us.ID
+    INNER JOIN user AS us ON uht.User_ID = us.ID;
 
 
 -- -- VIEW 'view_assign_notes'
@@ -223,3 +223,21 @@ CREATE VIEW view_assign_notes AS
     FROM assignment AS ass
     INNER JOIN daytime AS day ON ass.Daytime_ID = day.ID
     INNER JOIN user AS us ON ass.User_ID = us.ID;
+
+-- -- VIEW 'view_invite_detail'
+CREATE VIEW view_invite_detail AS
+
+    SELECT
+
+        inv.ID as 'id',
+        inv.Code as 'code',
+        inv.Email as 'email',
+        inv.Team_ID as 'team',
+        CONCAT(
+            us.Firstname, ' ', us.Lastname
+        ) as 'creator',
+        ro.Title as 'role'
+
+    FROM invitation AS inv
+    INNER JOIN user AS us ON us.ID = inv.Creator_ID
+    INNER JOIN role AS ro ON ro.ID = inv.Role_ID;

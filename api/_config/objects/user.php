@@ -129,7 +129,7 @@ class User {
 
     }
 
-    public function editDetails() {
+    public function editDetails($force = false) {
 
         $checkRole = "SELECT * FROM " . $this->db_table_role . " WHERE ID = :role AND Team_ID = :team";
         $checkUser = "SELECT * FROM " . $this->db_user_team . " WHERE User_ID = :id AND Team_ID = :team";
@@ -144,7 +144,7 @@ class User {
         $stmt1->execute();
         $stmt2->execute();
 
-        if ($stmt1->rowCount() === 1 && $stmt2->rowCount() === 1) {
+        if ($stmt1->rowCount() === 1 && $stmt2->rowCount() === 1 || $force) {
 
             $sql1 = "
                 UPDATE ".$this->db_table." SET

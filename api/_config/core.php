@@ -34,14 +34,14 @@ function returnSuccess($data = false) {
     http_response_code(200);
     if ($data) {
         echo json_encode(array(
-        "status" => "success",
-        "message" => "Request successfully handled",
-        "content" => $data
-        ));
+            "status" => "success",
+            "message" => "Request successfully handled",
+            "content" => $data
+        ), JSON_NUMERIC_CHECK);
     } else {
         echo json_encode(array(
-        "status" => "success",
-        "message" => "Request successfully handled (Returning no content)"
+            "status" => "success",
+            "message" => "Request successfully handled (Returning no content)"
         ));
     }
     die();
@@ -50,8 +50,8 @@ function returnSuccess($data = false) {
 function returnNoData() {
     http_response_code(204);
     echo json_encode(array(
-    "status" => "success",
-    "message" => "Request successfully handled but no data found"
+        "status" => "success",
+        "message" => "Request successfully handled but no data found"
     ));
     die();
 }

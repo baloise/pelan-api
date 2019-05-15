@@ -56,4 +56,52 @@ class Role {
 
     }
 
+    public function delete() {
+
+        $sql = "
+        DELETE FROM " . $this->db_table . "
+        WHERE ID = :id AND Team_ID = :team
+        ";
+
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindParam(":id", $this->id);
+        $stmt->bindParam(":team", $this->team);
+
+        if ($stmt->execute()) {
+            return true;
+        }
+
+        if($stmt->errorInfo()[1] == 1451){
+
+            throw new InvalidArgumentException('role_has_user');
+
+        }
+
+        throw new InvalidArgumentException($stmt->errorInfo()[1]);
+
+    }
+
+    public function edit() {
+
+        $query = "
+        UPDATE ".$this->db_table . " SET
+        Title = :title, Description = :description, Admin = :admin
+        WHERE ID = :id AND Team_ID = :team;
+        ";
+
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':title', $this->title);
+        $stmt->bindParam(':description', $this->description);
+        $stmt->bindParam(':admin', $this->admin);
+        $stmt->bindParam(':id', $this->id);
+        $stmt->bindParam(':team', $this->team);
+
+        if ($stmt->execute()) {
+            return true;
+        } else {
+            throw new InvalidArgumentException($stmt->errorInfo()[1]);
+        }
+
+    }
+
 }

@@ -18,11 +18,7 @@ class Role {
 
     public function read() {
 
-        $query = "
-            SELECT ID as id, Title as title, Admin as admin, Description as description
-            FROM ". $this->db_table . "
-            WHERE Team_ID = :team
-        ";
+        $query = "SELECT * FROM ". $this->db_table . " WHERE Team_ID = :team";
 
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':team', $this->team);
@@ -58,12 +54,28 @@ class Role {
 
     public function delete() {
 
-        $sql = "
+        $sql1 = "SELECT ID, Main FROM ".$this->db_table . " WHERE ID = :id AND Team_ID = :team";
+
+        $sql2 = "
         DELETE FROM " . $this->db_table . "
         WHERE ID = :id AND Team_ID = :team
         ";
 
-        $stmt = $this->conn->prepare($sql);
+        $stmt = $this->conn->prepare($sql1);
+        $stmt->bindParam(':id', $this->id);
+        $stmt->bindParam(':team', $this->team);
+        $stmt->execute();
+
+        if ($stmt->rowCount() === 1) {
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+            if(intval($row['Main']) === 1){
+                throw new InvalidArgumentException('Unable to delete main role');
+            }
+        } else {
+            throw new InvalidArgumentException('Role not found');
+        }
+
+        $stmt = $this->conn->prepare($sql2);
         $stmt->bindParam(":id", $this->id);
         $stmt->bindParam(":team", $this->team);
 
@@ -72,9 +84,7 @@ class Role {
         }
 
         if($stmt->errorInfo()[1] == 1451){
-
-            throw new InvalidArgumentException('role_has_user');
-
+            throw new InvalidArgumentException('role_has_user_or_invitation');
         }
 
         throw new InvalidArgumentException($stmt->errorInfo()[1]);
@@ -83,24 +93,42 @@ class Role {
 
     public function edit() {
 
-        $query = "
+        $sql1 = "SELECT ID, Main FROM ".$this->db_table . " WHERE ID = :id AND Team_ID = :team";
+
+        $sql2 = "
         UPDATE ".$this->db_table . " SET
         Title = :title, Description = :description, Admin = :admin
-        WHERE ID = :id AND Team_ID = :team;
+        WHERE ID = :id AND Team_ID = :team
         ";
 
-        $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(':title', $this->title);
-        $stmt->bindParam(':description', $this->description);
-        $stmt->bindParam(':admin', $this->admin);
+        $stmt = $this->conn->prepare($sql1);
         $stmt->bindParam(':id', $this->id);
         $stmt->bindParam(':team', $this->team);
+        $stmt->execute();
 
-        if ($stmt->execute()) {
+        if ($stmt->rowCount() === 1) {
+
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+            if(intval($row['Main']) === 1){
+                $this->admin = 1;
+            }
+
+            $stmt = $this->conn->prepare($sql2);
+            $stmt->bindParam(':title', $this->title);
+            $stmt->bindParam(':description', $this->description);
+            $stmt->bindParam(':id', $this->id);
+            $stmt->bindParam(':team', $this->team);
+            $stmt->bindParam(':admin', $this->admin);
+
+            if (!$stmt->execute()) {
+                throw new InvalidArgumentException($stmt->errorInfo()[1]);
+            }
+
             return true;
-        } else {
-            throw new InvalidArgumentException($stmt->errorInfo()[1]);
+
         }
+
+        throw new InvalidArgumentException('Role not found');
 
     }
 

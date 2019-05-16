@@ -38,12 +38,12 @@ try {
 
         $roles_arr = array();
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            extract($row);
             $role_item = array(
-                "id" => $id,
-                "title" => $title,
-                "admin" => $admin,
-                "description" => $description
+                "id" => (int) $row['ID'],
+                "title" => $row['Title'],
+                "admin" => (int) $row['Admin'],
+                "main" => (int) $row['Main'],
+                "description" => $row['Description']
             );
             array_push($roles_arr, $role_item);
         }

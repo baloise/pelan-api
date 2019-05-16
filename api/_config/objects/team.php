@@ -86,7 +86,7 @@ class Team {
                 return array(
                     "id"=>$this->id,
                     "title"=>$row['Title'],
-                    "team"=>$row['Description']
+                    "description"=>$row['Description']
                 );
             }
 

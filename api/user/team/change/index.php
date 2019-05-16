@@ -33,7 +33,7 @@ $user = new User($db);
 
 try {
 
-    $user->id = $decoded->data->id;
+    $user->id = (int) $decoded->data->id;
     $team_id = val_number($data->team, 1);
 
     if ($user->readToken($team_id)) {
@@ -44,7 +44,7 @@ try {
             "exp" => $token_conf['expireAt'],
             "nbf" => $token_conf['notBefore'],
             "data" => array(
-                "id" => $user->id,
+                "id" => (int) $user->id,
                 "firstname" => $user->firstname,
                 "lastname" => $user->lastname,
                 "language" => $user->language,

@@ -24,6 +24,33 @@ class User {
         $this->conn = $db;
     }
 
+    public function create() {
+
+        $query = "
+            INSERT INTO ".$this->db_table . "
+            (`Firstname`, `Lastname`, `Nickname`, `Email`, `Auth_Key`, `Lang`) VALUES
+            (:firstname, :lastname, :nickname, :email, :authkey, :language);
+        ";
+
+        $this->authkey = password_hash($this->authkey, PASSWORD_BCRYPT);
+
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':firstname', $this->firstname);
+        $stmt->bindParam(':lastname', $this->lastname);
+        $stmt->bindParam(':email', $this->email);
+        $stmt->bindParam(':nickname', $this->nickname);
+        $stmt->bindParam(':language', $this->language);
+        $stmt->bindParam(':authkey', $this->authkey);
+
+        if ($stmt->execute()) {
+            $this->id = $this->conn->lastInsertId();
+            return true;
+        } else {
+            throw new InvalidArgumentException($stmt->errorInfo()[1]);
+        }
+
+    }
+
     public function userExists() {
 
         $query = "
@@ -47,49 +74,46 @@ class User {
     public function readToken($teamid = false) {
 
         $sql1 = "SELECT * FROM ".$this->db_view_detail." WHERE id = ?";
-        $sql2 = "SELECT * FROM ".$this->db_view_team." WHERE id = ? ";
-        $sql3 = "
-            UPDATE ".$this->db_user_team." SET Current = NULL
-            WHERE User_ID = ? AND Current = 1
-        ";
-        $sql4 = "
-            UPDATE ".$this->db_user_team." SET Current = 1
-            WHERE User_ID = ? AND Team_ID = ?
-        ";
-
-        if ($teamid) {
-            $sql2 .= " AND team_id = ?";
-        }
+        $sql2 = "SELECT * FROM ".$this->db_view_team." WHERE id = ?";
+        $sql3 = "UPDATE ".$this->db_user_team." SET Current = NULL WHERE Current = 1";
+        $sql4 = "UPDATE ".$this->db_user_team." SET Current = 1 WHERE Team_ID = ?";
+        if ($teamid) { $sql2 .= " AND team_id = ?"; }
         $sql2 .= " ORDER BY current DESC LIMIT 1";
+        $sql3 .= " AND User_ID = ?";
+        $sql4 .= " AND User_ID = ?";
 
         $stmt = $this->conn->prepare($sql1);
         $stmt->bindParam(1, $this->id);
-        $stmt->execute();
+
+        if(!$stmt->execute()){
+            throw new InvalidArgumentException($stmt1->errorInfo()[1]);
+        }
 
         if ($stmt->rowCount() === 1) {
+
             $dRow = $stmt->fetch(PDO::FETCH_ASSOC);
+            $this->firstname = $dRow['firstname'];
+            $this->lastname = $dRow['lastname'];
+            $this->language = $dRow['language'];
+            $this->nickname = $dRow['nickname'];
+            $this->email = $dRow['email'];
+            $this->role = new stdClass();
+            $this->team = new stdClass();
+
             $stmt = $this->conn->prepare($sql2);
             $stmt->bindParam(1, $this->id);
             if ($teamid) { $stmt->bindParam(2, $teamid); }
+
             $stmt->execute();
 
             if ($stmt->rowCount() === 1) {
 
                 $tRow = $stmt->fetch(PDO::FETCH_ASSOC);
 
-                $this->role = new stdClass();
-                $this->team = new stdClass();
-
-                $this->firstname = $dRow['firstname'];
-                $this->lastname = $dRow['lastname'];
-                $this->language = $dRow['language'];
-                $this->nickname = $dRow['nickname'];
-                $this->email = $dRow['email'];
-
-                $this->role->id = $tRow['role_id'];
+                $this->role->id = (int) $tRow['role_id'];
                 $this->role->title = $tRow['role_title'];
-                $this->role->admin = $tRow['role_admin'];
-                $this->team->id = $tRow['team_id'];
+                $this->role->admin = (int) $tRow['role_admin'];
+                $this->team->id = (int) $tRow['team_id'];
                 $this->team->title = $tRow['team_title'];
 
                 $stmt = $this->conn->prepare($sql3);
@@ -100,12 +124,12 @@ class User {
                 $stmt->bindParam(2, $tRow['team_id']);
                 $stmt->execute();
 
-                return true;
-
             } else {
-                throw new InvalidArgumentException('STMT: '.$stmt->errorInfo()[1]);
+                $this->role = 0;
+                $this->team = 0;
             }
 
+            return true;
 
         }
 

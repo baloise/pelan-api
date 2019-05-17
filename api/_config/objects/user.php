@@ -110,11 +110,16 @@ class User {
 
                 $tRow = $stmt->fetch(PDO::FETCH_ASSOC);
 
-                $this->role->id = (int) $tRow['role_id'];
-                $this->role->title = $tRow['role_title'];
-                $this->role->admin = (int) $tRow['role_admin'];
-                $this->team->id = (int) $tRow['team_id'];
-                $this->team->title = $tRow['team_title'];
+                $this->role = array(
+                    "id" => (int) $tRow['role_id'],
+                    "title" => $tRow['role_title'],
+                    "admin" => (int) $tRow['role_admin']
+                );
+
+                $this->team = array(
+                    "id" => (int) $tRow['team_id'],
+                    "title" => $tRow['team_title']
+                );
 
                 $stmt = $this->conn->prepare($sql3);
                 $stmt->bindParam(1, $this->id);

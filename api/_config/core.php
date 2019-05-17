@@ -1,5 +1,10 @@
 <?php
 
+// Application Params
+error_reporting(E_ALL);
+//error_reporting(0); <-- to deactivate
+date_default_timezone_set('Europe/Zurich');
+
 function setAuth($token, $expire, $conf) {
 
     $appCookie = setcookie("app_token", $token, $expire, "/", $conf['domain'], $conf['secure'], false);

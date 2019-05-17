@@ -23,58 +23,59 @@ include_once '../../_config/objects/team.php';
 $team = new Team($db);
 // ---- End of default Configuration
 
-if ($api_conf['environment'] === 'test') {
+if ($api_conf['environment'] === 'prod') {
 
-    if (!isset($_SERVER['PHP_AUTH_USER'])) {
-        header('WWW-Authenticate: Basic realm="Dev-Mode: Auth required"');
-        header('HTTP/1.0 401 Unauthorized');
-        die('Auth unsuccessful');
+    $data = json_decode(file_get_contents("php://input"));
+    if(isset($data->password) && isset($data->email)){
+        $user->email = val_string($data->email, 1, 90);
+        $authKey = $data->password;
     } else {
-        $notUsed = $_SERVER['PHP_AUTH_PW'];
-        $submitKey = $_SERVER['PHP_AUTH_USER'];
-        $user->email = $_SERVER['PHP_AUTH_USER']."@demo.com";
+        returnForbidden('credentials_needed');
     }
 
-} else if ($api_conf['environment'] === 'testMedusa') {
+} else if ($api_conf['environment'] === 'medusa') {
+
+    // TODO
+    returnError('medusa_not_configured');
+    $user->email = 'mailByMedusa';
+    $authKey = 'keyByMedusa';
+
+} else if ($api_conf['environment'] === 'medusa_test') {
 
     $user->email = "xx0001@demo.com"; // = Admin Helpdesk
-    $submitKey = "xx0001";
+    $authKey = "xx0001";
     //$user->email = "xx0003@demo.com"; // = Teammitglied Helpdesk
-    //$submitKey = "xx0003";
-
+    //$authKey = "xx0003";
     //$user->email = "yy0001@demo.com"; // = Admin Verkauf
-    //$submitKey = "yy0001";
+    //$authKey = "yy0001";
     //$user->email = "b123321@demo.com"; // = Not existing
-    //$submitKey = "b123321";
+    //$authKey = "b123321";
 
 } else if ($api_conf['environment'] === 'demo') {
 
     $user->email = "xx0001@demo.com";
-    $submitKey = "xx0001";
+    $authKey = "xx0001";
 
     $user->id = val_number('2', 1);
     $user->firstname = val_string('Nemo', 1, 255);
     $user->lastname = val_string('Nobody', 1, 255);
     $user->nickname = val_string('MrNobody', 1, 10, false);
-
     $user->editDetails(true);
 
     $team->user = $user->id;
     $team->id = val_number('1', 1);
     $team->join(val_number('1', 1));
-
     $team->id = val_number('2', 1);
     $team->join(val_number('4', 1));
 
-} else if ($api_conf['environment'] === 'prod') {
-    $user->email = 'mailByMedusa';
-    $submitKey = 'keyByMedusa';
 }
 
 
 if(!$user->userExists()){
     returnForbidden('not_registered');
-} else if (password_verify($submitKey, $user->authkey)) {
+}
+
+if (password_verify($authKey, $user->authkey)) {
 
     if ($user->readToken()) {
 
@@ -90,15 +91,8 @@ if(!$user->userExists()){
                 "language" => $user->language,
                 "nickname" => $user->nickname,
                 "email" => $user->email,
-                "role" => array(
-                    "id" => $user->role->id,
-                    "title" => $user->role->title,
-                    "admin" => $user->role->admin,
-                ),
-                "team" => array(
-                    "id" => $user->team->id,
-                    "title" => $user->team->title
-                ),
+                "role" => $user->role,
+                "team" => $user->team
             )
         );
 
@@ -110,5 +104,8 @@ if(!$user->userExists()){
     }
 
 } else {
-    returnBadRequest();
+    returnForbidden('password_incorrect');
 }
+    
+returnBadRequest();
+

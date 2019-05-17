@@ -50,15 +50,8 @@ try {
                 "language" => $user->language,
                 "nickname" => $user->nickname,
                 "email" => $user->email,
-                "role" => array(
-                    "id" => $user->role->id,
-                    "title" => $user->role->title,
-                    "admin" => $user->role->admin,
-                ),
-                "team" => array(
-                    "id" => $user->team->id,
-                    "title" => $user->team->title
-                ),
+                "role" => $user->role,
+                "team" => $user->team
             )
         );
 

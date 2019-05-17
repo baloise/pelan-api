@@ -1,12 +1,9 @@
 <?php
 
-// Application Params
-error_reporting(E_ALL);
-//error_reporting(0); <-- to deactivate
-date_default_timezone_set('Europe/Zurich');
+// Environments: 'prod', 'medusa', 'medusa_test', 'demo'
 
 $api_conf = array(
-    "environment" => "testMedusa", // 'test', 'testMedusa', 'demo', 'prod'
+    "environment" => "prod", 
     "corsOrigins" => array(
         "http://localhost:8080",
         "https://pelan.osis.io",

@@ -31,7 +31,7 @@ try {
     $user->email = val_string($data->user->email, 1, 89);
     $user->nickname = val_string($data->user->nickname, 1, 10);
     $user->language = val_string($data->user->language, 2, 2);
-    $user->authkey = val_string($data->user->authkey, 1, 10, false);
+    $user->authkey = val_string($data->user->password, 1, 999, false);
 
     if($user->userExists()){
         returnBadRequest('email_in_use');

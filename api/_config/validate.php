@@ -28,7 +28,7 @@ function val_number($value, $min = false, $max = true) {
         $value = filter_var($value, FILTER_SANITIZE_NUMBER_FLOAT);
         $state = filter_var($value, FILTER_VALIDATE_FLOAT);
         if ($state && $min <= $value && $max >= $value) {
-            return $value;
+            return (int) $value;
         }
     }
 

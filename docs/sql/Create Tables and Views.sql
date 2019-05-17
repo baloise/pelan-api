@@ -163,13 +163,16 @@ CREATE VIEW view_user_team AS
         te.ID AS 'team_id',
         te.Title AS 'team_title',
         te.Description AS 'team_description',
+        CONCAT(us.Firstname, ' ', us.Lastname) AS 'team_owner',
+        us.ID AS 'team_owner_id',
         ro.ID AS 'role_id',
         ro.Title AS 'role_title',
         ro.Admin AS 'role_admin'
 
     FROM user_has_team AS uht
     INNER JOIN role AS ro ON uht.Role_ID = ro.ID
-    INNER JOIN team AS te ON uht.Team_ID = te.ID;
+    INNER JOIN team AS te ON uht.Team_ID = te.ID
+    LEFT JOIN user AS us ON te.Owner_ID = us.ID;
 
 
 -- -- VIEW 'view_assigns_team'

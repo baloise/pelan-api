@@ -42,7 +42,11 @@ try {
             $item = array(
                 "id" => $team_id,
                 "title" => $team_title,
-                "description" => $team_description
+                "description" => $team_description,
+                "owner" => array(
+                    "id" => $team_owner_id,
+                    "name" => $team_owner
+                )
             );
             array_push($elems_arr, $item);
         }

@@ -118,7 +118,12 @@ class User {
 
                 $this->team = array(
                     "id" => (int) $tRow['team_id'],
-                    "title" => $tRow['team_title']
+                    "title" => $tRow['team_title'],
+                    "description" => $tRow['team_description'],
+                    "owner" => array(
+                        "id" => (int) $tRow['team_owner_id'],
+                        "name" => $tRow['team_owner'],
+                    )
                 );
 
                 $stmt = $this->conn->prepare($sql3);

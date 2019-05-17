@@ -82,7 +82,7 @@ if (password_verify($authKey, $user->authkey)) {
             "exp" => $conf['token']['expireAt'],
             "nbf" => $conf['token']['notBefore'],
             "data" => array(
-                "id" => $user->id,
+                "id" => (int) $user->id,
                 "firstname" => $user->firstname,
                 "lastname" => $user->lastname,
                 "language" => $user->language,

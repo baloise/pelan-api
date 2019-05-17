@@ -57,6 +57,39 @@ class Team {
 
     }
 
+    public function edit($owner = false) {
+
+        $sql = "
+        UPDATE ".$this->db_table . " SET 
+        Title = :title, Description = :description 
+        WHERE ID = :id;
+        ";
+
+        if($owner){
+            $sql = "
+            UPDATE ".$this->db_table . " SET 
+            Owner_ID = :owner WHERE ID = :id;
+            ";
+        }
+
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindParam(':id', $this->id);
+
+        if($owner){
+            $stmt->bindParam(':owner', $owner);
+        } else {
+            $stmt->bindParam(':title', $this->title);
+            $stmt->bindParam(':description', $this->description);
+        }
+
+        if ($stmt->execute()) {
+            return true;
+        } else {
+            throw new InvalidArgumentException($stmt->errorInfo()[1]);
+        }
+
+    }
+
     public function join($role = false) {
 
         if(!$role){

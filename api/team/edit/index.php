@@ -1,15 +1,15 @@
 <?php
 
 // ---- Initialize Default
-include_once '../../../_config/settings.php';
-include_once '../../../_config/core.php';
-include_once '../../../_config/headers.php';
-include_once '../../../_config/database.php';
-include_once '../../../_config/validate.php';
-include_once '../../../_config/libraries/php-jwt-master/src/BeforeValidException.php';
-include_once '../../../_config/libraries/php-jwt-master/src/ExpiredException.php';
-include_once '../../../_config/libraries/php-jwt-master/src/SignatureInvalidException.php';
-include_once '../../../_config/libraries/php-jwt-master/src/JWT.php';
+include_once '../../_config/settings.php';
+include_once '../../_config/core.php';
+include_once '../../_config/headers.php';
+include_once '../../_config/database.php';
+include_once '../../_config/validate.php';
+include_once '../../_config/libraries/php-jwt-master/src/BeforeValidException.php';
+include_once '../../_config/libraries/php-jwt-master/src/ExpiredException.php';
+include_once '../../_config/libraries/php-jwt-master/src/SignatureInvalidException.php';
+include_once '../../_config/libraries/php-jwt-master/src/JWT.php';
 use \Firebase\JWT\JWT;
 $database = new Database();
 $db = $database->connect($conf['db']);
@@ -26,7 +26,9 @@ try {
 // ---- End of Authenticate Request
 
 // ---- Get needed Objects
-include_once '../../../_config/objects/user.php';
+include_once '../../_config/objects/team.php';
+$team = new Team($db);
+include_once '../../_config/objects/user.php';
 $user = new User($db);
 // ---- End of Get needed Objects
 
@@ -36,16 +38,14 @@ if (!$decoded->data->role->admin) {
 
 try {
 
-    $user->id = val_number($data->id, 1);
-    $user->role = val_number($data->role, 1);
-    $user->team = $decoded->data->team->id;
+    $user->id = (int) $decoded->data->id;
+    $team->id = (int) $decoded->data->team->id;
+    $team->title = val_string($data->title, 1, 999, false);
+    $team->description = val_string($data->description, 1, 999, false);
 
-    $user->teamEdit();
-    if ($decoded->data->id != $user->id) {
-        returnSuccess();
-    }
+    $team->edit();
 
-    if ($user->readToken()) {
+    if ($user->readToken($team->id)) {
 
         $token = array(
             "iss" => $conf['token']['issuer'],
@@ -53,7 +53,7 @@ try {
             "exp" => $conf['token']['expireAt'],
             "nbf" => $conf['token']['notBefore'],
             "data" => array(
-                "id" => $user->id,
+                "id" => (int) $user->id,
                 "firstname" => $user->firstname,
                 "lastname" => $user->lastname,
                 "language" => $user->language,

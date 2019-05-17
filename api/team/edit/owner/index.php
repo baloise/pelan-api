@@ -26,6 +26,8 @@ try {
 // ---- End of Authenticate Request
 
 // ---- Get needed Objects
+include_once '../../../_config/objects/team.php';
+$team = new Team($db);
 include_once '../../../_config/objects/user.php';
 $user = new User($db);
 // ---- End of Get needed Objects
@@ -36,16 +38,16 @@ if (!$decoded->data->role->admin) {
 
 try {
 
-    $user->id = val_number($data->id, 1);
-    $user->role = val_number($data->role, 1);
-    $user->team = $decoded->data->team->id;
-
-    $user->teamEdit();
-    if ($decoded->data->id != $user->id) {
-        returnSuccess();
+    $user->id = (int) $decoded->data->id;
+    $team->id = (int) $decoded->data->team->id;
+    if($decoded->data->id !== $decoded->data->team->owner->id){
+        returnForbidden('Not Owner');
     }
 
-    if ($user->readToken()) {
+    $newOwner = val_number($data->owner, 1);
+    $team->edit($newOwner);
+
+    if ($user->readToken($team->id)) {
 
         $token = array(
             "iss" => $conf['token']['issuer'],
@@ -53,7 +55,7 @@ try {
             "exp" => $conf['token']['expireAt'],
             "nbf" => $conf['token']['notBefore'],
             "data" => array(
-                "id" => $user->id,
+                "id" => (int) $user->id,
                 "firstname" => $user->firstname,
                 "lastname" => $user->lastname,
                 "language" => $user->language,

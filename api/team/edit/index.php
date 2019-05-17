@@ -65,7 +65,7 @@ try {
         );
 
         $jwt = JWT::encode($token, $conf['token']['secret']);
-        if (setAuth($jwt, $conf['token']['expireAt'])) {
+        if (setAuth($jwt, $conf['token']['expireAt'], $conf['env']['cookie'])) {
             returnSuccess("TOKEN");
         }
 

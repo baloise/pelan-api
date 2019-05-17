@@ -3,23 +3,43 @@
 $environments = array(
     "prod" => array(
         "cors" => "https://pelan.osis.io",
-        "auth" => "credentials"
+        "auth" => "credentials",
+        "cookie"=> array(
+            "secure"=>false,
+            "domain"=>"osis.io"
+        )
     ),
     "test" => array(
         "cors" => "http://localhost:8080",
-        "auth" => "credentials"
+        "auth" => "credentials",
+        "cookie"=> array(
+            "secure"=>false,
+            "domain"=>""
+        )
     ),
     "medusa" => array(
         "cors" => "",
-        "auth" => "medusa"
+        "auth" => "medusa",
+        "cookie"=> array(
+            "secure"=>false,
+            "domain"=>""
+        )
     ),
     "medusa_test" => array(
         "cors" => "",
-        "auth" => "medusa_fake"
+        "auth" => "medusa_fake",
+        "cookie"=> array(
+            "secure"=>false,
+            "domain"=>""
+        )
     ),
     "demo" => array(
         "cors" => "https://pelan-demo.osis.io",
-        "auth" => "demo"
+        "auth" => "demo",
+        "cookie"=> array(
+            "secure"=>false,
+            "domain"=>"osis.io"
+        )
     )
 );
 

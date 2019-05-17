@@ -57,7 +57,7 @@ if ($conf['env']['auth'] === 'credentials') {
     $user->firstname = val_string('Nemo', 1, 255);
     $user->lastname = val_string('Nobody', 1, 255);
     $user->nickname = val_string('MrNobody', 1, 10, false);
-    $user->editDetails(true);
+    $user->edit(true);
 
     $team->user = $user->id;
     $team->id = val_number('1', 1);
@@ -94,7 +94,7 @@ if (password_verify($authKey, $user->authkey)) {
         );
 
         $jwt = JWT::encode($token, $conf['token']['secret']);
-        if (setAuth($jwt, $conf['token']['expireAt'])) {
+        if (setAuth($jwt, $conf['token']['expireAt'], $conf['env']['cookie'])) {
             returnSuccess("Authenticated '".$user->email."' in team '".$user->team['title']."'");
         }
 

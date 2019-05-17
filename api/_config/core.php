@@ -5,10 +5,10 @@ error_reporting(E_ALL);
 //error_reporting(0); <-- to deactivate
 date_default_timezone_set('Europe/Zurich');
 
-function setAuth($token, $expire) {
+function setAuth($token, $expire, $cook) {
 
-    $appCookie = setcookie("app_token", $token, $expire, "/", "", false, false);
-    $secureCookie = setcookie("secure_token", $token, $expire, "/", "", false, true);
+    $appCookie = setcookie("app_token", $token, $expire, "/", $cook['domain'], $cook['secure'], false);
+    $secureCookie = setcookie("secure_token", $token, $expire, "/", $cook['domain'], $cook['secure'], true);
 
     if ($appCookie && $secureCookie) {
         return true;

@@ -14,7 +14,7 @@ use \Firebase\JWT\JWT;
 
 // ---- Initialize Default
 $database = new Database();
-$db = $database->connect($db_conf);
+$db = $database->connect($conf['db']);
 
 // ---- Include Object
 include_once '../../_config/objects/user.php';
@@ -23,7 +23,7 @@ include_once '../../_config/objects/team.php';
 $team = new Team($db);
 // ---- End of default Configuration
 
-if ($api_conf['environment'] === 'prod') {
+if ($conf['env']['auth'] === 'credentials') {
 
     $data = json_decode(file_get_contents("php://input"));
     if(isset($data->password) && isset($data->email)){
@@ -33,14 +33,11 @@ if ($api_conf['environment'] === 'prod') {
         returnForbidden('credentials_needed');
     }
 
-} else if ($api_conf['environment'] === 'medusa') {
+} else if ($conf['env']['auth'] === 'medusa') {
 
-    // TODO
-    returnError('medusa_not_configured');
-    $user->email = 'mailByMedusa';
-    $authKey = 'keyByMedusa';
+    returnError('medusa_not_available_yet');
 
-} else if ($api_conf['environment'] === 'medusa_test') {
+} else if ($conf['env']['auth'] === 'medusa_fake') {
 
     $user->email = "xx0001@demo.com"; // = Admin Helpdesk
     $authKey = "xx0001";
@@ -51,7 +48,7 @@ if ($api_conf['environment'] === 'prod') {
     //$user->email = "b123321@demo.com"; // = Not existing
     //$authKey = "b123321";
 
-} else if ($api_conf['environment'] === 'demo') {
+} else if ($conf['env']['auth'] === 'demo') {
 
     $user->email = "xx0001@demo.com";
     $authKey = "xx0001";
@@ -80,10 +77,10 @@ if (password_verify($authKey, $user->authkey)) {
     if ($user->readToken()) {
 
         $token = array(
-            "iss" => $token_conf['issuer'],
-            "iat" => $token_conf['issuedAt'],
-            "exp" => $token_conf['expireAt'],
-            "nbf" => $token_conf['notBefore'],
+            "iss" => $conf['token']['issuer'],
+            "iat" => $conf['token']['issuedAt'],
+            "exp" => $conf['token']['expireAt'],
+            "nbf" => $conf['token']['notBefore'],
             "data" => array(
                 "id" => $user->id,
                 "firstname" => $user->firstname,
@@ -96,9 +93,9 @@ if (password_verify($authKey, $user->authkey)) {
             )
         );
 
-        $jwt = JWT::encode($token, $token_conf['secret']);
-        if (setAuth($jwt, $token_conf['expireAt'], $api_conf['cookie'])) {
-            returnSuccess("Authenticated '".$user->email."' in team '".$user->team->title."'");
+        $jwt = JWT::encode($token, $conf['token']['secret']);
+        if (setAuth($jwt, $conf['token']['expireAt'], $conf['cookie'])) {
+            returnSuccess("Authenticated '".$user->email."' in team '".$user->team['title']."'");
         }
 
     }

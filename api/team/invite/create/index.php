@@ -12,14 +12,14 @@ include_once '../../../_config/libraries/php-jwt-master/src/SignatureInvalidExce
 include_once '../../../_config/libraries/php-jwt-master/src/JWT.php';
 use \Firebase\JWT\JWT;
 $database = new Database();
-$db = $database->connect($db_conf);
+$db = $database->connect($conf['db']);
 $data = json_decode(file_get_contents("php://input"));
 // ---- End of Initialize Default
 
 // ---- Authenticate Request
 try {
     $token = authenticate();
-    $decoded = JWT::decode($token, $token_conf['secret'], $token_conf['algorithm']);
+    $decoded = JWT::decode($token, $conf['token']['secret'], $conf['token']['algorithm']);
 } catch (Exception $e) {
     returnForbidden();
 }

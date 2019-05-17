@@ -12,14 +12,14 @@ include_once '../../_config/libraries/php-jwt-master/src/SignatureInvalidExcepti
 include_once '../../_config/libraries/php-jwt-master/src/JWT.php';
 use \Firebase\JWT\JWT;
 $database = new Database();
-$db = $database->connect($db_conf);
+$db = $database->connect($conf['db']);
 $data = json_decode(file_get_contents("php://input"));
 // ---- End of Initialize Default
 
 // ---- Authenticate Request
 try {
     $token = authenticate();
-    $decoded = JWT::decode($token, $token_conf['secret'], $token_conf['algorithm']);
+    $decoded = JWT::decode($token, $conf['token']['secret'], $conf['token']['algorithm']);
 } catch (Exception $e) {
     returnForbidden();
 }
@@ -60,10 +60,10 @@ try {
     if ($user->readToken()) {
 
         $token = array(
-            "iss" => $token_conf['issuer'],
-            "iat" => $token_conf['issuedAt'],
-            "exp" => $token_conf['expireAt'],
-            "nbf" => $token_conf['notBefore'],
+            "iss" => $conf['token']['issuer'],
+            "iat" => $conf['token']['issuedAt'],
+            "exp" => $conf['token']['expireAt'],
+            "nbf" => $conf['token']['notBefore'],
             "data" => array(
                 "id" => $user->id,
                 "firstname" => $user->firstname,
@@ -83,8 +83,8 @@ try {
             )
         );
 
-        $jwt = JWT::encode($token, $token_conf['secret']);
-        if (setAuth($jwt, $token_conf['expireAt'], $api_conf['cookie'])) {
+        $jwt = JWT::encode($token, $conf['token']['secret']);
+        if (setAuth($jwt, $conf['token']['expireAt'], $conf['cookie'])) {
             returnSuccess("TOKEN");
         }
 

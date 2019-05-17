@@ -95,7 +95,7 @@ if (password_verify($authKey, $user->authkey)) {
 
         $jwt = JWT::encode($token, $conf['token']['secret']);
         if (setAuth($jwt, $conf['token']['expireAt'], $conf['env']['cookie'])) {
-            returnSuccess("Authenticated '".$user->email."' in team '".$user->team['title']."'");
+            returnSuccess($conf['env']['cookie']['prefix']);
         }
 
     }

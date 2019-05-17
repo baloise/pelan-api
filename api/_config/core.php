@@ -7,8 +7,8 @@ date_default_timezone_set('Europe/Zurich');
 
 function setAuth($token, $expire, $cook) {
 
-    $appCookie = setcookie("app_token", $token, $expire, "/", $cook['domain'], $cook['secure'], false);
-    $secureCookie = setcookie("secure_token", $token, $expire, "/", $cook['domain'], $cook['secure'], true);
+    $appCookie = setcookie($cook['prefix']."_app_token", $token, $expire, "/", $cook['domain'], $cook['secure'], false);
+    $secureCookie = setcookie($cook['prefix']."_secure_token", $token, $expire, "/", $cook['domain'], $cook['secure'], true);
 
     if ($appCookie && $secureCookie) {
         return true;
@@ -18,12 +18,13 @@ function setAuth($token, $expire, $cook) {
 
 }
 
-function authenticate() {
-    if (isset($_COOKIE["secure_token"]) && isset(getallheaders()['Authorization'])) {
+function authenticate($cook) {
+    $cookieName = $cook['prefix']."_secure_token";
+    if (isset($_COOKIE[$cookieName]) && isset(getallheaders()['Authorization'])) {
         list($type, $data) = explode(" ", getallheaders()['Authorization'], 2);
         if (strcasecmp($type, "Bearer") == 0) {
-            if ($_COOKIE["secure_token"] === $data) {
-                return $_COOKIE["secure_token"];
+            if ($_COOKIE[$cookieName] === $data) {
+                return $_COOKIE[$cookieName];
             } else {
                 returnForbidden("Tokens not correct");
             }

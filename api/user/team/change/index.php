@@ -18,7 +18,7 @@ $data = json_decode(file_get_contents("php://input"));
 
 // ---- Authenticate Request
 try {
-    $token = authenticate();
+    $token = authenticate($conf["env"]["cookie"]);
     $decoded = JWT::decode($token, $conf['token']['secret'], $conf['token']['algorithm']);
 } catch (Exception $e) {
     returnForbidden();
@@ -57,7 +57,7 @@ try {
 
         $jwt = JWT::encode($token, $conf['token']['secret']);
         if (setAuth($jwt, $conf['token']['expireAt'], $conf['env']['cookie'])) {
-            returnSuccess("TOKEN");
+            returnSuccess($conf['env']['cookie']['prefix']);
         }
 
     } else {

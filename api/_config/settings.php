@@ -6,7 +6,8 @@ $environments = array(
         "auth" => "credentials",
         "cookie"=> array(
             "secure"=>false,
-            "domain"=>"osis.io"
+            "domain"=>"osis.io",
+            "prefix"=>"pelProCoo"
         )
     ),
     "test" => array(
@@ -14,7 +15,8 @@ $environments = array(
         "auth" => "credentials",
         "cookie"=> array(
             "secure"=>false,
-            "domain"=>""
+            "domain"=>"",
+            "prefix"=>"lhPelanC"
         )
     ),
     "medusa" => array(
@@ -22,7 +24,8 @@ $environments = array(
         "auth" => "medusa",
         "cookie"=> array(
             "secure"=>false,
-            "domain"=>""
+            "domain"=>"",
+            "prefix"=>"lhPelanCMedusa"
         )
     ),
     "medusa_test" => array(
@@ -30,7 +33,8 @@ $environments = array(
         "auth" => "medusa_fake",
         "cookie"=> array(
             "secure"=>false,
-            "domain"=>""
+            "domain"=>"",
+            "prefix"=>"lhPelanCMedusaFake"
         )
     ),
     "demo" => array(
@@ -38,7 +42,8 @@ $environments = array(
         "auth" => "demo",
         "cookie"=> array(
             "secure"=>false,
-            "domain"=>"osis.io"
+            "domain"=>"osis.io",
+            "prefix"=>"pelDEMOCoo"
         )
     )
 );

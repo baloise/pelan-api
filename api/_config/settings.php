@@ -7,7 +7,7 @@ $environments = array(
     ),
     "test" => array(
         "cors" => "http://localhost:8080",
-        "auth" => "medusa_fake"
+        "auth" => "credentials"
     ),
     "medusa" => array(
         "cors" => "",
@@ -30,10 +30,6 @@ $conf = array(
         "database" => "pelan",
         "user" => "root",
         "pass" => ""
-    ),
-    "cookie" => array(
-        "domain" => "", //IE11 doesn't like this
-        "secure" => false //Set TRUE if HTTPS
     ),
     "token" => array(
         "secret" => 'asdffae@hjk4352[bnbnmv]lkjhgfr:334', //Change for PROD!

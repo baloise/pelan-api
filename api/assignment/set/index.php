@@ -28,6 +28,8 @@ try {
 // ---- Get needed Objects
 include_once '../../_config/objects/assignment.php';
 $assignment = new Assignment($db);
+include_once '../../_config/objects/user.php';
+    $user = new User($db);
 // ---- End of Get needed Objects
 
 
@@ -37,8 +39,6 @@ if (!$decoded->data->role->admin) {
 
 try {
 
-    include_once '../../_config/objects/user.php';
-    $user = new User($db);
     $user->team = $decoded->data->team->id;
     $exist = ($user->read(val_number($data->user, 1)))->rowCount();
 

@@ -45,6 +45,7 @@ try {
             "team" => $assignment->team,
             "users" => array()
         );
+
         $user_assigns_arr = array(
             "user" => 0,
             "assignments" => array()
@@ -71,6 +72,10 @@ try {
 
             array_push($user_assigns_arr['assignments'], $user_assign);
 
+        }
+
+        if(sizeof($user_assigns_arr['assignments'])){
+            array_push($assignments_arr["users"], $user_assigns_arr);
         }
 
         returnSuccess($assignments_arr);

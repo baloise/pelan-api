@@ -142,23 +142,34 @@ class User {
 
     }
 
-    public function editLanguage() {
+    public function edit() {
 
-        $query = "UPDATE " . $this->db_table . " SET Lang = :language WHERE ID = :id";
+        $sql = "
+            UPDATE ".$this->db_table." SET
+            Firstname = :firstname,
+            Lastname = :lastname,
+            Nickname = :nickname,
+            Lang = :language
+            WHERE ID = :id
+        ";
 
-        $stmt = $this->conn->prepare($query);
+        $stmt = $this->conn->prepare($sql);
+
+        $stmt->bindParam(':firstname', $this->firstname);
+        $stmt->bindParam(':lastname', $this->lastname);
+        $stmt->bindParam(':nickname', $this->nickname);
         $stmt->bindParam(':language', $this->language);
         $stmt->bindParam(':id', $this->id);
 
-        if ($stmt->execute()) {
-            return true;
-        } else {
+        if (!$stmt->execute()) {
             throw new InvalidArgumentException($stmt->errorInfo()[1]);
         }
 
+        return true;
+
     }
 
-    public function editDetails($force = false) {
+    public function teamEdit($force = false) {
 
         $checkRole = "SELECT * FROM " . $this->db_table_role . " WHERE ID = :role AND Team_ID = :team";
         $checkUser = "SELECT * FROM " . $this->db_user_team . " WHERE User_ID = :id AND Team_ID = :team";
@@ -167,46 +178,27 @@ class User {
         $stmt2 = $this->conn->prepare($checkUser);
         $stmt1->bindParam(':role', $this->role);
         $stmt1->bindParam(':team', $this->team);
-        $stmt2->bindParam(':team', $this->team);
         $stmt2->bindParam(':id', $this->id);
+        $stmt2->bindParam(':team', $this->team);
 
         $stmt1->execute();
         $stmt2->execute();
 
         if ($stmt1->rowCount() === 1 && $stmt2->rowCount() === 1 || $force) {
 
-            $sql1 = "
-                UPDATE ".$this->db_table." SET
-                Firstname = :firstname,
-                Lastname = :lastname,
-                Nickname = :nickname
-                WHERE ID = :id
-            ";
-
-            $sql2 = "
+            $sql = "
                 UPDATE ".$this->db_user_team." SET
                 Role_ID = :role
                 WHERE User_ID = :id AND Team_ID = :team
             ";
 
-            $stmt1 = $this->conn->prepare($sql1);
-            $stmt2 = $this->conn->prepare($sql2);
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bindParam(':role', $this->role);
+            $stmt->bindParam(':id', $this->id);
+            $stmt->bindParam(':team', $this->team);
 
-            $stmt1->bindParam(':firstname', $this->firstname);
-            $stmt1->bindParam(':lastname', $this->lastname);
-            $stmt1->bindParam(':nickname', $this->nickname);
-            $stmt1->bindParam(':id', $this->id);
-
-            $stmt2->bindParam(':role', $this->role);
-            $stmt2->bindParam(':id', $this->id);
-            $stmt2->bindParam(':team', $this->team);
-
-            if (!$stmt1->execute()) {
-                throw new InvalidArgumentException('STMT1: '.$stmt1->errorInfo()[1]);
-            }
-
-            if (!$stmt2->execute()) {
-                throw new InvalidArgumentException('STMT2: '.$stmt2->errorInfo()[1]);
+            if (!$stmt->execute()) {
+                throw new InvalidArgumentException($stmt->errorInfo()[1]);
             }
 
             return true;

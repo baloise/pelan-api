@@ -1,15 +1,15 @@
 <?php
 
 // ---- Initialize Default
-include_once '../../_config/settings.php';
-include_once '../../_config/core.php';
-include_once '../../_config/headers.php';
-include_once '../../_config/database.php';
-include_once '../../_config/validate.php';
-include_once '../../_config/libraries/php-jwt-master/src/BeforeValidException.php';
-include_once '../../_config/libraries/php-jwt-master/src/ExpiredException.php';
-include_once '../../_config/libraries/php-jwt-master/src/SignatureInvalidException.php';
-include_once '../../_config/libraries/php-jwt-master/src/JWT.php';
+include_once '../../../_config/settings.php';
+include_once '../../../_config/core.php';
+include_once '../../../_config/headers.php';
+include_once '../../../_config/database.php';
+include_once '../../../_config/validate.php';
+include_once '../../../_config/libraries/php-jwt-master/src/BeforeValidException.php';
+include_once '../../../_config/libraries/php-jwt-master/src/ExpiredException.php';
+include_once '../../../_config/libraries/php-jwt-master/src/SignatureInvalidException.php';
+include_once '../../../_config/libraries/php-jwt-master/src/JWT.php';
 use \Firebase\JWT\JWT;
 $database = new Database();
 $db = $database->connect($conf['db']);
@@ -26,19 +26,24 @@ try {
 // ---- End of Authenticate Request
 
 // ---- Get needed Objects
-include_once '../../_config/objects/user.php';
+include_once '../../../_config/objects/user.php';
 $user = new User($db);
 // ---- End of Get needed Objects
 
+if (!$decoded->data->role->admin) {
+    returnForbidden('Not Admin');
+}
 
 try {
 
-    $user->id = $decoded->data->id;
-    $user->firstname = val_string($data->firstname, 1, 255);
-    $user->lastname = val_string($data->lastname, 1, 255);
-    $user->nickname = val_string($data->nickname, 1, 10, false);
-    $user->language = val_string($data->language, 2, 2);
-    $user->edit();
+    $user->id = val_number($data->id, 1);
+    $user->role = val_number($data->role, 1);
+    $user->team = $decoded->data->team->id;
+
+    $user->teamEdit();
+    if ($decoded->data->id !== $user->id) {
+        returnSuccess();
+    }
 
     if ($user->readToken()) {
 

@@ -1,8 +1,6 @@
 <?php
 
-function setAuth($token, $expire, $ck) {
-
-    print_r($token, $expire, $ck);
+function setAuth($token, $expire) {
 
     $appCookie = setcookie("app_token", $token, $expire, "/", "", false, false);
     $secureCookie = setcookie("secure_token", $token, $expire, "/", "", false, true);

@@ -199,9 +199,11 @@ CREATE VIEW view_team_users AS
         us.Nickname as 'nickname',
         us.Lang as 'language',
         uht.Team_ID as 'team_id',
-        uht.Role_ID as 'role_id'
+        uht.Role_ID as 'role_id',
+        te.Owner_ID as 'owner_id'
 
     FROM user_has_team AS uht
+    LEFT JOIN team AS te ON te.Owner_ID = uht.User_ID
     INNER JOIN user AS us ON uht.User_ID = us.ID;
 
 

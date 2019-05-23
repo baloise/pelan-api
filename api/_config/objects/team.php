@@ -224,6 +224,7 @@ class Team {
             $row = $stmt->fetch(PDO::FETCH_ASSOC);
             return array(
                 "role"=>$row['Role_ID'],
+                "invite"=>$row['ID'],
                 "team"=>$row['Team_ID']
             );
         } else {

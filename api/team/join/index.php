@@ -42,6 +42,7 @@ try {
         $team->id = $where['team'];
         $joined = $team->join($where['role']);
         if($joined){
+            $team->deleteInvite($where['invite']);
             returnSuccess($joined);
         } else {
             returnError('Unable to join team');

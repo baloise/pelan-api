@@ -69,7 +69,7 @@ try {
             );
             array_push($dash_arr["times"], $time_item);
         }
-    } else { $error = true; }
+    } 
 
     // Read Shifts
     if ($stmt_shift->rowCount() > 0) {
@@ -83,7 +83,7 @@ try {
             );
             array_push($dash_arr["shifts"], $shift_item);
         }
-    } else { $error = true; }
+    } 
 
     // Read Assigns
     if ($stmt_assign->rowCount() > 0) {
@@ -98,7 +98,7 @@ try {
             );
             array_push($dash_arr["assigns"], $assignment_item);
         }
-    } else { $error = true; }
+    } 
 
     // Read notes
     if ($stmt_note->rowCount() > 0) {
@@ -107,13 +107,13 @@ try {
             if (strlen($note) > 0) {
                 $note_item = array(
                     "date" => (new DateTime($date))->format('Y/m/d'),
-                    "user" => $user,
+                    "user" => $user_fullname,
                     "note" => $note
                 );
                 array_push($dash_arr["notes"], $note_item);
             }
         }
-    } else { $error = true; }
+    } 
 
     if(!$error){
         returnSuccess($dash_arr);

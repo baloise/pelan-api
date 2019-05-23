@@ -29,7 +29,7 @@ $environments = array(
         )
     ),
     "medusa_test" => array(
-        "cors" => "",
+        "cors" => "http://localhost:8080",
         "auth" => "medusa_fake",
         "cookie"=> array(
             "secure"=>false,
@@ -49,7 +49,7 @@ $environments = array(
 );
 
 $conf = array(
-    "env" => $environments['test'],
+    "env" => $environments['medusa_test'],
     "db" => array(
         "host" => "localhost",
         "database" => "pelan",

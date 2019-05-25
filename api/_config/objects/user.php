@@ -5,6 +5,7 @@ class User {
     private $conn;
     private $db_table = "user";
     private $db_table_role = "role";
+    private $db_verify = "user_verify";
     private $db_user_team = "user_has_team";
     private $db_view_detail = "view_user_detail";
     private $db_view_team_users = "view_team_users";
@@ -26,15 +27,20 @@ class User {
 
     public function create() {
 
-        $query = "
+        $sql1 = "
             INSERT INTO ".$this->db_table . "
             (`Firstname`, `Lastname`, `Nickname`, `Email`, `Auth_Key`, `Lang`) VALUES
             (:firstname, :lastname, :nickname, :email, :authkey, :language);
         ";
 
+        $sql2 = "
+            INSERT INTO ".$this->db_verify . " (`User_ID`, `Code`) 
+            VALUES (:userid, :code);
+        ";
+
         $this->authkey = password_hash($this->authkey, PASSWORD_BCRYPT);
 
-        $stmt = $this->conn->prepare($query);
+        $stmt = $this->conn->prepare($sql1);
         $stmt->bindParam(':firstname', $this->firstname);
         $stmt->bindParam(':lastname', $this->lastname);
         $stmt->bindParam(':email', $this->email);
@@ -44,6 +50,61 @@ class User {
 
         if ($stmt->execute()) {
             $this->id = $this->conn->lastInsertId();
+
+            $code = '';
+            $characters = '0123456789';
+            for ($i = 0; $i < 10; $i++) {
+                $index = rand(0, strlen($characters) - 1);
+                $code .= $characters[$index];
+            }
+
+            $code_hash = password_hash($code, PASSWORD_BCRYPT);
+            $stmt = $this->conn->prepare($sql2);
+            $stmt->bindParam(':userid', $this->id);
+            $stmt->bindParam(':code', $code_hash);
+            
+
+            if ($stmt->execute()) {
+                return $code;
+            } else {
+                throw new InvalidArgumentException('verify_generation_error');
+            }
+
+        } else {
+            throw new InvalidArgumentException($stmt->errorInfo()[1]);
+        }
+
+    }
+
+    public function verifyCode() {
+
+        $sql = "
+        SELECT Code FROM ".$this->db_verify . " WHERE User_ID = :userid
+        ";
+        
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindParam(':userid', $this->id);
+        $stmt->execute();
+
+        if ($stmt->rowCount() === 1) {
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+            return $row['Code'];
+        } else {
+            throw new InvalidArgumentException($stmt->errorInfo()[1]);
+        }
+
+    }
+
+    public function verify() {
+
+        $sql = "
+        UPDATE ".$this->db_verify . " SET `Verified` = '1' WHERE User_ID = :userid;
+        ";
+
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindParam(':userid', $this->id);
+
+        if ($stmt->execute()) {
             return true;
         } else {
             throw new InvalidArgumentException($stmt->errorInfo()[1]);

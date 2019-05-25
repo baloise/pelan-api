@@ -21,6 +21,18 @@ CREATE TABLE IF NOT EXISTS user (
     PRIMARY KEY (ID)
 );
 
+-- ---- TABLE 'user_verify'
+CREATE TABLE IF NOT EXISTS user_verify (
+    User_ID             INT NOT NULL,
+    Code                VARCHAR(255) NOT NULL,
+    Created             TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    Verified            BOOLEAN NOT NULL,
+
+    PRIMARY KEY (User_ID),
+    FOREIGN KEY (User_ID) REFERENCES user(ID)
+);
+
+
 -- ---- TABLE 'user_is_dev'
 CREATE TABLE IF NOT EXISTS user_is_dev (
     User_ID             INT NOT NULL,
@@ -148,9 +160,11 @@ CREATE VIEW view_user_detail AS
         us.Lastname AS 'lastname',
         us.Lang AS 'language',
         us.Nickname AS 'nickname',
-        us.Email AS 'email'
+        us.Email AS 'email',
+        ve.Verified AS 'verified'
 
-    FROM user AS us;
+    FROM user AS us
+    LEFT JOIN user_verify AS ve ON ve.User_ID = us.ID;
 
 
 -- -- VIEW 'view_user_team'

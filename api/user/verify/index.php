@@ -24,29 +24,19 @@ $user = new User($db);
 
 try {
 
-
-    $user->firstname = val_string($data->firstname, 1, 255);
-    $user->lastname = val_string($data->lastname, 1, 255);
+    $code = val_string($data->code, 10, 10);
     $user->email = val_string($data->email, 1, 89);
-    $user->nickname = val_string($data->nickname, 1, 10);
-    $user->language = val_string($data->language, 2, 2);
-    $user->authkey = val_string($data->password, 1, 999, false);
 
-    if($user->userExists()){
-        returnBadRequest('email_in_use');
+    if(!$user->userExists()){
+        returnBadRequest('mail_not_found');
     }
-
-    $code = $user->create();
-
-    if(!$code){
-        returnError('Unable to create user');
+    
+    if(password_verify($code, $user->verifyCode())){
+        $user->verify();
+        returnSuccess();
+    } else {
+        returnBadRequest('code_invalid');
     }
-
-    include_once 'sendMail.php';
-    $confirm_link = "pelan.osis.io/register/verify";
-    sendMail($user->email, $code, $confirm_link, $user->language);
-
-    returnSuccess($code);
 
 } catch (Exception $e) {
     returnBadRequest($e->getMessage());

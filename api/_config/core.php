@@ -1,21 +1,16 @@
 <?php
 
-// Application Params
-error_reporting(E_ALL);
-//error_reporting(0); <-- to deactivate
+// App-Params
+error_reporting(E_ALL); // error_reporting(0); <-- to deactivate
 date_default_timezone_set('Europe/Zurich');
 
-function setAuth($token, $expire, $cook) {
 
+// Auth functions
+function setAuth($token, $expire, $cook) {
     $appCookie = setcookie($cook['prefix']."_app_token", $token, $expire, "/", $cook['domain'], $cook['secure'], false);
     $secureCookie = setcookie($cook['prefix']."_secure_token", $token, $expire, "/", $cook['domain'], $cook['secure'], true);
-
-    if ($appCookie && $secureCookie) {
-        return true;
-    }
-
+    if ($appCookie && $secureCookie) { return true; }
     return false;
-
 }
 
 function authenticate($cook) {
@@ -36,6 +31,8 @@ function authenticate($cook) {
     }
 }
 
+
+// Return/Response functions
 function returnSuccess($data = false) {
     http_response_code(200);
     if ($data) {
@@ -50,7 +47,7 @@ function returnSuccess($data = false) {
             "message" => "Request successfully handled (Returning no content)"
         ));
     }
-    die();
+    if(!ignore_user_abort()){ die();}
 }
 
 function returnNoData() {
@@ -59,7 +56,7 @@ function returnNoData() {
         "status" => "success",
         "message" => "Request successfully handled but no data found"
     ));
-    die();
+    if(!ignore_user_abort()){ die();}
 }
 
 function returnForbidden($reason = false) {
@@ -76,7 +73,7 @@ function returnForbidden($reason = false) {
         "message" => "User is not authorized to perform this action"
         ));
     }
-    die();
+    if(!ignore_user_abort()){ die();}
 }
 
 function returnBadRequest($reason = false) {
@@ -93,7 +90,7 @@ function returnBadRequest($reason = false) {
         "message" => "Bad Request: Values are wrong or missing."
         ));
     }
-    die();
+    if(!ignore_user_abort()){ die();}
 }
 
 function returnError($reason = false) {
@@ -110,5 +107,5 @@ function returnError($reason = false) {
         "message" => "An internal error occured",
         ));
     }
-    die();
+    if(!ignore_user_abort()){ die();}
 }

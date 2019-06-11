@@ -1,12 +1,5 @@
 <?php
 
-// ---- Enable async response
-ignore_user_abort(true);
-set_time_limit(0);
-ob_start();
-// ---- End of Enable async response
-
-
 // ---- Initialize Default
 include_once '../../settings.php';
 include_once '../../_config/core.php';
@@ -103,12 +96,6 @@ if(!$user->userExists()){
 } else {
     returnForbidden('password_incorrect');
 }
+    
+returnBadRequest();
 
-// ---- Send async response and keep processing
-header('Content-Length: '.ob_get_length());
-ob_end_flush();
-ob_flush();
-flush();
-// ---- End of Send async response and keep processing
-
-$user->edit(date('Y/m/d H:i:s', time()));

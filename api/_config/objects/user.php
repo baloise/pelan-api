@@ -208,24 +208,36 @@ class User {
 
     }
 
-    public function edit() {
+    public function edit($login = false) {
 
-        $sql = "
-            UPDATE ".$this->db_table." SET
-            Firstname = :firstname,
-            Lastname = :lastname,
-            Nickname = :nickname,
-            Lang = :language
-            WHERE ID = :id
-        ";
+        if($login){
+            $sql = "
+                UPDATE ".$this->db_table." SET 
+                Last_Login = :login
+                WHERE ID = :id
+            ";
+        } else {
+            $sql = "
+                UPDATE ".$this->db_table." SET
+                Firstname = :firstname,
+                Lastname = :lastname,
+                Nickname = :nickname,
+                Lang = :language
+                WHERE ID = :id
+            ";
+        }
 
         $stmt = $this->conn->prepare($sql);
-
-        $stmt->bindParam(':firstname', $this->firstname);
-        $stmt->bindParam(':lastname', $this->lastname);
-        $stmt->bindParam(':nickname', $this->nickname);
-        $stmt->bindParam(':language', $this->language);
         $stmt->bindParam(':id', $this->id);
+
+        if($login){
+            $stmt->bindParam(':login', $login);
+        } else {
+            $stmt->bindParam(':firstname', $this->firstname);
+            $stmt->bindParam(':lastname', $this->lastname);
+            $stmt->bindParam(':nickname', $this->nickname);
+            $stmt->bindParam(':language', $this->language);
+        }
 
         if (!$stmt->execute()) {
             throw new InvalidArgumentException($stmt->errorInfo()[1]);

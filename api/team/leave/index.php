@@ -30,19 +30,23 @@ include_once '../../_config/objects/team.php';
 $team = new Team($db);
 // ---- End of Get needed Objects
 
-if (!$decoded->data->role->admin) {
-    returnForbidden('Not Admin');
-}
 
 try {
-
+    
     $userid = val_number($data->user, 1);
-    $team->id = $decoded->data->team->id;
-
-    if($team->leave($userid)){
+    if($userid != $decoded->data->id){
+        if(!$decoded->data->role->admin) {
+            returnForbidden('Not Admin');
+        } else {
+            $team->id = $decoded->data->team->id;
+            $team->leave($userid);
+            returnSuccess();
+        }
+    } else {
+        $team->id = val_number($data->team, 1);
+        $team->leave($userid);
         returnSuccess();
     }
-
 
 } catch (Exception $e) {
     returnBadRequest($e->getMessage());

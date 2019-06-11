@@ -24,13 +24,21 @@ $user = new User($db);
 
 try {
 
-
-    $user->firstname = val_string($data->firstname, 1, 255);
-    $user->lastname = val_string($data->lastname, 1, 255);
-    $user->email = val_string($data->email, 1, 89);
     $user->nickname = val_string($data->nickname, 1, 10);
     $user->language = val_string($data->language, 2, 2);
-    $user->authkey = val_string($data->password, 1, 999, false);
+
+    if(!$conf['env']['auth'] === 'medusa' && !$conf['env']['auth'] === 'medusa_fake'){
+        $user->firstname = val_string($data->firstname, 1, 255);
+        $user->lastname = val_string($data->lastname, 1, 255);
+        $user->email = val_string($data->email, 1, 89);
+        $user->authkey = val_string($data->password, 1, 999, false);
+    } else {
+        //GET USERINFO FROM PROVIDER
+        $user->firstname = 'Max';
+        $user->lastname = 'Muster';
+        $user->email = 'baaccee@demo.com';
+        $user->authkey = 'baaccee';
+    }
 
     if($user->userExists()){
         returnBadRequest('email_in_use');
@@ -42,11 +50,15 @@ try {
         returnError('Unable to create user');
     }
 
-    include_once 'sendMail.php';
-    $confirm_link = "pelan.osis.io/register/verify";
-    sendMail($user->email, $code, $confirm_link, $user->language);
-
-    returnSuccess($code);
+    if($conf['env']['auth'] === 'medusa' || $conf['env']['auth'] === 'medusa_fake'){
+        $user->verify();
+        returnSuccess();
+    } else {
+        include_once 'sendMail.php';
+        $confirm_link = "pelan.osis.io/register/verify";
+        sendMail($user->email, $code, $confirm_link, $user->language);
+        returnSuccess();
+    }
 
 } catch (Exception $e) {
     returnBadRequest($e->getMessage());

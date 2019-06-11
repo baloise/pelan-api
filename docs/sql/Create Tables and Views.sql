@@ -194,15 +194,16 @@ CREATE VIEW view_assigns_team AS
 
     SELECT
 
-        ass.User_ID as 'user',
+        us.User_ID as 'user',
+        us.Team_ID as 'team',
         ass.Date as 'date',
         ass.Daytime_ID as 'time',
         ass.Shift_ID as 'shift',
         ass.Note as 'note',
-        ass.Team_ID as 'team',
         ass.Creator_ID as 'creator'
 
-    FROM assignment AS ass;
+    FROM assignment AS ass
+    INNER JOIN user_has_team AS us ON ass.User_ID = us.User_ID;
 
 
 -- -- VIEW 'view_team_users'
@@ -229,19 +230,20 @@ CREATE VIEW view_assign_notes AS
 
     SELECT
 
-        us.ID as 'user_id',
-        ass.Team_ID as 'team_id',
+        us.User_ID as 'user_id',
+        us.Team_ID as 'team_id',
         ass.Date as 'date',
         ass.Note as 'note',
         day.ID as 'time_id',
         day.Title as 'time_title',
         CONCAT(
-            us.Firstname, ' ', us.Lastname
+            usde.Firstname, ' ', usde.Lastname
         ) as 'user_fullname'
 
     FROM assignment AS ass
     INNER JOIN daytime AS day ON ass.Daytime_ID = day.ID
-    INNER JOIN user AS us ON ass.User_ID = us.ID;
+    INNER JOIN user_has_team AS us ON ass.User_ID = us.User_ID
+    INNER JOIN user AS usde ON usde.ID = us.User_ID;
 
 -- -- VIEW 'view_invite_detail'
 CREATE VIEW view_invite_detail AS

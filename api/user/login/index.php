@@ -41,12 +41,12 @@ if ($conf['env']['auth'] === 'credentials') {
 
     $user->email = "xx0001@demo.com"; // = Admin Helpdesk
     $authKey = "xx0001";
-    //$user->email = "xx0003@demo.com"; // = Teammitglied Helpdesk
-    //$authKey = "xx0003";
+    //$user->email = "xx0014@demo.com"; // = Teammitglied Helpdesk
+    //$authKey = "xx0014";
     //$user->email = "yy0001@demo.com"; // = Admin Verkauf
     //$authKey = "yy0001";
-    //$user->email = "b123321@demo.com"; // = Not existing
-    //$authKey = "b123321";
+    //$user->email = "baaccee@demo.com"; // = Not existing
+    //$authKey = "baaccee";
 
 } else if ($conf['env']['auth'] === 'demo') {
 
@@ -67,10 +67,10 @@ if ($conf['env']['auth'] === 'credentials') {
 
 }
 
-
 if(!$user->userExists()){
     returnForbidden('not_registered');
 }
+
 
 if (password_verify($authKey, $user->authkey)) {
 

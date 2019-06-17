@@ -34,15 +34,14 @@ try {
         $user->authkey = val_string($data->password, 1, 999, false);
     } else {
 
+        include_once '../../_config/partner.php';
         $decoded = explode(";", file_get_contents('compress.zlib://data:who/cares;base64,'. $_COOKIE["MedusaToken"] ));
         $authKey = (explode("=", $decoded[0])[1]);
-
-        include_once 'partner.php';
         $userInfo = loadPerson($authKey);
 
+        $user->email = $userInfo['email'];
         $user->firstname = $userInfo['firstname'];
         $user->lastname = $userInfo['lastname'];
-        $user->email = $userInfo['email'];
         $user->authkey = $authKey;
 
     }

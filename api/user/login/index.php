@@ -45,8 +45,11 @@ if ($conf['env']['auth'] === 'credentials') {
 
 } else if ($conf['env']['auth'] === 'medusa') {
 
+    include_once '../../_config/partner.php';
     $decoded = explode(";", file_get_contents('compress.zlib://data:who/cares;base64,'. $_COOKIE["MedusaToken"] ));
     $authKey = (explode("=", $decoded[0])[1]);
+    $userInfo = loadPerson($authKey);
+    $user->email = $userInfo['email'];
 
 } else if ($conf['env']['auth'] === 'medusa_fake') {
     $user->email = "xx0001@demo.com"; // "xx0003@demo.com", "yy0001@demo.com"

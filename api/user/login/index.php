@@ -100,12 +100,10 @@ if(!$user->userExists()){
         );
 
         $jwt = JWT::encode($token, $conf['token']['secret']);
-        
-        if($conf['env']['auth'] === 'medusa'){
-            $toReturn = $jwt;
-        } else {
-            $toReturn = $conf['env']['cookie']['prefix'];
-        }
+        $toReturn = array(
+            "token"=>$jwt,
+            "prefix"=>$conf['env']['cookie']['prefix']
+        );
 
         if (setAuth($jwt, $conf['token']['expireAt'], $conf['env']['cookie'])) {
             returnSuccess($toReturn);

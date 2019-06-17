@@ -47,7 +47,7 @@ if ($conf['env']['auth'] === 'credentials') {
 
     $decoded = explode(";", file_get_contents('compress.zlib://data:who/cares;base64,'. $_COOKIE["MedusaToken"] ));
     $authKey = (explode("=", $decoded[0])[1]);
-    print_r($decoded[0]);
+    print_r($decoded);
 
 } else if ($conf['env']['auth'] === 'medusa_fake') {
     $user->email = "xx0001@demo.com"; // "xx0003@demo.com", "yy0001@demo.com"

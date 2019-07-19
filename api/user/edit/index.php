@@ -16,16 +16,6 @@ $db = $database->connect($conf['db']);
 $data = json_decode(file_get_contents("php://input"));
 // ---- End of Initialize Default
 
-http_response_code(200);
-
-try {
-    print_r(getallheaders()['Authorization']);
-} catch(Exception $e){
-    print_r($e);
-}
-
-die();
-
 // ---- Authenticate Request
 try {
     $token = authenticate($conf["env"]["cookie"]);

@@ -4,18 +4,6 @@
 error_reporting(E_ALL); // error_reporting(0); <-- to deactivate
 date_default_timezone_set('Europe/Zurich');
 
-if (!function_exists('getallheaders')) {
-    function getallheaders() {
-        $headers = [];
-        foreach ($_SERVER as $name => $value) {
-            if (substr($name, 0, 5) == 'HTTP_') {
-                $headers[str_replace(' ', '-', ucwords(strtolower(str_replace('_', ' ', substr($name, 5)))))] = $value;
-            }
-        }
-        return $headers;
-    }
-}
-
 // Auth functions
 function setAuth($token, $expire, $cook) {
     $appCookie = setcookie($cook['prefix']."_app_token", $token, $expire, "/", $cook['domain'], $cook['secure'], false);
@@ -27,28 +15,8 @@ function setAuth($token, $expire, $cook) {
 function authenticate($cook) {
 
     $cookieName = $cook['prefix']."_secure_token";
-
-    $headers = [];
-    foreach ($_SERVER as $name => $value) {
-        if (substr($name, 0, 5) == 'HTTP_') {
-            $headers[str_replace(' ', '-', ucwords(strtolower(str_replace('_', ' ', substr($name, 5)))))] = $value;
-        }
-    }
-    print_r($headers);
-    print_r($_COOKIE[$cookieName]);
-    exit();
-
-    if (isset($_COOKIE[$cookieName]) && isset(getallheaders()['Authorization'])) {
-        list($type, $data) = explode(" ", getallheaders()['Authorization'], 2);
-        if (strcasecmp($type, "Bearer") == 0) {
-            if ($_COOKIE[$cookieName] === $data) {
-                return $_COOKIE[$cookieName];
-            } else {
-                returnForbidden("Tokens not correct");
-            }
-        } else {
-            returnForbidden("Auth-Token invalid.");
-        }
+    if (isset($_COOKIE[$cookieName])) {
+        return $_COOKIE[$cookieName];
     } else {
         returnForbidden("Required Tokens not found.");
     }

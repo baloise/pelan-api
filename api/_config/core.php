@@ -1,17 +1,5 @@
 <?php
 
-$headers = [];
-foreach ($_SERVER as $name => $value) {
-    if (substr($name, 0, 5) == 'HTTP_') {
-        $headers[str_replace(' ', '-', ucwords(strtolower(str_replace('_', ' ', substr($name, 5)))))] = $value;
-    }
-}
-print_r($headers);
-
-exit();
-
-
-
 // App-Params
 error_reporting(E_ALL); // error_reporting(0); <-- to deactivate
 date_default_timezone_set('Europe/Zurich');

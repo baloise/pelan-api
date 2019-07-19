@@ -1,9 +1,5 @@
 <?php
 
-http_response_code(200);
-print_r("Dies ist ein Test");
-die();
-
 // ---- Initialize Default
 include_once '../../settings.php';
 include_once '../../_config/core.php';
@@ -19,6 +15,16 @@ $database = new Database();
 $db = $database->connect($conf['db']);
 $data = json_decode(file_get_contents("php://input"));
 // ---- End of Initialize Default
+
+http_response_code(200);
+
+try {
+    print_r(getallheaders()['Authorization']);
+} catch(Exception $e){
+    print_r($e);
+}
+
+die();
 
 // ---- Authenticate Request
 try {

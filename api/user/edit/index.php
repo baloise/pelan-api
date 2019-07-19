@@ -1,7 +1,7 @@
 <?php
 
-
-print_r(getallheaders()['Authorization']);
+http_response_code(200);
+print_r("Dies ist ein Test");
 die();
 
 // ---- Initialize Default

@@ -51,7 +51,7 @@ function returnSuccess($data = false) {
 }
 
 function returnNoData() {
-    http_response_code(204);
+    http_response_code(200);
     echo json_encode(array(
         "status" => "success",
         "message" => "Request successfully handled but no data found"
@@ -60,7 +60,7 @@ function returnNoData() {
 }
 
 function returnForbidden($reason = false) {
-    http_response_code(403);
+    http_response_code(200);
     if ($reason) {
         echo json_encode(array(
         "status" => "unauthorized",
@@ -77,7 +77,7 @@ function returnForbidden($reason = false) {
 }
 
 function returnBadRequest($reason = false) {
-    http_response_code(400);
+    http_response_code(200);
     if ($reason) {
         echo json_encode(array(
         "status" => "failed",
@@ -94,7 +94,7 @@ function returnBadRequest($reason = false) {
 }
 
 function returnError($reason = false) {
-    http_response_code(500);
+    http_response_code(200);
     if ($reason) {
         echo json_encode(array(
         "status" => "error",

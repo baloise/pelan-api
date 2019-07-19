@@ -1,5 +1,9 @@
 <?php
 
+
+print_r(getallheaders()['Authorization']);
+die();
+
 // ---- Initialize Default
 include_once '../../settings.php';
 include_once '../../_config/core.php';
@@ -29,7 +33,6 @@ try {
 include_once '../../_config/objects/user.php';
 $user = new User($db);
 // ---- End of Get needed Objects
-
 
 try {
 

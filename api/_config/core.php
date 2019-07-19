@@ -25,7 +25,19 @@ function setAuth($token, $expire, $cook) {
 }
 
 function authenticate($cook) {
+
     $cookieName = $cook['prefix']."_secure_token";
+
+    $headers = [];
+    foreach ($_SERVER as $name => $value) {
+        if (substr($name, 0, 5) == 'HTTP_') {
+            $headers[str_replace(' ', '-', ucwords(strtolower(str_replace('_', ' ', substr($name, 5)))))] = $value;
+        }
+    }
+    print_r($headers);
+    print_r($_COOKIE[$cookieName]);
+    exit();
+
     if (isset($_COOKIE[$cookieName]) && isset(getallheaders()['Authorization'])) {
         list($type, $data) = explode(" ", getallheaders()['Authorization'], 2);
         if (strcasecmp($type, "Bearer") == 0) {

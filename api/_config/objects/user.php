@@ -291,8 +291,7 @@ class User {
 
         $sql1 = "
         SELECT * FROM ".$this->db_view_team_users."
-        WHERE team_id = :team
-        GROUP BY id
+        WHERE team_id = :team 
         ";
 
         if ($userid) {

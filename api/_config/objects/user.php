@@ -49,27 +49,7 @@ class User {
         $stmt->bindParam(':authkey', $this->authkey);
 
         if ($stmt->execute()) {
-            $this->id = $this->conn->lastInsertId();
-
-            $code = '';
-            $characters = '0123456789';
-            for ($i = 0; $i < 10; $i++) {
-                $index = rand(0, strlen($characters) - 1);
-                $code .= $characters[$index];
-            }
-
-            $code_hash = password_hash($code, PASSWORD_BCRYPT);
-            $stmt = $this->conn->prepare($sql2);
-            $stmt->bindParam(':userid', $this->id);
-            $stmt->bindParam(':code', $code_hash);
-            
-
-            if ($stmt->execute()) {
-                return $code;
-            } else {
-                throw new InvalidArgumentException('verify_generation_error');
-            }
-
+            return true;
         } else {
             throw new InvalidArgumentException($stmt->errorInfo()[1]);
         }
